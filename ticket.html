@@ -75,6 +75,9 @@
     <section id="ticketOutput" class="hidden">
         <div class="ticket-card" id="printableTicket">
             <div class="ticket-top-border"></div>
+            
+            <div class="paid-stamp-box">PAID</div>
+            
             <div class="ticket-header">
                 <img src="templeimage/1742626228036 (1).jpg" alt="Logo" class="ticket-logo">
                 <h3>టికెట్ బుకింగ్ నిర్ధారణ</h3>
@@ -96,7 +99,6 @@
                     <p>మొత్తం చెల్లింపు</p>
                     <b>₹<span id="t-total"></span></b>
                 </div>
-                <div class="paid-stamp">VERIFIED</div>
             </div>
             
             <div class="ticket-actions no-print">
@@ -132,7 +134,6 @@ endInput.addEventListener('change', updatePrice);
 function updatePrice() {
     const startVal = startInput.value;
     const endVal = endInput.value;
-    
     if (startVal && endVal) {
         const d1 = new Date(startVal);
         const d2 = new Date(endVal);
@@ -141,7 +142,6 @@ function updatePrice() {
         months += d2.getMonth();
         if (d2.getDate() < d1.getDate()) months--;
         const finalMonths = months <= 0 ? 0 : months;
-
         document.getElementById('durationText').innerText = `పూర్తయిన నెలలు: ${finalMonths}`;
         document.getElementById('totalCost').innerText = `మొత్తం: ₹${finalMonths * 100}`;
         return { total: finalMonths * 100, count: finalMonths };
@@ -155,7 +155,6 @@ form.addEventListener('submit', async (e) => {
     if (count <= 0) return Swal.fire("గమనిక", "కనీసం ఒక నెల పూర్తి కావాలి", "warning");
 
     document.getElementById('spinner').classList.remove('hidden');
-    
     bookingData = {
         bookingID: "POL-" + Date.now().toString().slice(-6),
         name: document.getElementById('name').value,
@@ -175,12 +174,7 @@ form.addEventListener('submit', async (e) => {
     try {
         await fetch(SCRIPT_URL, { method: 'POST', body: formData });
         document.getElementById('spinner').classList.add('hidden');
-        Swal.fire({
-            title: "విజయం!",
-            text: "బుకింగ్ విజయవంతమైంది",
-            icon: "success",
-            confirmButtonColor: "#e65100"
-        });
+        Swal.fire({ title: "విజయం!", text: "బుకింగ్ విజయవంతమైంది", icon: "success", confirmButtonColor: "#e65100" });
         
         document.getElementById('t-id').innerText = bookingData.bookingID;
         document.getElementById('t-date').innerText = bookingData.bookingDate;
@@ -216,133 +210,82 @@ function shareMessage() {
 </script>
 
 <style>
-:root {
-    --primary: #e65100;
-    --secondary: #ff9800;
-    --bg-light: #fdf5e6;
-    --glass: rgba(255, 255, 255, 0.9);
-}
-
-* { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-
-body { margin: 0; min-height: 100vh; overflow-x: hidden; background-color: var(--bg-light); }
+:root { --primary: #e65100; --secondary: #ff9800; --bg-light: #fdf5e6; --glass: rgba(255, 255, 255, 0.9); }
+* { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+body { margin: 0; min-height: 100vh; background-color: var(--bg-light); }
 
 .bg-gradient {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(45deg, #ff9800, #ff5722, #e65100, #ffc107);
-    background-size: 400% 400%;
-    z-index: -1;
-    animation: gradientBG 15s ease infinite;
-    opacity: 0.15;
+    background-size: 400% 400%; z-index: -1; animation: gradientBG 15s ease infinite; opacity: 0.15;
 }
 
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+@keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-header {
-    background: var(--glass);
-    backdrop-filter: blur(10px);
-    padding: 15px;
-    text-align: center;
-    border-bottom: 3px solid var(--primary);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-header h1 { color: var(--primary); font-size: 1.2rem; margin: 10px 0 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-.header-logo { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); padding: 2px; }
+header { background: var(--glass); backdrop-filter: blur(10px); padding: 15px; text-align: center; border-bottom: 3px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+header h1 { color: var(--primary); font-size: 1.2rem; margin: 10px 0 0; }
+.header-logo { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); }
 
 .booking-container { display: flex; flex-direction: column; align-items: center; padding: 20px; gap: 30px; }
 
 .booking-card {
-    background: var(--glass);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 25px;
-    width: 100%;
-    max-width: 450px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px;
+    padding: 25px; width: 100%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
-
-.card-header { text-align: center; margin-bottom: 20px; }
-.card-header h2 { color: var(--primary); margin: 0; }
-.card-header p { color: #666; font-size: 0.9rem; margin: 5px 0; }
 
 .input-group { margin-bottom: 15px; }
-.input-group label { display: block; font-weight: 600; color: #444; margin-bottom: 5px; font-size: 0.9rem; }
-.input-group label i { color: var(--primary); margin-right: 5px; }
-
-input, textarea {
-    width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px;
-    transition: all 0.3s ease; font-size: 1rem; background: rgba(255,255,255,0.8);
-}
-
-input:focus, textarea:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 10px rgba(255,152,0,0.2); background: #fff; }
+.input-group label { display: block; font-weight: 600; color: #444; margin-bottom: 5px; }
+input, textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; background: rgba(255,255,255,0.8); }
 
 .row { display: flex; gap: 10px; }
 .col { flex: 1; }
 
-.price-summary-card {
-    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-    border-radius: 15px; padding: 15px; margin: 20px 0;
-    border-left: 8px solid var(--primary); text-align: center;
-}
+.price-summary-card { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-radius: 15px; padding: 15px; margin: 20px 0; border-left: 8px solid var(--primary); text-align: center; }
 
-.monthly-btn {
-    width: 100%; background: var(--primary); color: white; border: none;
-    padding: 15px; border-radius: 50px; font-size: 1.1rem; font-weight: bold;
-    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 5px 15px rgba(230,81,0,0.3);
-}
+.monthly-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(230,81,0,0.3); }
 
-.monthly-btn:active { transform: scale(0.95); }
-
-/* Ticket Styles */
+/* TICKET STYLES */
 .ticket-card {
     background: white; border-radius: 15px; width: 100%; max-width: 400px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.2); position: relative; overflow: hidden;
-    padding: 25px; border: 1px solid #ddd;
+    padding: 25px; border: 1px solid #ddd; margin-bottom: 50px;
 }
 
-.ticket-top-border {
-    position: absolute; top: 0; left: 0; width: 100%; height: 8px;
-    background: repeating-linear-gradient(45deg, var(--primary), var(--primary) 10px, var(--secondary) 10px, var(--secondary) 20px);
+.ticket-top-border { position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: repeating-linear-gradient(45deg, var(--primary), var(--primary) 10px, var(--secondary) 10px, var(--secondary) 20px); }
+
+/* THE PAID STAMP FEATURE */
+.paid-stamp-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    border: 6px solid rgba(211, 47, 47, 0.4); /* Subtle Red */
+    color: rgba(211, 47, 47, 0.4);
+    font-size: 4rem;
+    font-weight: 900;
+    padding: 10px 30px;
+    border-radius: 15px;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    pointer-events: none; /* User can't click it */
+    user-select: none;
+    z-index: 1;
 }
 
-.ticket-header { text-align: center; margin-bottom: 20px; }
+.ticket-header { text-align: center; margin-bottom: 20px; position: relative; z-index: 2; }
 .ticket-logo { width: 70px; margin-bottom: 10px; }
 .temple-name { font-size: 0.8rem; font-weight: bold; color: var(--primary); }
 
+.ticket-body { position: relative; z-index: 2; }
 .divider { height: 1px; background: #eee; margin: 15px 0; border-top: 2px dashed #ddd; }
-
 .t-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.95rem; }
 
-.price-highlight {
-    background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 10px;
-    padding: 10px; text-align: center; margin-top: 20px;
-}
-.price-highlight p { margin: 0; font-size: 0.8rem; color: #2e7d32; }
+.price-highlight { background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 10px; padding: 10px; text-align: center; margin-top: 20px; }
 .price-highlight b { font-size: 1.5rem; color: #1b5e20; }
 
-.paid-stamp {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg);
-    font-size: 3rem; font-weight: 900; color: rgba(76, 175, 80, 0.1);
-    border: 8px double rgba(76, 175, 80, 0.1); padding: 10px; pointer-events: none;
-}
-
-.ticket-actions { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
-.action-btn {
-    width: 45px; height: 45px; border-radius: 50%; border: none; color: white;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s;
-}
-.btn-print { background: #444; }
-.btn-wa { background: #25d366; }
-.btn-msg { background: #007bff; }
-.action-btn:hover { transform: translateY(-3px); }
+.ticket-actions { display: flex; justify-content: center; gap: 15px; margin-top: 25px; position: relative; z-index: 3; }
+.action-btn { width: 45px; height: 45px; border-radius: 50%; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-print { background: #444; } .btn-wa { background: #25d366; } .btn-msg { background: #007bff; }
 
 .hidden { display: none; }
 .spinner { position: fixed; top: 50%; left: 50%; width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; z-index: 9999; }
@@ -351,11 +294,12 @@ input:focus, textarea:focus { border-color: var(--secondary); outline: none; box
 
 @media print {
     body { background: white; }
-    .bg-gradient, header, .booking-card, .no-print, .action-btn { display: none !important; }
+    .bg-gradient, header, .booking-card, .no-print { display: none !important; }
     .ticket-card { box-shadow: none; border: 1px solid #000; margin: 0 auto; width: 100%; }
     #ticketOutput { display: block !important; }
+    .paid-stamp-box { border-color: rgba(211, 47, 47, 0.6); color: rgba(211, 47, 47, 0.6); } /* Make darker for printing */
 }
 </style>
 </body>
-    </html>
-                        
+                </html>
+    
