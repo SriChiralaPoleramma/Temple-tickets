@@ -1,2 +1,0 @@
-# Temple-tickets
-Tickets booking
