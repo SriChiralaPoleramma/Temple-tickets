@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pooja Booking - Poleramma Temple</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -20,10 +20,10 @@
 </header>
 
 <main class="booking-container">
-    <div class="booking-card animate-fade-in">
+    <div class="booking-card">
         <div class="card-header">
             <h2><i class="fas fa-scroll"></i> పూజా బుకింగ్</h2>
-            <p>వివరాలను నమోదు చేసి PDF టికెట్ పొందండి</p>
+            <p>వివరాలను నమోదు చేసి ఫోటో టికెట్ పొందండి</p>
         </div>
         
         <form id="monthlyForm">
@@ -44,11 +44,11 @@
 
             <div class="row">
                 <div class="col">
-                    <label><i class="fas fa-calendar-alt"></i> ప్రారంభ తేదీ</label>
+                    <label>📅 ప్రారంభ తేదీ</label>
                     <input type="date" id="startDate" required>
                 </div>
                 <div class="col">
-                    <label><i class="fas fa-calendar-check"></i> ముగింపు తేదీ</label>
+                    <label>📅 ముగింపు తేదీ</label>
                     <input type="date" id="endDate" required>
                 </div>
             </div>
@@ -58,15 +58,13 @@
                 <h3 id="totalCost">మొత్తం: ₹0</h3>
             </div>
 
-            <button type="submit" class="monthly-btn">
-                <span>🛕 బుక్ చేయండి & PDF పొందండి</span>
-            </button>
+            <button type="submit" class="monthly-btn">🛕 బుక్ చేయండి & ఫోటో పొందండి</button>
         </form>
     </div>
 
     <section id="ticketOutput" class="hidden">
         <div class="ticket-wrapper">
-            <div class="ticket-card" id="printableTicket">
+            <div class="ticket-card" id="captureTicket">
                 <div class="ticket-top-border"></div>
                 <div class="paid-stamp-box">PAID</div>
                 
@@ -93,9 +91,10 @@
                 </div>
             </div>
             
-            <div class="ticket-actions no-print">
-                <button onclick="downloadPDF()" class="action-btn btn-pdf"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button onclick="shareWhatsApp()" class="action-btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+            <div class="ticket-actions">
+                <button onclick="shareAsImage()" class="action-btn btn-jpg">
+                    <i class="fas fa-image"></i> WhatsApp ఫోటో
+                </button>
             </div>
         </div>
     </section>
@@ -110,7 +109,7 @@ const startInput = document.getElementById('startDate');
 const endInput = document.getElementById('endDate');
 let bookingData = {};
 
-// Date Restrictions
+// Date Logic
 startInput.addEventListener('change', function() {
     if (this.value) {
         endInput.min = this.value;
@@ -156,14 +155,13 @@ form.addEventListener('submit', async (e) => {
     };
 
     try {
-        // Send to Sheet
         const formData = new FormData();
         for (let key in bookingData) formData.append(key, bookingData[key]);
         await fetch(SCRIPT_URL, { method: 'POST', body: formData });
 
         document.getElementById('spinner').classList.add('hidden');
         
-        // Show Ticket
+        // Fill Ticket Details
         document.getElementById('t-id').innerText = bookingData.bookingID;
         document.getElementById('t-date').innerText = bookingData.bookingDate;
         document.getElementById('t-name').innerText = bookingData.name;
@@ -174,73 +172,86 @@ form.addEventListener('submit', async (e) => {
         document.getElementById('t-total').innerText = total;
         
         document.getElementById('ticketOutput').classList.remove('hidden');
-        
-        Swal.fire({
-            title: "విజయం!",
-            text: "బుకింగ్ పూర్తయింది. ఇప్పుడు PDF డౌన్‌లోడ్ చేయవచ్చు.",
-            icon: "success",
-            confirmButtonText: "సరే"
-        });
-
+        Swal.fire("విజయం!", "బుకింగ్ పూర్తయింది. క్రింద ఉన్న బటన్ నొక్కి ఫోటో షేర్ చేయండి.", "success");
     } catch (err) {
         document.getElementById('spinner').classList.add('hidden');
         Swal.fire("Error", "సర్వర్ సమస్య", "error");
     }
 });
 
-// PDF FEATURE
-function downloadPDF() {
-    const element = document.getElementById('printableTicket');
-    const opt = {
-        margin: 10,
-        filename: `Poleramma_Ticket_${bookingData.bookingID}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
+// IMAGE GENERATION & SHARING
+async function shareAsImage() {
+    const ticketElement = document.getElementById('captureTicket');
+    
+    // Create Image from HTML
+    const canvas = await html2canvas(ticketElement, { scale: 2, useCORS: true });
+    const imgData = canvas.toDataURL("image/jpeg", 0.9);
+
+    // Convert to file for sharing
+    const blob = await (await fetch(imgData)).blob();
+    const file = new File([blob], `Poleramma_Ticket_${bookingData.bookingID}.jpg`, { type: "image/jpeg" });
+
+    // Try Native Sharing (Works on mobile browsers)
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                files: [file],
+                title: 'Temple Ticket',
+                text: `ID: ${bookingData.bookingID} - ${bookingData.name}`
+            });
+        } catch (error) {
+            fallbackWhatsApp(imgData);
+        }
+    } else {
+        fallbackWhatsApp(imgData);
+    }
 }
 
-function shareWhatsApp() {
-    const text = `*శ్రీ పోలేరమ్మ ఆలయ టికెట్*%0A🔖 ID: ${bookingData.bookingID}%0A👤 పేరు: ${bookingData.name}%0A💰 మొత్తం: ₹${bookingData.totalAmount}%0A✅ Status: PAID%0A%0Aటికెట్ PDF కోసం డౌన్‌లోడ్ బటన్ క్లిక్ చేయండి.`;
-    window.open(`https://wa.me/91${bookingData.phone}?text=${text}`, '_blank');
+function fallbackWhatsApp(imgData) {
+    // If browser doesn't support file sharing, we download and open WhatsApp
+    const link = document.createElement('a');
+    link.href = imgData;
+    link.download = `Ticket_${bookingData.bookingID}.jpg`;
+    link.click();
+    
+    setTimeout(() => {
+        const text = `*శ్రీ పోలేరమ్మ ఆలయ టికెట్*%0A🔖 ID: ${bookingData.bookingID}%0A👤 పేరు: ${bookingData.name}%0A✅ Status: PAID%0A%0Aనేను టికెట్ ఫోటో డౌన్‌లోడ్ చేశాను. దాన్ని ఇక్కడ పంపుతున్నాను.`;
+        window.open(`https://wa.me/91${bookingData.phone}?text=${text}`, '_blank');
+    }, 1500);
 }
 </script>
 
 <style>
-/* Same beautiful styles as before with PDF optimizations */
-:root { --primary: #e65100; --secondary: #ff9800; --bg-light: #fdf5e6; --glass: rgba(255, 255, 255, 0.9); }
-* { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-body { margin: 0; background-color: var(--bg-light); }
-.bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, #ff9800, #ff5722); opacity: 0.1; z-index: -1; }
-header { background: var(--glass); padding: 15px; text-align: center; border-bottom: 3px solid var(--primary); }
+/* Clean & Professional Styling */
+:root { --primary: #e65100; --bg: #fdf5e6; }
+body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
+header { background: white; padding: 15px; text-align: center; border-bottom: 3px solid var(--primary); }
 .header-logo { width: 60px; border-radius: 50%; }
 .booking-container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
-.booking-card { background: white; border-radius: 20px; padding: 25px; width: 100%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.input-group { margin-bottom: 15px; }
-input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; }
+.booking-card { background: white; border-radius: 15px; padding: 25px; width: 100%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.input-group { margin-bottom: 12px; }
+input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
 .row { display: flex; gap: 10px; } .col { flex: 1; }
-.price-summary-card { background: #fff3e0; border-radius: 15px; padding: 15px; margin: 20px 0; text-align: center; border-left: 5px solid var(--primary); }
-.monthly-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 50px; font-weight: bold; cursor: pointer; }
+.price-summary-card { background: #fff3e0; padding: 15px; border-radius: 10px; text-align: center; margin: 15px 0; border-left: 5px solid var(--primary); }
+.monthly-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 30px; font-weight: bold; cursor: pointer; }
 
-/* TICKET STYLES */
-.ticket-card { background: white; width: 350px; padding: 25px; border: 1px solid #ddd; position: relative; border-radius: 10px; }
-.ticket-top-border { height: 8px; background: var(--primary); position: absolute; top: 0; left: 0; width: 100%; }
-.paid-stamp-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); border: 5px solid rgba(211, 47, 47, 0.2); color: rgba(211, 47, 47, 0.2); font-size: 3rem; font-weight: 900; padding: 10px; z-index: 0; pointer-events: none; }
-.ticket-header { text-align: center; margin-bottom: 20px; position: relative; z-index: 1; }
-.ticket-logo { width: 60px; }
-.ticket-body { position: relative; z-index: 1; }
-.t-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.9rem; }
-.divider { border-top: 1px dashed #ccc; margin: 10px 0; }
-.price-highlight { background: #e8f5e9; padding: 10px; text-align: center; border-radius: 10px; margin-top: 15px; }
-.price-highlight b { font-size: 1.2rem; color: #2e7d32; }
-.ticket-actions { display: flex; gap: 10px; margin-top: 20px; }
-.action-btn { flex: 1; padding: 10px; border: none; border-radius: 5px; color: white; cursor: pointer; }
-.btn-pdf { background: #d32f2f; } .btn-wa { background: #25d366; }
+/* TICKET JPEG STYLE */
+.ticket-card { background: white; width: 320px; padding: 20px; border: 1px solid #eee; position: relative; border-radius: 0; }
+.ticket-top-border { height: 6px; background: var(--primary); position: absolute; top: 0; left: 0; width: 100%; }
+.paid-stamp-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); border: 4px solid rgba(211, 47, 47, 0.2); color: rgba(211, 47, 47, 0.2); font-size: 2.5rem; font-weight: 900; padding: 5px; z-index: 0; }
+.ticket-header { text-align: center; margin-bottom: 15px; }
+.ticket-logo { width: 50px; }
+.t-row { display: flex; justify-content: space-between; margin: 5px 0; font-size: 0.85rem; }
+.divider { border-top: 1px dashed #ccc; margin: 8px 0; }
+.price-highlight { background: #e8f5e9; padding: 8px; text-align: center; border-radius: 8px; margin-top: 10px; }
+.price-highlight b { font-size: 1.1rem; color: #2e7d32; }
+
+.ticket-actions { margin-top: 20px; width: 320px; }
+.btn-jpg { width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 .hidden { display: none; }
-.spinner { position: fixed; top: 50%; left: 50%; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.spinner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </body>
-            </html>
+    </html>
     
