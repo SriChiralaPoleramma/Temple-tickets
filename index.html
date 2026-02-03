@@ -74,18 +74,16 @@
         .data-row b { color: #222; font-size: 13.5px; text-align: right; }
 
         .price-badge { background: linear-gradient(to right, #fff8e1, #fff3e0); border: 2px dashed #ff9100; border-radius: 18px; padding: 18px; text-align: center; margin-top: 15px; }
-
         .qr-wrapper { display: flex; justify-content: center; margin: 25px 0; padding: 15px; background: #f9f9f9; border-radius: 20px; border: 1px solid #eee; }
         
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
         .btn { width: 100%; padding: 18px; border-radius: 16px; border: none; color: white; font-weight: 800; font-size: 16px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--secondary)); box-shadow: 0 10px 20px rgba(191, 54, 12, 0.25); }
+        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--accent)); box-shadow: 0 10px 20px rgba(191, 54, 12, 0.25); }
         .btn-save { background: #34495e; }
         .btn-wa { background: #25D366; }
 
         .hidden { display: none !important; }
 
-        /* Verification Screen */
         .v-layout { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #e8f5e9; padding: 20px; }
         .v-card { text-align: center; border-top: 12px solid var(--success); width: 100%; max-width: 420px; animation: slideUp 0.5s ease-out; }
         .v-icon { font-size: 75px; color: var(--success); margin-bottom: 25px; }
@@ -138,7 +136,6 @@
                         <div class="data-row"><span>DEVOTEE:</span> <b id="t-name"></b></div>
                         <div class="data-row"><span>MOBILE:</span> <b id="t-phone"></b></div>
                         <div class="data-row"><span>GOTHRAM:</span> <b id="t-gothram"></b></div>
-                        <div class="data-row"><span>FAMILY:</span> <b id="t-family"></b></div>
                         <div class="data-row"><span>START:</span> <b id="t-start"></b></div>
                         <div class="data-row"><span>END:</span> <b id="t-end"></b></div>
                         <div class="qr-wrapper"><div id="qrcode"></div></div>
@@ -197,11 +194,11 @@
         document.getElementById('t-name').innerText = document.getElementById('name').value;
         document.getElementById('t-phone').innerText = document.getElementById('phone').value;
         document.getElementById('t-gothram').innerText = document.getElementById('gothram').value || "---";
-        document.getElementById('t-family').innerText = document.getElementById('family').value || "---";
         document.getElementById('t-start').innerText = sDate.value;
         document.getElementById('t-end').innerText = eDate.value;
         document.getElementById('t-amt').innerText = p.cost;
 
+        // DEVELOPER LOGIC: Generate Scannable Web URL
         const currentUrl = window.location.href.split('?')[0];
         const verifyUrl = `${currentUrl}?verify=1&id=${tid}&n=${encodeURIComponent(document.getElementById('name').value)}&a=${p.cost}&p=${sDate.value}_to_${eDate.value}&g=${encodeURIComponent(document.getElementById('gothram').value || '---')}&f=${encodeURIComponent(document.getElementById('family').value || '---')}`;
 
@@ -218,7 +215,7 @@
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
         if(urlParams.has('verify')) {
-            document.getElementById('appInterface').remove();
+            document.getElementById('appInterface').remove(); // SPA Logic: Removes booking UI
             document.getElementById('verifyDisplay').classList.remove('hidden');
             document.getElementById('vContent').innerHTML = `
                 <div class="data-row"><span>ID:</span><b>${urlParams.get('id')}</b></div>
@@ -250,8 +247,6 @@
         const goth = document.getElementById('t-gothram').innerText;
         const fam = document.getElementById('t-family').innerText;
         const phone = document.getElementById('t-phone').innerText;
-        
-        // Developer Feature: Digital Hash for Authenticity
         const hash = btoa(tid).substring(0, 10).toUpperCase();
 
         const msg = 
@@ -272,5 +267,4 @@
     }
 </script>
 </body>
-            </html>
-                                                                    
+</html>
