@@ -12,89 +12,71 @@
 
     <style>
         :root { --primary: #d84315; --secondary: #ff8f00; --bg: #fff9f0; --success: #2e7d32; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
         
         header { 
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             color: white; text-align: center; padding: 30px 15px; 
             border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; 
-            box-shadow: 0 4px 20px rgba(216, 67, 21, 0.3); 
+            box-shadow: 0 10px 20px rgba(216, 67, 21, 0.2); 
         }
 
         .booking-container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
         
         .booking-form { 
             background: white; padding: 30px; border-radius: 25px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            width: 100%; max-width: 440px; margin-top: -50px;
-            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
+            width: 100%; max-width: 450px; margin-top: -50px;
         }
 
-        h2 { color: var(--primary); text-align: center; font-size: 1.4rem; margin-top: 0; }
-        label { font-weight: 600; font-size: 0.85rem; color: #666; display: block; margin-top: 15px; }
+        .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        label { font-weight: 600; font-size: 0.85rem; color: #555; display: block; margin-top: 15px; }
         
         input { 
-            width: 100%; padding: 14px; margin: 8px 0; 
-            border: 1.5px solid #eee; border-radius: 12px; 
-            box-sizing: border-box; transition: 0.3s;
-            font-size: 1rem; background: #fafafa;
+            width: 100%; padding: 12px; margin: 5px 0; 
+            border: 2px solid #f0f0f0; border-radius: 12px; 
+            box-sizing: border-box; font-size: 0.95rem; transition: 0.3s;
         }
-        input:focus { border-color: var(--secondary); outline: none; background: #fff; box-shadow: 0 0 8px rgba(255,143,0,0.2); }
-
+        input:focus { border-color: var(--secondary); outline: none; background: #fff; }
+        
         .price-summary-card { 
-            background: #fff8e1; padding: 15px; margin: 20px 0; 
-            border-radius: 15px; text-align: center; 
-            border: 1px dashed var(--secondary);
+            background: #fff8e1; padding: 20px; margin: 20px 0; 
+            border-radius: 18px; text-align: center; border: 2px dashed var(--secondary);
         }
 
         .monthly-btn { 
             width: 100%; background: var(--primary); color: white; border: none; 
-            padding: 16px; border-radius: 15px; font-weight: bold; 
-            cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(216, 67, 21, 0.3);
-            transition: 0.3s;
+            padding: 18px; border-radius: 15px; font-weight: bold; 
+            cursor: pointer; font-size: 1.1rem; box-shadow: 0 8px 15px rgba(216, 67, 21, 0.3);
         }
-        .monthly-btn:hover { background: #bf360c; transform: translateY(-2px); }
 
-        /* Professional Ticket Design */
+        /* High-Resolution Ticket Design */
         #ticketOutput { width: 100%; max-width: 400px; margin-top: 30px; }
         .ticket-card { 
             background: white; border-radius: 25px; overflow: hidden; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15); border: 1px solid #ddd;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12); border: 1px solid #ddd;
             position: relative;
         }
-        .ticket-header { 
-            background: #fdfdfd; padding: 25px; text-align: center; 
-            border-bottom: 2.5px dashed #ccc; 
-        }
-        /* Ticket Cut-outs */
+        .ticket-header { background: #fcfcfc; padding: 25px; text-align: center; border-bottom: 2.5px dashed #ccc; }
+        
+        /* Scalloped edge effect for developer look */
         .ticket-card::before, .ticket-card::after {
-            content: ""; position: absolute; width: 20px; height: 20px;
+            content: ""; position: absolute; width: 25px; height: 25px;
             background: var(--bg); border-radius: 50%; top: 95px; z-index: 5;
         }
-        .ticket-card::before { left: -10px; }
-        .ticket-card::after { right: -10px; }
+        .ticket-card::before { left: -12.5px; }
+        .ticket-card::after { right: -12.5px; }
 
         .ticket-body { padding: 30px; background: #fff; }
-        .t-row { display: flex; justify-content: space-between; margin: 12px 0; font-size: 0.95rem; }
-        .t-row span { color: #888; }
+        .t-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 0.9rem; border-bottom: 1px solid #f9f9f9; padding-bottom: 5px; }
+        .t-row span { color: #888; font-weight: 500; }
         .t-row b { color: #222; }
 
-        #qrcode { 
-            display: flex; justify-content: center; margin: 20px 0; 
-            padding: 15px; background: #fff; border-radius: 15px;
-            border: 1px solid #eee;
-        }
-
-        .price-highlight { 
-            background: #e8f5e9; padding: 15px; text-align: center; 
-            color: var(--success); border-radius: 15px; 
-            font-weight: 800; font-size: 1.5rem; border: 1px solid #c8e6c9;
-        }
+        #qrcode { display: flex; justify-content: center; margin: 20px 0; padding: 10px; border: 1px solid #eee; border-radius: 15px; }
+        .price-highlight { background: #e8f5e9; padding: 15px; text-align: center; color: var(--success); border-radius: 15px; font-weight: 800; font-size: 1.5rem; }
         
-        .timestamp-info { text-align: center; font-size: 11px; color: #aaa; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
-
         .ticket-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; background: #f5f5f5; }
-        .btn-action { padding: 12px; border: none; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-action { padding: 14px; border: none; border-radius: 12px; color: white; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-download { background: #1976d2; }
         .btn-wa { background: #25d366; }
         .hidden { display: none; }
@@ -102,93 +84,94 @@
 </head>
 <body>
 
-<div id="mainContent">
-    <header>
-        <h1>శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
-        <p>చీరాల - అధికారిక బుకింగ్ పోర్టల్</p>
-    </header>
+<header>
+    <h1>శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
+    <p>చీరాల - స్మార్ట్ పూజా బుకింగ్ సిస్టమ్</p>
+</header>
 
-    <div class="booking-container">
-        <div class="booking-form">
-            <h2>📜 పూజా బుకింగ్</h2>
-            <form id="monthlyForm">
-                <label><i class="fas fa-user"></i> భక్తుని పేరు (Name)</label>
-                <input type="text" id="name" required placeholder="మీ పూర్తి పేరు నమోదు చేయండి">
-                
-                <label><i class="fas fa-phone"></i> ఫోన్ నంబర్</label>
-                <input type="tel" id="phone" required maxlength="10" placeholder="10 అంకెల మొబైల్ నంబర్">
-                
-                <div style="display:flex; gap:12px;">
-                    <div style="flex:1;">
-                        <label>📅 ప్రారంభ నెల</label>
-                        <input type="month" id="startMonth" required>
-                    </div>
-                    <div style="flex:1;">
-                        <label>📅 ముగింపు నెల</label>
-                        <input type="month" id="endMonth" required disabled>
-                    </div>
+<div class="booking-container">
+    <div class="booking-form">
+        <h2 style="text-align:center; color:var(--primary); margin-top:0;"><i class="fas fa-calendar-check"></i> పూజా బుకింగ్</h2>
+        <form id="monthlyForm">
+            <label>భక్తుని పేరు (Name)</label>
+            <input type="text" id="name" required placeholder="మీ పేరు నమోదు చేయండి">
+            
+            <label>ఫోన్ నంబర్</label>
+            <input type="tel" id="phone" required maxlength="10" placeholder="10 అంకెల మొబైల్ నంబర్">
+            
+            <div class="date-grid">
+                <div>
+                    <label>ప్రారంభ తేదీ</label>
+                    <input type="date" id="startDate" required>
                 </div>
-
-                <div id="priceSummary" class="price-summary-card">
-                    <h3 id="totalCost" style="margin:5px 0; color: var(--primary);">మొత్తం: ₹0</h3>
-                    <p id="monthCount" style="margin:0; font-size: 0.85rem; color:#666;">కాలవ్యవధి ఎంచుకోండి</p>
+                <div>
+                    <label>ముగింపు తేదీ</label>
+                    <input type="date" id="endDate" required disabled>
                 </div>
+            </div>
 
-                <button type="submit" class="monthly-btn">Confirm & Generate Ticket</button>
-            </form>
+            <div id="priceSummary" class="price-summary-card">
+                <p id="calcInfo" style="margin:0; font-size: 0.85rem; color:#888;">తేదీలను ఎంచుకోండి</p>
+                <h3 id="totalCost" style="margin:5px 0; color: var(--primary); font-size: 1.8rem;">₹0</h3>
+            </div>
+
+            <button type="submit" class="monthly-btn">Confirm & Generate Ticket</button>
+        </form>
+    </div>
+
+    <div id="ticketOutput" class="hidden">
+        <div id="ticketCapture" class="ticket-card">
+            <div class="ticket-header">
+                <h2 style="margin:0; color:var(--primary); font-size: 1.4rem;">పూజా ప్రసాద రశీదు</h2>
+                <small id="t-id" style="font-weight:bold; color:#666;"></small>
+            </div>
+            <div class="ticket-body">
+                <div class="t-row"><span>భక్తుని పేరు:</span> <b id="t-name"></b></div>
+                <div class="t-row"><span>మొబైల్:</span> <b id="t-phone"></b></div>
+                <div class="t-row"><span>ప్రారంభ తేదీ:</span> <b id="t-start"></b></div>
+                <div class="t-row"><span>ముగింపు తేదీ:</span> <b id="t-end"></b></div>
+                <div class="t-row"><span>బుకింగ్ సమయం:</span> <b id="t-datetime"></b></div>
+                
+                <div id="qrcode"></div>
+                
+                <div class="price-highlight">PAID: ₹<span id="t-total"></span></div>
+                <p style="text-align:center; font-size:10px; color:#aaa; margin-top:15px; text-transform:uppercase;">Official Digital Verification QR</p>
+            </div>
         </div>
-
-        <div id="ticketOutput" class="hidden">
-            <div id="ticketCapture" class="ticket-card">
-                <div class="ticket-header">
-                    <h2 style="margin:0; color:var(--primary); font-size: 1.3rem;">పూజా ప్రసాద రసీదు</h2>
-                    <small id="t-id" style="font-weight:bold; color:#555;"></small>
-                </div>
-                <div class="ticket-body">
-                    <div class="t-row"><span>భక్తుని పేరు:</span> <b id="t-name"></b></div>
-                    <div class="t-row"><span>మొబైల్ నంబర్:</span> <b id="t-phone"></b></div>
-                    <div class="t-row"><span>ప్రారంభ నెల:</span> <b id="t-start"></b></div>
-                    <div class="t-row"><span>ముగింపు నెల:</span> <b id="t-end"></b></div>
-                    <div class="t-row"><span>బుకింగ్ సమయం:</span> <b id="t-datetime"></b></div>
-                    
-                    <div id="qrcode"></div>
-                    
-                    <div class="price-highlight">PAID: ₹<span id="t-total"></span></div>
-                    <div class="timestamp-info">Verified Official Digital Receipt</div>
-                </div>
-            </div>
-            <div class="ticket-actions">
-                <button onclick="downloadTicket()" class="btn-action btn-download"><i class="fas fa-file-download"></i> Save</button>
-                <button onclick="shareWhatsApp()" class="btn-action btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-            </div>
+        <div class="ticket-actions">
+            <button onclick="downloadTicket()" class="btn-action btn-download"><i class="fas fa-save"></i> Save</button>
+            <button onclick="shareWhatsApp()" class="btn-action btn-wa"><i class="fab fa-whatsapp"></i> Share</button>
         </div>
     </div>
 </div>
 
 <script>
-    const startMonth = document.getElementById('startMonth');
-    const endMonth = document.getElementById('endMonth');
-    
-    // Set min date to current month
-    const today = new Date().toISOString().slice(0, 7);
-    startMonth.min = today;
+    const startInput = document.getElementById('startDate');
+    const endInput = document.getElementById('endDate');
 
-    startMonth.addEventListener('change', () => {
-        endMonth.disabled = !startMonth.value;
-        endMonth.min = startMonth.value;
+    // Date Logic: Set minimum to today
+    const today = new Date().toISOString().split('T')[0];
+    startInput.min = today;
+
+    startInput.addEventListener('change', () => {
+        endInput.disabled = !startInput.value;
+        endInput.min = startInput.value;
         updatePricing();
     });
-    endMonth.addEventListener('change', updatePricing);
+
+    endInput.addEventListener('change', updatePricing);
 
     function updatePricing() {
-        if (startMonth.value && endMonth.value) {
-            const d1 = new Date(startMonth.value + "-01");
-            const d2 = new Date(endMonth.value + "-01");
-            const months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth()) + 1;
+        if (startInput.value && endInput.value) {
+            const d1 = new Date(startInput.value);
+            const d2 = new Date(endInput.value);
             
-            document.getElementById('totalCost').innerText = `మొత్తం: ₹${months * 100}`;
-            document.getElementById('monthCount').innerText = `వ్యవధి: ${months} నెలలు`;
-            return { total: months * 100, start: startMonth.value, end: endMonth.value };
+            // Developer Logic: Calculate months based on date difference
+            let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth()) + 1;
+            
+            document.getElementById('calcInfo').innerText = `వ్యవధి: ${months} నెలలు (నెలవారీ ₹100)`;
+            document.getElementById('totalCost').innerText = `₹${months * 100}`;
+            return { total: months * 100, start: startInput.value, end: endInput.value };
         }
         return { total: 0 };
     }
@@ -200,44 +183,37 @@
 
         const bID = "POL-" + Math.floor(100000 + Math.random() * 900000);
         const now = new Date();
-        const dateTimeStr = now.toLocaleDateString('en-IN') + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        const timeStr = now.toLocaleDateString('en-IN') + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-        // Update Ticket UI
-        document.getElementById('t-id').innerText = "ID: " + bID;
+        // Populate Ticket
+        document.getElementById('t-id').innerText = "TRANSACTION ID: " + bID;
         document.getElementById('t-name').innerText = document.getElementById('name').value;
         document.getElementById('t-phone').innerText = document.getElementById('phone').value;
         document.getElementById('t-start').innerText = pricing.start;
         document.getElementById('t-end').innerText = pricing.end;
-        document.getElementById('t-datetime').innerText = dateTimeStr;
         document.getElementById('t-total').innerText = pricing.total;
+        document.getElementById('t-datetime').innerText = timeStr;
 
-        // Generate High-Correction QR
+        // QR Code Implementation (Encoded with Details)
         const qrBox = document.getElementById("qrcode");
         qrBox.innerHTML = "";
-        const qrText = `TEMPLE_VERIFIED\nID: ${bID}\nNAME: ${document.getElementById('name').value}\nAMT: ${pricing.total}\nDATE: ${dateTimeStr}`;
+        const qrData = `VERIFIED: ${bID}\nNAME: ${document.getElementById('name').value}\nVALID: ${pricing.start} TO ${pricing.end}\nAMT: ₹${pricing.total}`;
         
         new QRCode(qrBox, {
-            text: qrText,
+            text: qrData,
             width: 160,
             height: 160,
             colorDark : "#d84315",
-            colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
         });
 
         document.getElementById('ticketOutput').classList.remove('hidden');
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        
-        Swal.fire({
-            title: 'బుకింగ్ విజయవంతమైంది!',
-            icon: 'success',
-            confirmButtonColor: '#d84315'
-        });
+        Swal.fire("విజయం!", "పూజా రశీదు సిద్ధంగా ఉంది", "success");
     });
 
     function downloadTicket() {
-        const ticket = document.getElementById('ticketCapture');
-        html2canvas(ticket, { scale: 3 }).then(canvas => {
+        html2canvas(document.getElementById('ticketCapture'), { scale: 3 }).then(canvas => {
             const link = document.createElement('a');
             link.download = `Poleramma_Ticket_${Date.now()}.png`;
             link.href = canvas.toDataURL();
@@ -251,5 +227,5 @@
     }
 </script>
 </body>
-    </html>
-                    
+        </html>
+                
