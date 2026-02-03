@@ -12,118 +12,107 @@
 
     <style>
         :root { --primary: #d84315; --secondary: #ff8f00; --bg: #fff9f0; --success: #2e7d32; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
         
+        /* Modern Header */
         header { 
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            color: white; text-align: center; padding: 25px 15px; 
-            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            color: white; text-align: center; padding: 30px 15px; 
+            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; 
+            box-shadow: 0 10px 20px rgba(216, 67, 21, 0.2); 
         }
 
         .booking-container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
         
+        /* Form Card */
         .booking-form { 
-            background: white; padding: 25px; border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            width: 100%; max-width: 420px; margin-top: -40px;
+            background: white; padding: 30px; border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
+            width: 100%; max-width: 440px; margin-top: -50px;
             border: 1px solid rgba(0,0,0,0.05);
         }
 
-        h2 { color: var(--primary); text-align: center; font-size: 1.3rem; margin-bottom: 20px; }
-        label { font-weight: 600; font-size: 0.85rem; color: #666; display: block; margin-top: 15px; }
-        
-        input, textarea { 
-            width: 100%; padding: 12px; margin: 8px 0; 
-            border: 1.5px solid #eee; border-radius: 12px; 
-            box-sizing: border-box; transition: 0.3s;
-            font-size: 1rem; background: #fafafa;
+        label { font-weight: 600; font-size: 0.9rem; color: #555; display: block; margin-top: 18px; }
+        input { 
+            width: 100%; padding: 14px; margin: 8px 0; 
+            border: 2px solid #f0f0f0; border-radius: 12px; 
+            box-sizing: border-box; font-size: 1rem; transition: all 0.3s ease;
         }
-
-        input:focus { border-color: var(--secondary); outline: none; background: #fff; }
-
+        input:focus { border-color: var(--secondary); outline: none; background: #fff; box-shadow: 0 0 10px rgba(255,143,0,0.1); }
+        
         .price-summary-card { 
-            background: #fff8e1; padding: 15px; margin: 20px 0; 
-            border-radius: 15px; text-align: center; 
-            border: 1px dashed var(--secondary);
+            background: #fff8e1; padding: 20px; margin: 25px 0; 
+            border-radius: 18px; text-align: center; border: 2px dashed var(--secondary);
         }
 
         .monthly-btn { 
             width: 100%; background: var(--primary); color: white; border: none; 
-            padding: 16px; border-radius: 15px; font-weight: bold; 
-            cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(216, 67, 21, 0.3);
+            padding: 18px; border-radius: 15px; font-weight: bold; 
+            cursor: pointer; font-size: 1.1rem; box-shadow: 0 8px 15px rgba(216, 67, 21, 0.3);
+            transition: transform 0.2s;
         }
+        .monthly-btn:hover { transform: translateY(-3px); background: #bf360c; }
 
-        /* High-End Ticket UI */
-        #ticketOutput { width: 100%; max-width: 380px; margin-top: 30px; animation: slideUp 0.5s ease; }
-        
+        /* Premium Ticket UI */
+        #ticketOutput { width: 100%; max-width: 400px; margin-top: 40px; }
         .ticket-card { 
-            background: white; border-radius: 20px; overflow: hidden; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15); border: 1px solid #ddd;
+            background: white; border-radius: 25px; overflow: hidden; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12); border: 1px solid #eee;
             position: relative;
         }
 
         .ticket-header { 
-            background: #fdfdfd; padding: 20px; text-align: center; 
-            border-bottom: 2px dashed #ccc; 
+            background: #fcfcfc; padding: 25px; text-align: center; 
+            border-bottom: 2px dashed #ddd; position: relative;
         }
 
-        .ticket-body { padding: 25px; background: #fff; position: relative; }
-        
-        .t-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 0.95rem; border-bottom: 1px solid #f9f9f9; padding-bottom: 5px; }
-        .t-row span { color: #888; }
-        .t-row b { color: #222; }
+        .ticket-body { padding: 30px; background: #fff; }
+        .t-row { display: flex; justify-content: space-between; margin: 12px 0; font-size: 0.95rem; }
+        .t-row span { color: #777; font-weight: 500; }
+        .t-row b { color: #111; }
 
         #qrcode { 
-            display: flex; justify-content: center; margin: 20px 0; 
-            padding: 15px; background: #fff; border-radius: 15px;
-            border: 1px solid #eee;
+            display: flex; justify-content: center; margin: 25px 0; 
+            padding: 15px; background: #fff; border-radius: 20px;
+            border: 1px solid #f0f0f0;
         }
 
         .price-highlight { 
-            background: #e8f5e9; padding: 15px; text-align: center; 
-            color: var(--success); border-radius: 12px; 
-            font-weight: 800; font-size: 1.4rem; border: 1px solid #c8e6c9;
+            background: #e8f5e9; padding: 18px; text-align: center; 
+            color: var(--success); border-radius: 15px; 
+            font-weight: 800; font-size: 1.5rem; border: 1px solid #c8e6c9;
         }
 
-        .paid-stamp {
-            position: absolute; top: 40%; right: 10%;
-            border: 3px solid #d32f2f; color: #d32f2f;
-            padding: 5px 15px; font-weight: bold; font-size: 1.5rem;
-            transform: rotate(-20deg); opacity: 0.2; border-radius: 5px;
-            pointer-events: none;
-        }
+        .meta-info { text-align: center; font-size: 11px; color: #bbb; margin-top: 20px; letter-spacing: 0.5px; }
 
-        .ticket-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; background: #f5f5f5; }
-        
+        .ticket-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; background: #f9f9f9; }
         .btn-action { 
-            padding: 12px; border: none; border-radius: 10px; color: white; 
-            cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 14px; border: none; border-radius: 12px; color: white; 
+            cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-download { background: #1976d2; }
+        .btn-download { background: #007bff; }
         .btn-wa { background: #25d366; }
 
         .hidden { display: none; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
-    <p>చీరాల - అధికారిక బుకింగ్ పోర్టల్</p>
+    <h1 style="margin:0; font-size: 1.6rem;">శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
+    <p style="margin:5px 0 0; opacity: 0.9;">ఆన్‌లైన్ పూజా బుకింగ్ రశీదు సిస్టమ్</p>
 </header>
 
 <div class="booking-container">
     <div class="booking-form">
         <form id="monthlyForm">
-            <label><i class="fas fa-user"></i> భక్తుని పేరు (Name)</label>
-            <input type="text" id="name" required placeholder="మీ పేరు నమోదు చేయండి">
+            <label><i class="fas fa-user-circle"></i> భక్తుని పేరు (Devotee Name)</label>
+            <input type="text" id="name" required placeholder="మీ పూర్తి పేరు నమోదు చేయండి">
             
-            <label><i class="fas fa-phone"></i> ఫోన్ నంబర్</label>
+            <label><i class="fas fa-phone-alt"></i> మొబైల్ నంబర్</label>
             <input type="tel" id="phone" required maxlength="10" placeholder="10 అంకెల మొబైల్ నంబర్">
             
-            <div style="display:flex; gap:10px;">
+            <div style="display:flex; gap:12px;">
                 <div style="flex:1;">
                     <label>📅 ప్రారంభ నెల</label>
                     <input type="month" id="startMonth" required>
@@ -135,37 +124,40 @@
             </div>
 
             <div id="priceSummary" class="price-summary-card">
-                <p id="monthCount" style="margin:0; font-size: 0.9rem; color: #777;">కాలవ్యవధి: 0 నెలలు</p>
-                <h3 id="totalCost" style="margin:5px 0; font-size: 1.6rem; color: var(--primary);">మొత్తం: ₹0</h3>
+                <p id="monthCount" style="margin:0; font-size: 0.85rem; color: #666;">వ్యవధి: 0 నెలలు</p>
+                <h3 id="totalCost" style="margin:8px 0; font-size: 1.8rem; color: var(--primary);">₹0</h3>
             </div>
 
-            <button type="submit" class="monthly-btn">Confirm & Generate Ticket</button>
+            <button type="submit" class="monthly-btn">Confirm Booking</button>
         </form>
     </div>
 
     <div id="ticketOutput" class="hidden">
         <div id="ticketCapture" class="ticket-card">
             <div class="ticket-header">
-                <h2 style="margin:0; color:var(--primary); font-size: 1.2rem;">పూజా ప్రసాద రసీదు</h2>
-                <small id="t-id" style="font-weight:bold; color:#777;"></small>
+                <h2 style="margin:0; color:var(--primary); font-size: 1.4rem;">పూజా ప్రసాద రశీదు</h2>
+                <div id="t-id" style="font-weight:700; color:#555; margin-top:5px; font-size: 0.9rem;"></div>
             </div>
             <div class="ticket-body">
-                <div class="paid-stamp">PAID</div>
-                <div class="t-row"><span>భక్తుని పేరు:</span> <b id="t-name"></b></div>
-                <div class="t-row"><span>మొబైల్:</span> <b id="t-phone"></b></div>
-                <div class="t-row"><span>కాలవ్యవధి:</span> <b id="t-period"></b></div>
+                <div class="t-row"><span>Devotee:</span> <b id="t-name"></b></div>
+                <div class="t-row"><span>Mobile:</span> <b id="t-phone"></b></div>
+                <div class="t-row"><span>Start Month:</span> <b id="t-start"></b></div>
+                <div class="t-row"><span>End Month:</span> <b id="t-end"></b></div>
+                <div class="t-row"><span>Issued On:</span> <b id="t-datetime"></b></div>
                 
                 <div id="qrcode"></div>
                 
                 <div class="price-highlight">PAID: ₹<span id="t-total"></span></div>
-                <p style="text-align:center; font-size: 10px; color: #aaa; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">
-                    This is a digitally generated ticket.
-                </p>
+                
+                <div class="meta-info">
+                    VALID UNTIL THE END OF THE SELECTED PERIOD<br>
+                    DIGITALLY VERIFIED RECORD
+                </div>
             </div>
         </div>
         
         <div class="ticket-actions">
-            <button onclick="downloadTicket()" class="btn-action btn-download"><i class="fas fa-file-download"></i> Save</button>
+            <button onclick="downloadTicket()" class="btn-action btn-download"><i class="fas fa-save"></i> Save</button>
             <button onclick="shareWhatsApp()" class="btn-action btn-wa"><i class="fab fa-whatsapp"></i> Share</button>
         </div>
     </div>
@@ -175,93 +167,105 @@
     const startInput = document.getElementById('startMonth');
     const endInput = document.getElementById('endMonth');
 
-    // Prevent past dates
-    const currentMonth = new Date().toISOString().slice(0, 7);
-    startInput.min = currentMonth;
+    // 1. Logic: Date Constraints
+    const currentYearMonth = new Date().toISOString().slice(0, 7);
+    startInput.min = currentYearMonth;
 
     startInput.addEventListener('change', () => {
         endInput.disabled = !startInput.value;
         endInput.min = startInput.value;
-        updatePrice();
+        calculateTotal();
     });
 
-    endInput.addEventListener('change', updatePrice);
+    endInput.addEventListener('change', calculateTotal);
 
-    function updatePrice() {
+    function calculateTotal() {
         if (startInput.value && endInput.value) {
             const d1 = new Date(startInput.value + "-01");
             const d2 = new Date(endInput.value + "-01");
             const months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth()) + 1;
             
-            document.getElementById('monthCount').innerText = `కాలవ్యవధి: ${months} నెలలు`;
-            document.getElementById('totalCost').innerText = `మొత్తం: ₹${months * 100}`;
-            return { total: months * 100, period: `${startInput.value} to ${endInput.value}` };
+            document.getElementById('monthCount').innerText = `వ్యవధి: ${months} నెలలు`;
+            document.getElementById('totalCost').innerText = `₹${months * 100}`;
+            return { total: months * 100, start: startInput.value, end: endInput.value };
         }
         return { total: 0 };
     }
 
+    // 2. Logic: Ticket Generation
     document.getElementById('monthlyForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const pricing = updatePrice();
-        if(pricing.total === 0) return;
+        const pricing = calculateTotal();
+        if (pricing.total === 0) return;
 
         const bookingID = "POL-" + Math.floor(100000 + Math.random() * 900000);
-        const nameVal = document.getElementById('name').value;
-        const phoneVal = document.getElementById('phone').value;
-        
-        // Populate Ticket
-        document.getElementById('t-id').innerText = "ID: " + bookingID;
-        document.getElementById('t-name').innerText = nameVal;
-        document.getElementById('t-phone').innerText = phoneVal;
-        document.getElementById('t-period').innerText = pricing.period;
-        document.getElementById('t-total').innerText = pricing.total;
+        const now = new Date();
+        const timestamp = now.toLocaleDateString('en-IN') + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-        // QR CODE GENERATION - Optimized for 100% Scan rate
-        const qrContainer = document.getElementById("qrcode");
-        qrContainer.innerHTML = "";
+        // Update Ticket UI
+        document.getElementById('t-id').innerText = "TRANSACTION ID: " + bookingID;
+        document.getElementById('t-name').innerText = document.getElementById('name').value;
+        document.getElementById('t-phone').innerText = document.getElementById('phone').value;
+        document.getElementById('t-start').innerText = pricing.start;
+        document.getElementById('t-end').innerText = pricing.end;
+        document.getElementById('t-total').innerText = pricing.total;
+        document.getElementById('t-datetime').innerText = timestamp;
+
+        // QR Code Implementation with Link Verification Logic
+        const qrBox = document.getElementById("qrcode");
+        qrBox.innerHTML = "";
         
-        const qrData = `TEMPLE TICKET\nID: ${bookingID}\nName: ${nameVal}\nPhone: ${phoneVal}\nAmount: ${pricing.total}\nStatus: VERIFIED PAID`;
+        // Creating a dynamic verification link (Base64 encoded data)
+        const bookingData = {
+            id: bookingID,
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            start: pricing.start,
+            end: pricing.end,
+            total: pricing.total,
+            issued: timestamp
+        };
+        const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(bookingData))));
+        const vLink = window.location.href.split('?')[0] + "?verify=" + encoded;
         
-        new QRCode(qrContainer, {
-            text: qrData,
-            width: 160,
-            height: 160,
-            colorDark : "#000000",
+        new QRCode(qrBox, {
+            text: vLink,
+            width: 180,
+            height: 180,
+            colorDark : "#d84315",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
         });
 
         document.getElementById('ticketOutput').classList.remove('hidden');
         Swal.fire({
-            title: 'విజయం!',
-            text: 'మీ పూజా బుకింగ్ విజయవంతమైంది.',
+            title: 'బుకింగ్ విజయవంతమైంది!',
             icon: 'success',
-            confirmButtonColor: '#d84315'
+            timer: 2000,
+            showConfirmButton: false
         });
-        
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     });
 
-    // Save as Image - High Quality
+    // 3. Logic: Download & Sharing
     function downloadTicket() {
         const ticket = document.getElementById('ticketCapture');
-        html2canvas(ticket, { 
-            scale: 3, // High DPI for crisp QR codes
-            backgroundColor: "#fff9f0" 
-        }).then(canvas => {
+        html2canvas(ticket, { scale: 3 }).then(canvas => {
             const link = document.createElement('a');
-            link.download = `Poleramma_Ticket_${Date.now()}.png`;
+            link.download = `TempleTicket_${Date.now()}.png`;
             link.href = canvas.toDataURL("image/png");
             link.click();
         });
     }
 
     function shareWhatsApp() {
-        const phone = document.getElementById('phone').value;
-        const bID = document.getElementById('t-id').innerText;
-        const text = `*శ్రీ పోలేరమ్మ ఆలయం - బుకింగ్ రశీదు*%0A🔖 ${bID}%0A👤 పేరు: ${document.getElementById('t-name').innerText}%0A💰 మొత్తం: ₹${document.getElementById('t-total').innerText}%0A✅ Status: PAID`;
+        const name = document.getElementById('t-name').innerText;
+        const total = document.getElementById('t-total').innerText;
+        const phone = document.getElementById('t-phone').innerText;
+        const text = `*శ్రీ పోలేరమ్మ ఆలయం - బుకింగ్ రశీదు*%0A👤 పేరు: ${name}%0A💰 మొత్తం: ₹${total}%0A✅ స్టేటస్: PAID`;
         window.open(`https://wa.me/91${phone}?text=${text}`, '_blank');
     }
 </script>
 </body>
-</html>
+    </html>
+                
