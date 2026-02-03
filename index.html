@@ -27,11 +27,10 @@
             background: var(--sandalwood); 
             margin: 0; 
             color: var(--text-main);
-            /* Subtle flower pattern overlay */
             background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
         }
 
-        /* DIVINE HEADER: Elegant and spiritual */
+        /* DIVINE HEADER */
         header { 
             background: white; 
             padding: 50px 15px; 
@@ -66,7 +65,7 @@
 
         .container { max-width: 480px; margin: 0 auto; padding: 15px; }
 
-        /* ZEN FORM CARD: Clean and professional */
+        /* ZEN FORM CARD */
         .zen-card { 
             background: white; 
             border-radius: 25px; 
@@ -76,7 +75,6 @@
             position: relative;
         }
 
-        /* Decorative flower icons in corners */
         .zen-card::before { content: '🌼'; position: absolute; top: 15px; left: 15px; opacity: 0.3; }
         .zen-card::after { content: '🌼'; position: absolute; bottom: 15px; right: 15px; opacity: 0.3; }
 
@@ -100,7 +98,6 @@
         }
         .input-group input:focus { border-color: var(--banthi-gold); outline: none; background: #fff; }
 
-        /* PRICE DISPLAY */
         .price-panel {
             background: #fffdf5; 
             border: 1px solid var(--banthi-gold);
@@ -110,7 +107,7 @@
             margin: 25px 0;
         }
 
-        /* TICKET: Designed like a premium temple invite */
+        /* TICKET UI */
         .ticket-box { 
             background: white; 
             border-radius: 20px; 
@@ -198,7 +195,7 @@
 
             <div class="price-panel">
                 <span id="liveAmt" style="font-size: 30px; font-weight: 800; color: var(--om-red);">₹ 100</span><br>
-                <small id="liveMonths" style="color: #888;">1 Month Seva Selection</small>
+                <small id="liveMonths" style="color: #888;">1 Month Seva Selected</small>
             </div>
 
             <button type="submit" class="btn btn-om">Generate Digital Receipt</button>
@@ -248,9 +245,6 @@
 </div>
 
 <script>
-    /* DEVELOPER LOGIC: MONTHLY CALCULATION (₹100/mo)
-       Rule: Difference based on Calendar months. Jan 1 to Feb 1 = 1 month.
-    */
     const sDate = document.getElementById('sDate');
     const eDate = document.getElementById('eDate');
     sDate.min = new Date().toISOString().split('T')[0];
@@ -259,21 +253,17 @@
         if(!sDate.value || !eDate.value) return;
         const d1 = new Date(sDate.value), d2 = new Date(eDate.value);
         let diff = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
-        
-        // Match user logic: if end date day is less than start day, it's a partial month
         if (d2.getDate() < d1.getDate()) diff--;
         const count = diff < 1 ? 1 : diff;
 
         document.getElementById('liveAmt').innerText = `₹ ${count * 100}`;
-        document.getElementById('liveMonths').innerText = `${count} Month(s) Seva Selected`;
+        document.getElementById('liveMonths').innerText = `${count} Month(s) Selected`;
         return count * 100;
     }
 
     sDate.onchange = () => { eDate.disabled = false; eDate.min = sDate.value; updateCalc(); };
     eDate.onchange = updateCalc;
 
-    /* URL QR SYSTEM: Generates full link for scanning mobile 
-    */
     document.getElementById('ticketForm').onsubmit = (e) => {
         e.preventDefault();
         const amt = updateCalc();
@@ -291,19 +281,15 @@
         const vUrl = `${fullPath}?verify=1&id=${tid}&n=${encodeURIComponent(document.getElementById('name').value)}&p=${sDate.value}_to_${eDate.value}&a=${amt}&d=${today}`;
         
         document.getElementById("qrcode").innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { 
-            text: vUrl, width: 150, height: 150, colorDark: "#6b0000" 
-        });
+        new QRCode(document.getElementById("qrcode"), { text: vUrl, width: 150, height: 150, colorDark: "#6b0000" });
 
         document.getElementById('bookingUI').classList.add('hidden');
         document.getElementById('receiptUI').classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    /* HD SAVE & WHATSAPP SHARE 
-    */
     async function downloadHD() {
-        Swal.fire({ title: 'Downloading Ticket...', didOpen: () => Swal.showLoading() });
+        Swal.fire({ title: 'Downloading...', didOpen: () => Swal.showLoading() });
         const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 3 });
         const link = document.createElement('a');
         link.download = `Poleramma_Seva_Receipt.png`;
@@ -318,13 +304,11 @@
         const amt = document.getElementById('res-amt').innerText;
         const date = document.getElementById('res-date').innerText;
 
-        const message = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A--------------------------------%0A🔖 *ID:* ${tid}%0A📅 *Date:* ${date}%0A👤 *Devotee:* ${name}%0A💰 *Amount:* ${amt}%0A--------------------------------%0A_ఓం నమో నారాయణి! మీ గోత్రనామాలతో పూజలు జరిపి ప్రసాదం అందజేయబడును._`;
+        const message = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A--------------------------------%0A🔖 *ID:* ${tid}%0A📅 *Date:* ${date}%0A👤 *Devotee:* ${name}%0A💰 *Amount:* ${amt}%0A--------------------------------%0A_ఓం నమో నారాయణి!_`;
         
         window.open(`https://wa.me/91${document.getElementById('phone').value}?text=${message}`, '_blank');
     }
 
-    /* VERIFICATION LOGIC (ON SCAN) 
-    */
     window.onload = () => {
         const params = new URLSearchParams(window.location.search);
         if(params.has('verify')) {
