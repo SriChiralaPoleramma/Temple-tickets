@@ -3,284 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pooja Booking - Poleramma Temple</title>
+    <title>Chirala Poleramma Temple - Divine Booking</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ramabhadra&family=Rozha+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d84315;
+            --secondary: #ff8f00;
+            --accent: #ffd700;
+            --holy-bg: #fffbf0;
+            --text-dark: #3e2723;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--holy-bg);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--text-dark);
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+        }
+
+        /* Divine Header */
+        header {
+            background: linear-gradient(to right, #bf360c, #d84315, #bf360c);
+            padding: 25px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-bottom: 5px solid var(--accent);
+        }
+
+        .header-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 15px rgba(255,215,0,0.5);
+        }
+
+        h1 { font-family: 'Ramabhadra', sans-serif; margin: 10px 0; font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+
+        /* Booking Card */
+        .container { max-width: 600px; margin: 40px auto; padding: 0 20px; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: 'ॐ';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 150px;
+            color: rgba(216, 67, 21, 0.03);
+            pointer-events: none;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--primary); }
+        
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 2px solid #ffe0b2; border-radius: 12px;
+            font-size: 1rem; outline: none; transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(216, 67, 21, 0.1); }
+
+        .btn-divine {
+            width: 100%; background: linear-gradient(45deg, #d84315, #ff6f00);
+            color: white; border: none; padding: 18px; border-radius: 50px;
+            font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(216,67,21,0.3);
+            transition: 0.3s;
+        }
+
+        .btn-divine:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(216,67,21,0.4); }
+
+        /* Fancy Ticket */
+        #ticketOutput { margin-top: 40px; }
+        .temple-ticket {
+            background: white;
+            border: 10px double var(--primary);
+            padding: 0;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            background-image: radial-gradient(circle, #fff9f0 10%, transparent 11%);
+            background-size: 20px 20px;
+        }
+
+        .ticket-header-inner {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .ticket-content { padding: 30px; }
+        .t-detail { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
+        .t-label { color: #777; font-size: 0.9rem; }
+        .t-value { font-weight: bold; color: var(--primary); }
+
+        .price-tag {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--accent);
+        }
+
+        .stamp {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 100px;
+            opacity: 0.2;
+            transform: rotate(-15deg);
+        }
+
+        /* Action Buttons */
+        .actions { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .circle-btn {
+            width: 50px; height: 50px; border-radius: 50%; border: none;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem; cursor: pointer; transition: 0.3s;
+        }
+        .bg-wa { background: #25D366; }
+        .bg-print { background: #455a64; }
+
+        .hidden { display: none; }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; }
+            .temple-ticket { border: 5px solid black; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="bg-gradient"></div>
-
 <header>
-    <div class="logo-container">
-        <img src="templeimage/1742626228036 (1).jpg" alt="Logo" class="header-logo">
-        <h1>శ్రీ శ్రీ శ్రీ చీరాల పోలేరమ్మ తల్లి దేవస్థానం</h1>
-    </div>
-    <nav>
-        <ul>
-            <li><a href="reserv.html">🏠 Ticket</a></li>
-            
-        </ul>    
-    </nav>
+    <img src="templeimage/1742626228036 (1).jpg" alt="Temple Logo" class="header-logo" onerror="this.src='https://via.placeholder.com/100?text=Temple'">
+    <h1>శ్రీ శ్రీ శ్రీ చీరాల పోలేరమ్మ తల్లి దేవస్థానం</h1>
+    <p style="margin: 0; opacity: 0.9;">Online Pooja Booking Portal</p>
 </header>
 
-<main class="booking-container">
-    <div class="booking-card animate-fade-in">
-        <div class="card-header">
-            <h2><i class="fas fa-scroll"></i> పూజా బుకింగ్</h2>
-            <p>వివరాలను నమోదు చేసి అందమైన PDF టికెట్ పొందండి</p>
-        </div>
-        
-        <form id="monthlyForm">
+<div class="container">
+    <div class="glass-card">
+        <form id="poojaForm">
             <div class="input-group">
-                <label><i class="fas fa-user"></i> పేరు</label>
-                <input type="text" id="name" required placeholder="మీ పేరు">
+                <label><i class="fas fa-praying-hands"></i> సేవ రకం (Select Seva)</label>
+                <select id="sevaType" required onchange="calculatePrice()">
+                    <option value="100">కుంకుమ అర్చన (Monthly) - ₹100</option>
+                    <option value="500">అభిషేకం (Monthly) - ₹500</option>
+                    <option value="1116">శాశ్వత పూజ (Permanent) - ₹1116</option>
+                </select>
             </div>
 
             <div class="input-group">
-                <label><i class="fas fa-phone"></i> ఫోన్ నంబర్</label>
-                <input type="tel" id="phone" required placeholder="10 అంకెల నంబర్" maxlength="10">
+                <label><i class="fas fa-user"></i> పూర్తి పేరు (Full Name)</label>
+                <input type="text" id="name" required placeholder="మీ పేరు నమోదు చేయండి">
             </div>
 
-            <div class="input-group">
-                <label><i class="fas fa-om"></i> గోత్రం</label>
-                <input type="text" id="gothram" required placeholder="ఉదా: వాసిష్ఠ">
-            </div>
-
-            <div class="input-group">
-                <label><i class="fas fa-users"></i> కుటుంబ సభ్యులు</label>
-                <textarea id="family" rows="2" placeholder="రాము, సీత, లక్ష్మి"></textarea>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <label><i class="fas fa-calendar-alt"></i> ప్రారంభ తేదీ</label>
-                    <input type="date" id="startDate" required>
+            <div class="row" style="display: flex; gap: 15px;">
+                <div class="input-group" style="flex: 1;">
+                    <label><i class="fas fa-om"></i> గోత్రం</label>
+                    <input type="text" id="gothram" required placeholder="గోత్రం">
                 </div>
-                <div class="col">
-                    <label><i class="fas fa-calendar-check"></i> ముగింపు తేదీ</label>
-                    <input type="date" id="endDate" required>
+                <div class="input-group" style="flex: 1;">
+                    <label><i class="fas fa-phone"></i> ఫోన్</label>
+                    <input type="tel" id="phone" maxlength="10" required placeholder="ఫోన్ నంబర్">
                 </div>
             </div>
 
-            <div id="priceSummary" class="price-summary-card">
-                <span id="durationText">పూర్తయిన నెలలు: 0</span>
-                <h3 id="totalCost">మొత్తం: ₹0</h3>
+            <div class="row" style="display: flex; gap: 15px;">
+                <div class="input-group" style="flex: 1;">
+                    <label>ప్రారంభ తేదీ</label>
+                    <input type="date" id="startDate" required onchange="calculatePrice()">
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>ముగింపు తేదీ</label>
+                    <input type="date" id="endDate" required onchange="calculatePrice()">
+                </div>
             </div>
 
-            <button type="submit" class="monthly-btn">
-                <span>🛕 బుక్ చేయండి & టికెట్ పొందండి</span>
+            <div id="priceDisplay" style="text-align: center; margin: 15px 0; font-weight: bold; color: var(--primary);">
+                మొత్తం రుసుము: ₹<span id="totalDisplay">0</span>
+            </div>
+
+            <button type="submit" class="btn-divine">
+                <i class="fas fa-lock"></i> భక్తితో బుక్ చేయండి
             </button>
         </form>
     </div>
 
     <section id="ticketOutput" class="hidden">
-        <div class="ticket-wrapper">
-            <div class="ticket-card" id="printableTicket">
-                <div class="ticket-top-border"></div>
-                <div class="paid-stamp-box">PAID</div>
-                
-                <div class="ticket-header">
-                    <img src="templeimage/1742626228036 (1).jpg" alt="Logo" class="ticket-logo">
-                    <h3>టికెట్ బుకింగ్ నిర్ధారణ</h3>
-                    <p class="temple-name">చీరాల పోలేరమ్మ తల్లి దేవస్థానం</p>
-                </div>
-                
-                <div class="ticket-body">
-                    <div class="t-row"><span>బుకింగ్ ID:</span> <b id="t-id"></b></div>
-                    <div class="t-row"><span>తేదీ:</span> <span id="t-date"></span></div>
-                    <div class="divider"></div>
-                    <div class="t-row"><span>పేరు:</span> <span id="t-name"></span></div>
-                    <div class="t-row"><span>గోత్రం:</span> <b id="t-gothram"></b></div>
-                    <div class="t-row"><span>ఫోన్:</span> <span id="t-phone"></span></div>
-                    <div class="t-row"><span>ప్రారంభం:</span> <span id="t-start"></span></div>
-                    <div class="t-row"><span>ముగింపు:</span> <span id="t-end"></span></div>
-                    
-                    <div class="price-highlight">
-                        <p>మొత్తం చెల్లింపు (₹100/నెల)</p>
-                        <b>₹<span id="t-total"></span></b>
-                    </div>
-                </div>
+        <div class="temple-ticket" id="divineTicket">
+            <div class="ticket-header-inner">
+                <h2 style="margin:0; font-size: 1.2rem;">పూజా ప్రసాద రసీదు</h2>
+                <small id="t-id"></small>
             </div>
             
-            <div class="ticket-actions no-print">
-                <button onclick="shareLockedPDF()" class="action-btn btn-wa" title="WhatsApp Share">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </button>
-                <button onclick="downloadPDF()" class="action-btn btn-pdf" title="Download PDF">
-                    <i class="fas fa-download"></i> Download
-                </button>
-                <button onclick="window.print()" class="action-btn btn-print" title="Print Ticket">
-                    <i class="fas fa-print"></i> Print
-                </button>
-                <button onclick="shareText()" class="action-btn btn-msg" title="Text Share">
-                    <i class="fas fa-share-alt"></i> Share
-                </button>
+            <div class="ticket-content">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="color: var(--primary); margin: 0;">శ్రీ పోలేరమ్మ తల్లి ఆశీస్సులు</h3>
+                    <p style="font-size: 0.8rem; color: #666;">చీరాల, బాపట్ల జిల్లా, ఆంధ్రప్రదేశ్</p>
+                </div>
+
+                <div class="t-detail"><span class="t-label">భక్తుని పేరు:</span> <span class="t-value" id="t-name"></span></div>
+                <div class="t-detail"><span class="t-label">గోత్రం:</span> <span class="t-value" id="t-gothram"></span></div>
+                <div class="t-detail"><span class="t-label">సేవ:</span> <span class="t-value" id="t-seva"></span></div>
+                <div class="t-detail"><span class="t-label">కాలం:</span> <span class="t-value" id="t-period"></span></div>
+
+                <div class="price-tag">
+                    <div style="font-size: 0.9rem; color: #8d6e63;">చెల్లించిన మొత్తం</div>
+                    <div style="font-size: 2rem; color: #2e7d32; font-weight: 900;">₹<span id="t-amt"></span></div>
+                </div>
+
+                <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                    <div id="qrcode"></div>
+                    <p style="font-size: 0.7rem; color: #999; margin-top: 10px;">ID: <span id="t-footer-id"></span></p>
+                </div>
             </div>
+            <img src="https://cdn-icons-png.flaticon.com/512/7541/7541899.png" class="stamp">
+        </div>
+
+        <div class="actions no-print">
+            <button onclick="window.print()" class="circle-btn bg-print"><i class="fas fa-print"></i></button>
+            <button onclick="shareWA()" class="circle-btn bg-wa"><i class="fab fa-whatsapp"></i></button>
         </div>
     </section>
-</main>
-
-<div id="spinner" class="spinner hidden"></div>
+</div>
 
 <script>
-const SCRIPT_URL = "PASTE_YOUR_APPSCRIPT_URL_HERE";
-const form = document.getElementById('monthlyForm');
-const startInput = document.getElementById('startDate');
-const endInput = document.getElementById('endDate');
-let bookingData = {};
-
-// 1. Automatic Date Constraints
-startInput.addEventListener('change', function() {
-    if (this.value) {
-        endInput.min = this.value;
-        if (endInput.value && endInput.value < this.value) endInput.value = "";
-    }
-    updatePrice();
-});
-
-// 2. Price Logic: ₹100 per completed month
-function updatePrice() {
-    const startVal = startInput.value;
-    const endVal = endInput.value;
-    if (startVal && endVal) {
-        const d1 = new Date(startVal);
-        const d2 = new Date(endVal);
-        let months = (d2.getFullYear() - d1.getFullYear()) * 12;
-        months -= d1.getMonth();
-        months += d2.getMonth();
-        if (d2.getDate() < d1.getDate()) months--;
-        const finalMonths = months <= 0 ? 0 : months;
-
-        document.getElementById('durationText').innerText = `నెలలు: ${finalMonths}`;
-        document.getElementById('totalCost').innerText = `మొత్తం: ₹${finalMonths * 100}`;
-        return { total: finalMonths * 100, count: finalMonths };
-    }
-    return { total: 0, count: 0 };
-}
-
-// 3. Form Submission
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const { total, count } = updatePrice();
-    if (count <= 0) return Swal.fire("గమనిక", "కనీసం ఒక నెల పూర్తి కావాలి", "warning");
-
-    document.getElementById('spinner').classList.remove('hidden');
-    bookingData = {
-        bookingID: "POL-" + Date.now().toString().slice(-6),
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
-        gothram: document.getElementById('gothram').value,
-        startDate: document.getElementById('startDate').value,
-        endDate: document.getElementById('endDate').value,
-        totalAmount: total,
-        bookingDate: new Date().toLocaleString('en-IN')
-    };
-
-    try {
-        const formData = new FormData();
-        for (let key in bookingData) formData.append(key, bookingData[key]);
-        await fetch(SCRIPT_URL, { method: 'POST', body: formData });
-
-        document.getElementById('spinner').classList.add('hidden');
+    function calculatePrice() {
+        const start = new Date(document.getElementById('startDate').value);
+        const end = new Date(document.getElementById('endDate').value);
+        const sevaPrice = parseInt(document.getElementById('sevaType').value);
         
-        // Show Ticket Details
-        document.getElementById('t-id').innerText = bookingData.bookingID;
-        document.getElementById('t-date').innerText = bookingData.bookingDate;
-        document.getElementById('t-name').innerText = bookingData.name;
-        document.getElementById('t-gothram').innerText = bookingData.gothram;
-        document.getElementById('t-phone').innerText = bookingData.phone;
-        document.getElementById('t-start').innerText = bookingData.startDate;
-        document.getElementById('t-end').innerText = bookingData.endDate;
-        document.getElementById('t-total').innerText = total;
-        
-        document.getElementById('ticketOutput').classList.remove('hidden');
-        document.getElementById('ticketOutput').scrollIntoView({ behavior: 'smooth' });
-    } catch (err) {
-        document.getElementById('spinner').classList.add('hidden');
-        Swal.fire("Error", "సర్వర్ సమస్య", "error");
-    }
-});
-
-// 4. Locked PDF Functions
-async function shareLockedPDF() {
-    const element = document.getElementById('printableTicket');
-    const opt = { margin: 10, filename: `Ticket_${bookingData.bookingID}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4' } };
-    
-    try {
-        const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
-        const file = new File([pdfBlob], `Ticket_${bookingData.bookingID}.pdf`, { type: 'application/pdf' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title: 'Temple Ticket', text: 'మీ పోలేరమ్మ ఆలయ టికెట్.' });
-        } else {
-            html2pdf().set(opt).from(element).save();
-            alert("డైరెక్ట్ షేరింగ్ కు మద్దతు లేదు. టికెట్ డౌన్‌లోడ్ చేయబడింది.");
+        if (start && end && end >= start) {
+            let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+            if (end.getDate() < start.getDate()) months--;
+            const count = Math.max(1, months + 1);
+            const total = count * sevaPrice;
+            document.getElementById('totalDisplay').innerText = total;
+            return { total, count };
         }
-    } catch (e) { console.error(e); }
-}
+        return { total: 0, count: 0 };
+    }
 
-function downloadPDF() {
-    const element = document.getElementById('printableTicket');
-    html2pdf().from(element).save(`Ticket_${bookingData.bookingID}.pdf`);
-}
+    document.getElementById('poojaForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const priceInfo = calculatePrice();
+        
+        if (priceInfo.total === 0) {
+            Swal.fire("క్షమించండి", "దయచేసి సరైన తేదీలను ఎంచుకోండి", "error");
+            return;
+        }
 
-function shareText() {
-    const msg = `శ్రీ పోలేరమ్మ ఆలయ బుకింగ్ కన్ఫర్మ్. ID: ${bookingData.bookingID}, పేరు: ${bookingData.name}, మొత్తం: ₹${bookingData.totalAmount}.`;
-    if (navigator.share) navigator.share({ title: 'Ticket Info', text: msg }); else alert(msg);
-}
+        const bookingID = "POL-" + Math.floor(100000 + Math.random() * 900000);
+        const name = document.getElementById('name').value;
+        const sevaName = document.getElementById('sevaType').options[document.getElementById('sevaType').selectedIndex].text.split('(')[0];
+
+        // Fill Ticket
+        document.getElementById('t-id').innerText = "Receipt #: " + bookingID;
+        document.getElementById('t-footer-id').innerText = bookingID;
+        document.getElementById('t-name').innerText = name;
+        document.getElementById('t-gothram').innerText = document.getElementById('gothram').value;
+        document.getElementById('t-seva').innerText = sevaName;
+        document.getElementById('t-period').innerText = document.getElementById('startDate').value + " to " + document.getElementById('endDate').value;
+        document.getElementById('t-amt').innerText = priceInfo.total;
+
+        // QR Code
+        const qrDiv = document.getElementById("qrcode");
+        qrDiv.innerHTML = "";
+        new QRCode(qrDiv, { text: bookingID, width: 100, height: 100 });
+
+        document.getElementById('ticketOutput').classList.remove('hidden');
+        window.scrollTo({ top: document.getElementById('ticketOutput').offsetTop, behavior: 'smooth' });
+        
+        Swal.fire({
+            title: "బుకింగ్ విజయవంతమైంది!",
+            text: "అమ్మవారి కృప మీకు ఎల్లప్పుడూ ఉండాలి.",
+            icon: "success",
+            confirmButtonColor: "#d84315"
+        });
+    });
+
+    function shareWA() {
+        const name = document.getElementById('t-name').innerText;
+        const msg = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం పూజా టికెట్*%0Aపేరు: ${name}%0Aమొత్తం: ₹${document.getElementById('t-amt').innerText}%0AID: ${document.getElementById('t-footer-id').innerText}`;
+        window.open(`https://wa.me/?text=${msg}`, '_blank');
+    }
 </script>
 
-<style>
-:root { --primary: #e65100; --secondary: #ff9800; --bg: #fdf5e6; --glass: rgba(255, 255, 255, 0.95); }
-* { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-body { margin: 0; background: var(--bg); }
-
-.bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, #ff9800, #ff5722); opacity: 0.1; z-index: -1; }
-
-header { background: var(--glass); padding: 15px; text-align: center; border-bottom: 3px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.header-logo { width: 55px; border-radius: 50%; border: 2px solid var(--primary); }
-header h1 { color: var(--primary); font-size: 1.1rem; margin-top: 5px; }
-
-.booking-container { display: flex; flex-direction: column; align-items: center; padding: 20px; gap: 20px; }
-.booking-card { background: white; border-radius: 20px; padding: 25px; width: 100%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.input-group { margin-bottom: 15px; }
-label { display: block; font-weight: 600; color: #444; margin-bottom: 5px; font-size: 0.9rem; }
-input, textarea { width: 100%; padding: 12px; border: 1.5px solid #eee; border-radius: 10px; }
-.row { display: flex; gap: 10px; } .col { flex: 1; }
-
-.price-summary-card { background: #fff3e0; border-radius: 15px; padding: 15px; margin: 15px 0; border-left: 8px solid var(--primary); text-align: center; }
-.monthly-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-.monthly-btn:active { transform: scale(0.98); }
-
-/* Beautiful Ticket Styles */
-.ticket-card { background: white; width: 350px; padding: 30px; border: 1px solid #ddd; border-radius: 10px; position: relative; overflow: hidden; }
-.ticket-top-border { position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--primary); }
-.paid-stamp-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); border: 5px solid rgba(211, 47, 47, 0.2); color: rgba(211, 47, 47, 0.2); font-size: 3.5rem; font-weight: 900; padding: 10px; z-index: 0; pointer-events: none; }
-
-.ticket-header { text-align: center; margin-bottom: 20px; position: relative; z-index: 1; }
-.ticket-logo { width: 65px; margin-bottom: 5px; }
-.temple-name { font-size: 0.75rem; font-weight: bold; color: var(--primary); }
-
-.t-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.9rem; position: relative; z-index: 1; }
-.divider { border-top: 1px dashed #ccc; margin: 10px 0; }
-.price-highlight { background: #e8f5e9; padding: 12px; text-align: center; border-radius: 10px; border: 1px solid #c8e6c9; margin-top: 15px; position: relative; z-index: 1; }
-.price-highlight b { font-size: 1.4rem; color: #1b5e20; }
-
-.ticket-actions { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 350px; }
-.action-btn { border: none; padding: 12px; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; }
-.btn-wa { background: #25d366; } .btn-pdf { background: #d32f2f; } .btn-print { background: #555; } .btn-msg { background: #007bff; }
-
-.hidden { display: none; }
-.spinner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-@media print {
-    body { background: white; }
-    .bg-gradient, header, .booking-card, .ticket-actions { display: none !important; }
-    .ticket-card { border: 1px solid #000; margin: 0 auto; box-shadow: none; }
-}
-</style>
 </body>
 </html>
