@@ -61,7 +61,6 @@
         }
         input:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 12px rgba(191, 54, 12, 0.1); }
 
-        /* Ticket Result Styling */
         .ticket-outer { padding: 10px; background: white; border-radius: 30px; }
         .ticket-card { background: #fff; border: 2px solid #f2f2f2; border-radius: 25px; overflow: hidden; position: relative; }
         .ticket-header { background: linear-gradient(to right, #880e4f, #bf360c); padding: 25px; text-align: center; color: white; position: relative; }
@@ -75,15 +74,14 @@
         .data-row b { color: #222; font-size: 13.5px; text-align: right; }
 
         .price-badge { background: linear-gradient(to right, #fff8e1, #fff3e0); border: 2px dashed #ff9100; border-radius: 18px; padding: 18px; text-align: center; margin-top: 15px; }
+
         .qr-wrapper { display: flex; justify-content: center; margin: 25px 0; padding: 15px; background: #f9f9f9; border-radius: 20px; border: 1px solid #eee; }
         
-        /* Action Buttons */
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
         .btn { width: 100%; padding: 18px; border-radius: 16px; border: none; color: white; font-weight: 800; font-size: 16px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--accent)); box-shadow: 0 10px 20px rgba(191, 54, 12, 0.25); }
+        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--secondary)); box-shadow: 0 10px 20px rgba(191, 54, 12, 0.25); }
         .btn-save { background: #34495e; }
         .btn-wa { background: #25D366; }
-        .btn-share { background: #0288d1; }
 
         .hidden { display: none !important; }
 
@@ -149,10 +147,9 @@
                     </div>
                 </div>
             </div>
-            
             <div class="btn-group">
                 <button onclick="saveTicket()" class="btn btn-save"><i class="fas fa-camera"></i> Save Image</button>
-                <button onclick="shareDetailedWA()" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                <button onclick="shareWA()" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</button>
             </div>
             <button onclick="location.reload()" class="btn btn-primary" style="margin-top:12px; background: #880e4f;">Book Another</button>
         </div>
@@ -195,7 +192,7 @@
         const p = calc();
         if(p.count === 0) return Swal.fire("Error", "Select at least 1 month duration", "info");
 
-        const tid = "POL-TXN-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+        const tid = "POL-" + Math.random().toString(36).substr(2, 6).toUpperCase();
         document.getElementById('t-id').innerText = "ID: " + tid;
         document.getElementById('t-name').innerText = document.getElementById('name').value;
         document.getElementById('t-phone').innerText = document.getElementById('phone').value;
@@ -205,7 +202,6 @@
         document.getElementById('t-end').innerText = eDate.value;
         document.getElementById('t-amt').innerText = p.cost;
 
-        // GENERATE SCANNABLE URL
         const currentUrl = window.location.href.split('?')[0];
         const verifyUrl = `${currentUrl}?verify=1&id=${tid}&n=${encodeURIComponent(document.getElementById('name').value)}&a=${p.cost}&p=${sDate.value}_to_${eDate.value}&g=${encodeURIComponent(document.getElementById('gothram').value || '---')}&f=${encodeURIComponent(document.getElementById('family').value || '---')}`;
 
@@ -225,15 +221,12 @@
             document.getElementById('appInterface').remove();
             document.getElementById('verifyDisplay').classList.remove('hidden');
             document.getElementById('vContent').innerHTML = `
-                <div class="data-row"><span>TXN ID:</span><b>${urlParams.get('id')}</b></div>
+                <div class="data-row"><span>ID:</span><b>${urlParams.get('id')}</b></div>
                 <div class="data-row"><span>DEVOTEE:</span><b>${urlParams.get('n')}</b></div>
                 <div class="data-row"><span>GOTHRAM:</span><b>${urlParams.get('g')}</b></div>
                 <div class="data-row"><span>FAMILY:</span><b>${urlParams.get('f')}</b></div>
                 <div class="data-row"><span>PAYMENT:</span><b style="color:green">₹${urlParams.get('a')} (PAID)</b></div>
                 <div class="data-row"><span>VALIDITY:</span><b>${urlParams.get('p').replace('_to_', ' to ')}</b></div>
-                <div class="data-row" style="margin-top:10px; border-top:1px solid #ddd; padding-top:10px;">
-                    <span>VERIFIED ON:</span><b>${new Date().toLocaleDateString('en-IN')}</b>
-                </div>
             `;
         }
     };
@@ -248,36 +241,36 @@
         });
     }
 
-    function shareDetailedWA() {
+    function shareWA() {
         const name = document.getElementById('t-name').innerText;
         const tid = document.getElementById('t-id').innerText;
         const amt = document.getElementById('t-amt').innerText;
-        const period = `${document.getElementById('t-start').innerText} to ${document.getElementById('t-end').innerText}`;
+        const start = document.getElementById('t-start').innerText;
+        const end = document.getElementById('t-end').innerText;
         const goth = document.getElementById('t-gothram').innerText;
-        const family = document.getElementById('t-family').innerText;
+        const fam = document.getElementById('t-family').innerText;
         const phone = document.getElementById('t-phone').innerText;
         
         // Developer Feature: Digital Hash for Authenticity
         const hash = btoa(tid).substring(0, 10).toUpperCase();
 
-        const message = 
+        const msg = 
             `*శ్రీ పోలేరమ్మ తల్లి ఆలయం - డిజిటల్ రశీదు*%0A` +
             `----------------------------------------%0A` +
-            `✅ *Status:* PAID / విజయవంతమైంది%0A` +
-            `🔖 *TXN ID:* ${tid}%0A` +
+            `✅ *రశీదు స్థితి:* విజయవంతమైంది%0A` +
+            `🔖 *బుకింగ్ ID:* ${tid}%0A` +
             `👤 *భక్తుని పేరు:* ${name}%0A` +
             `🔱 *గోత్రం:* ${goth}%0A` +
-            `👨‍👩‍👧‍👦 *కుటుంబ సభ్యులు:* ${family}%0A` +
+            `👨‍👩‍👧‍👦 *కుటుంబ సభ్యులు:* ${fam}%0A` +
+            `📅 *వ్యవధి:* ${start} నుండి ${end}%0A` +
             `💰 *మొత్తం:* ₹${amt}/-%0A` +
-            `📅 *వ్యవధి:* ${period}%0A` +
-            `🕒 *Issued:* ${new Date().toLocaleString()}%0A` +
             `----------------------------------------%0A` +
-            `🔐 *Secure Hash:* ${hash}%0A` +
+            `🔐 *భద్రత కోడ్:* ${hash}%0A` +
             `_దయచేసి ఆలయ ప్రవేశం వద్ద ఈ రశీదును చూపించండి._`;
 
-        window.open(`https://wa.me/91${phone}?text=${message}`, '_blank');
+        window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
     }
 </script>
 </body>
-                    </html>
-    
+            </html>
+                                                                    
