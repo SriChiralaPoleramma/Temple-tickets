@@ -22,9 +22,8 @@
         }
 
         body { 
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
             background: var(--bg-shade); margin: 0; padding: 0; color: #2d3436; 
-            overflow-x: hidden;
         }
 
         .bg-pattern {
@@ -51,63 +50,45 @@
         .info-box {
             background: #fff; padding: 18px; border-radius: 20px; 
             margin-bottom: 20px; font-size: 13.5px; line-height: 1.6; 
-            border-left: 6px solid var(--accent); box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--accent);
         }
 
         .input-group { margin-bottom: 18px; }
-        label { display: block; font-size: 11px; font-weight: 800; color: #7f8c8d; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+        label { display: block; font-size: 11px; font-weight: 800; color: #7f8c8d; text-transform: uppercase; margin-bottom: 6px; }
         input, textarea { 
             width: 100%; padding: 15px; border: 2px solid #edf2f7; border-radius: 16px; 
-            box-sizing: border-box; font-size: 15px; transition: 0.3s; background: #fcfcfc;
+            box-sizing: border-box; font-size: 15px; background: #fcfcfc;
         }
-        input:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 12px rgba(191, 54, 12, 0.1); }
+        input:focus { border-color: var(--primary); outline: none; background: #fff; }
 
-        /* Ticket UI */
+        /* Ticket Design */
         .ticket-outer { padding: 10px; background: white; border-radius: 30px; }
-        .ticket-card { 
-            background: #fff; border: 2px solid #f2f2f2; border-radius: 25px; 
-            overflow: hidden; position: relative; 
-        }
-        .ticket-header { 
-            background: linear-gradient(to right, #880e4f, #bf360c); 
-            padding: 22px; text-align: center; color: white;
-            position: relative;
-        }
-        .ticket-header h2 { margin: 0; font-size: 19px; letter-spacing: 1.5px; font-weight: 800; }
-        
-        .ticket-header::after, .ticket-header::before { 
-            content: ''; position: absolute; width: 25px; height: 25px; background: white; border-radius: 50%; bottom: -12.5px; 
-        }
-        .ticket-header::before { left: -12.5px; } .ticket-header::after { right: -12.5px; }
-
-        .ticket-body { padding: 30px 25px; background: #ffffff; }
+        .ticket-card { background: #fff; border: 2px solid #f2f2f2; border-radius: 25px; overflow: hidden; }
+        .ticket-header { background: linear-gradient(to right, #880e4f, #bf360c); padding: 22px; text-align: center; color: white; position: relative; }
+        .ticket-header h2 { margin: 0; font-size: 19px; font-weight: 800; }
+        .ticket-body { padding: 30px 25px; }
         .data-row { display: flex; justify-content: space-between; margin-bottom: 11px; border-bottom: 1px dashed #eee; padding-bottom: 6px; }
-        .data-row span { color: #888; font-size: 12.5px; font-weight: 600; }
-        .data-row b { color: #222; font-size: 13.5px; text-align: right; }
+        .data-row span { color: #888; font-size: 12.5px; }
+        .data-row b { color: #222; font-size: 13.5px; }
 
         .price-badge {
             background: linear-gradient(to right, #fff8e1, #fff3e0); border: 2px dashed #ff9100; border-radius: 18px;
             padding: 18px; text-align: center; margin-top: 15px;
         }
 
-        .qr-wrapper { display: flex; justify-content: center; margin: 20px 0; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .qr-wrapper { display: flex; justify-content: center; margin: 20px 0; }
         
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
         .btn { 
             width: 100%; padding: 18px; border-radius: 16px; border: none; 
             color: white; font-weight: 800; font-size: 16px; cursor: pointer;
-            transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--accent)); box-shadow: 0 10px 20px rgba(191, 54, 12, 0.25); }
+        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--accent)); }
         .btn-save { background: #34495e; }
         .btn-wa { background: #25D366; }
 
         .hidden { display: none !important; }
-
-        /* Verification Screen */
-        .v-layout { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #e8f5e9; padding: 20px; }
-        .v-card { text-align: center; border-top: 12px solid var(--success); width: 100%; max-width: 420px; }
-        .v-icon { font-size: 75px; color: var(--success); margin-bottom: 25px; }
     </style>
 </head>
 <body>
@@ -122,28 +103,24 @@
 
     <div class="container">
         <div class="info-box">
-             నెలవారీ పూజా రుసుము: <b>₹100/-</b>. <br>
-             ప్రతి నెల 1వ తేదీ ప్రాతిపదికన అమౌంట్ గణించబడుతుంది.
+             నెలవారీ పూజా రుసుము: ₹100/-. <br>
+             <b>గమనిక:</b> కనీసం 1 నెల వ్యవధి ఎంచుకోవాలి.
         </div>
 
         <div id="bookingSection" class="glass-card">
-            <h2 style="text-align: center; margin-top: 0; color: var(--primary); font-weight: 800;">పూజా బుకింగ్</h2>
+            <h2 style="text-align: center; color: var(--primary);">పూజా బుకింగ్</h2>
             <form id="pForm">
                 <div class="input-group">
-                    <label><i class="fas fa-user"></i> భక్తుని పేరు (Devotee Name)</label>
-                    <input type="text" id="name" required placeholder="మీ పేరు నమోదు చేయండి">
+                    <label>భక్తుని పేరు</label>
+                    <input type="text" id="name" required placeholder="Name">
                 </div>
                 <div class="input-group">
-                    <label><i class="fas fa-phone"></i> మొబైల్ నంబర్</label>
-                    <input type="tel" id="phone" required maxlength="10" placeholder="10 Digit Number">
+                    <label>మొబైల్ నంబర్</label>
+                    <input type="tel" id="phone" required maxlength="10" placeholder="Mobile">
                 </div>
                 <div class="input-group">
-                    <label><i class="fas fa-scroll"></i> గోత్రం</label>
-                    <input type="text" id="gothram" placeholder="గోత్రం నమోదు చేయండి">
-                </div>
-                <div class="input-group">
-                    <label><i class="fas fa-users"></i> కుటుంబ సభ్యులు</label>
-                    <textarea id="family" rows="2" placeholder="కుటుంబ సభ్యుల పేర్లు..."></textarea>
+                    <label>గోత్రం</label>
+                    <input type="text" id="gothram" placeholder="Gothram">
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -159,10 +136,10 @@
 
                 <div class="price-badge">
                     <div id="totalPrice" style="font-size: 32px; font-weight: 900; color: var(--primary);">₹0</div>
-                    <small id="monthCount" style="color:#666; font-weight:800; text-transform: uppercase;">0 Months Selected</small>
+                    <small id="monthCount">0 Months Selected</small>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Proceed & Generate Ticket</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Generate Ticket</button>
             </form>
         </div>
 
@@ -171,69 +148,112 @@
                 <div class="ticket-card">
                     <div class="ticket-header">
                         <h2>POOJA RECEIPT</h2>
-                        <small id="t-id" style="font-family: monospace; font-weight: 700; opacity: 0.9;"></small>
+                        <small id="t-id"></small>
                     </div>
                     <div class="ticket-body">
-                        <div class="data-row"><span>DEVOTEE:</span> <b id="t-name"></b></div>
-                        <div class="data-row"><span>MOBILE:</span> <b id="t-phone"></b></div>
-                        <div class="data-row"><span>GOTHRAM:</span> <b id="t-gothram"></b></div>
-                        <div class="data-row"><span>FAMILY:</span> <b id="t-family"></b></div>
-                        <div class="data-row"><span>START DATE:</span> <b id="t-start"></b></div>
-                        <div class="data-row"><span>END DATE:</span> <b id="t-end"></b></div>
-                        <div class="data-row"><span>ISSUED ON:</span> <b id="t-issued"></b></div>
-                        
+                        <div class="data-row"><span>NAME:</span> <b id="t-name"></b></div>
+                        <div class="data-row"><span>PHONE:</span> <b id="t-phone"></b></div>
+                        <div class="data-row"><span>DATES:</span> <b id="t-period"></b></div>
                         <div class="qr-wrapper"><div id="qrcode"></div></div>
-                        
-                        <div class="price-badge" style="margin-top: 5px;">
-                            <span style="font-size: 11px; color: #666; font-weight: 800;">TOTAL PAID AMOUNT</span>
-                            <div style="font-size: 26px; font-weight: 900; color: var(--success);">₹<span id="t-amt"></span></div>
+                        <div class="price-badge">
+                            <span>TOTAL PAID</span>
+                            <div style="font-size: 24px; font-weight: 900; color: var(--success);" id="t-amt"></div>
                         </div>
-                        <p style="text-align: center; font-size: 9px; color: #aaa; margin-top: 15px;">© SRI POLERAMMA TEMPLE AUTHORITY</p>
                     </div>
                 </div>
             </div>
-            
             <div class="btn-group">
-                <button onclick="downloadTicket()" class="btn btn-save"><i class="fas fa-camera"></i> Save Image</button>
-                <button onclick="shareDetailedWA()" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                <button onclick="downloadTicket()" class="btn btn-save">Save Image</button>
+                <button onclick="shareWA()" class="btn btn-wa">WhatsApp</button>
             </div>
-            <button onclick="location.reload()" class="btn btn-primary" style="margin-top:12px; background: #880e4f;">Book Another Ticket</button>
         </div>
     </div>
 </div>
-
-<div id="verifyLayout" class="v-layout hidden">
-    <div class="glass-card v-card">
-        <div class="v-icon"><i class="fas fa-certificate"></i></div>
-        <h2 style="color: var(--success); margin: 0; font-weight: 900; font-size: 26px;">TICKET VERIFIED</h2>
-        <p style="color: #7f8c8d; font-size: 14px; margin: 10px 0 30px;">Official Temple Record Confirmed.</p>
-        <div id="vContent" style="text-align: left; background: #f8f9fa; padding: 25px; border-radius: 20px; border: 1px solid #eee;">
-        </div>
-        <div style="margin-top: 30px; padding: 12px; border: 2px dashed #c8e6c9; border-radius: 15px; display: inline-block;">
-            <span style="color: #1b5e20; font-weight: 800; font-size: 12px;"><i class="fas fa-shield-alt"></i> DIGITAL SIGNATURE: AUTH_OK</span>
-        </div>
-    </div>
-</div>
-
-<script src="g.js"></script>
 
 <script>
-    // SPA Verification Logic (Handles QR Scanning)
-    window.onload = () => {
-        const p = new URLSearchParams(window.location.search);
-        if(p.has('verify')) {
-            document.getElementById('bookingFlow').remove(); 
-            document.getElementById('verifyLayout').classList.remove('hidden');
-            document.getElementById('vContent').innerHTML = `
-                <div class="data-row"><span>ID:</span><b>${p.get('id')}</b></div>
-                <div class="data-row"><span>DEVOTEE:</span><b>${p.get('n')}</b></div>
-                <div class="data-row"><span>GOTHRAM:</span><b>${p.get('g') || '---'}</b></div>
-                <div class="data-row"><span>PAYMENT:</span><b style="color:green">₹${p.get('a')} (PAID)</b></div>
-                <div class="data-row"><span>VALIDITY:</span><b>${p.get('p').replace('_to_', ' to ')}</b></div>
-            `;
+    // 1. DATE LOGIC FIX
+    const sDateInput = document.getElementById('sDate');
+    const eDateInput = document.getElementById('eDate');
+    const priceDisplay = document.getElementById('totalPrice');
+    const monthDisplay = document.getElementById('monthCount');
+
+    // Set minimum date to today
+    sDateInput.min = new Date().toISOString().split('T')[0];
+
+    // UNLOCK End Date when Start Date is picked
+    sDateInput.addEventListener('change', function() {
+        if(this.value) {
+            eDateInput.disabled = false;
+            eDateInput.min = this.value;
+            calculatePrice();
         }
+    });
+
+    eDateInput.addEventListener('change', calculatePrice);
+
+    function calculatePrice() {
+        if(!sDateInput.value || !eDateInput.value) return;
+
+        let start = new Date(sDateInput.value);
+        let end = new Date(eDateInput.value);
+        
+        // Month difference logic
+        let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+        if (end.getDate() < start.getDate()) months--;
+        
+        let finalMonths = Math.max(0, months);
+        monthDisplay.innerText = finalMonths + " Month(s) Calculated";
+        priceDisplay.innerText = "₹" + (finalMonths * 100);
+        return finalMonths;
+    }
+
+    // 2. FORM SUBMISSION
+    document.getElementById('pForm').onsubmit = function(e) {
+        e.preventDefault();
+        const months = calculatePrice();
+        
+        if(months < 1) {
+            Swal.fire("గమనిక", "ముగింపు తేదీ కనీసం 1 నెల తర్వాత ఉండాలి.", "warning");
+            return;
+        }
+
+        const tid = "POL-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+        
+        // Populate Ticket
+        document.getElementById('t-id').innerText = "TXN: " + tid;
+        document.getElementById('t-name').innerText = document.getElementById('name').value;
+        document.getElementById('t-phone').innerText = document.getElementById('phone').value;
+        document.getElementById('t-period').innerText = sDateInput.value + " to " + eDateInput.value;
+        document.getElementById('t-amt').innerText = "₹" + (months * 100);
+
+        // QR Code
+        document.getElementById("qrcode").innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), {
+            text: "Verified ID: " + tid,
+            width: 150,
+            height: 150
+        });
+
+        document.getElementById('bookingSection').classList.add('hidden');
+        document.getElementById('ticketSection').classList.remove('hidden');
     };
+
+    // 3. EXPORT BUTTONS
+    function downloadTicket() {
+        html2canvas(document.getElementById('captureArea')).then(canvas => {
+            let link = document.createElement('a');
+            link.download = 'Receipt.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
+
+    function shareWA() {
+        const phone = document.getElementById('t-phone').innerText;
+        const msg = encodeURIComponent("శ్రీ పోలేరమ్మ తల్లి ప్రసాదం. బుకింగ్ విజయవంతమైంది. ID: " + document.getElementById('t-id').innerText);
+        window.open(`https://wa.me/91${phone}?text=${msg}`);
+    }
 </script>
 </body>
     </html>
-                            
+                    
