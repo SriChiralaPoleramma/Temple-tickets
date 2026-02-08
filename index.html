@@ -13,7 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        /* CSS DESIGN SYSTEM: Natural Sandalwood & Temple Maroon Theme */
         :root {
             --sandalwood: #fdf5e6;
             --om-red: #8e0000;
@@ -26,7 +25,6 @@
         * { box-sizing: border-box; transition: all 0.3s ease; }
         body { font-family: 'Mukta Vaani', sans-serif; background: var(--sandalwood); margin: 0; color: #333; }
 
-        /* HEADER: Designer Style with spiritual Om branding */
         header { 
             background: var(--white); padding: 50px 15px; text-align: center;
             border-bottom: 5px double var(--banthi-gold); position: relative;
@@ -34,7 +32,6 @@
         }
         .om-icon { font-size: 45px; color: var(--om-red); display: block; margin-bottom: 8px; }
 
-        /* PROMO BANNER: Based on image reference, highlights Seva info */
         .promo-banner {
             background: linear-gradient(135deg, var(--designer-orange), #e65100);
             margin: -30px auto 20px; max-width: 520px; border-radius: 15px;
@@ -45,7 +42,6 @@
 
         .container { max-width: 480px; margin: 0 auto; padding: 15px; }
 
-        /* FORM CARD: Modern, clean input grouping */
         .divine-card { 
             background: var(--white); border-radius: 30px; padding: 35px; 
             border: 1px solid #f1e9db; box-shadow: 0 20px 50px rgba(107, 0, 0, 0.05);
@@ -56,20 +52,17 @@
         .input-group input { width: 100%; padding: 14px; border: 1.5px solid #eee; border-radius: 15px; font-size: 16px; background: #fafafa; }
         .input-group input:focus { border-color: var(--banthi-gold); outline: none; background: white; }
 
-        /* DYNAMIC PRICE BOX: Highlights the calculated ₹100/mo amount */
         .price-panel {
             background: #fffdf5; border: 1.5px solid var(--banthi-gold);
             border-radius: 20px; padding: 20px; text-align: center; margin: 25px 0;
         }
 
-        /* TICKET: Optimized layout for clear text and QR scanning */
         .ticket-pro { background: var(--white); border-radius: 25px; overflow: hidden; border: 2px solid #eee; box-shadow: 0 35px 70px rgba(0,0,0,0.12); }
         .ticket-top { background: var(--om-red); color: white; padding: 30px; text-align: center; }
         .ticket-body { padding: 35px; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
         .t-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding: 12px 0; font-size: 14.5px; }
         .t-val { font-weight: 700; color: #111; text-align: right; }
 
-        /* ACTION BUTTONS: High-visibility for WhatsApp and Gallery save */
         .btn { 
             width: 100%; padding: 18px; border: none; border-radius: 18px; 
             font-weight: 700; cursor: pointer; display: flex; align-items: center; 
@@ -173,23 +166,24 @@
 </div>
 
 <script>
-    // URL for Google Apps Script to save to Google Sheets
     const SHEET_URL = "YOUR_APPS_SCRIPT_URL_HERE";
 
-    /* DATE & PRICING LOGIC
-       WHY: To automate cost calculation based on selected months.
-       HOW: Calculates difference between years and months.
-    */
     const sDate = document.getElementById('sDate');
     const eDate = document.getElementById('eDate');
-    sDate.min = new Date().toISOString().split('T')[0];
 
+    // FEATURE: Allow past dates by NOT setting a min value for sDate
     function calculateBilling() {
         if(!sDate.value || !eDate.value) return;
         const d1 = new Date(sDate.value), d2 = new Date(eDate.value);
-        let diff = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
         
-        // Exact rule: End day < Start day reduces month count, but min 1 month.
+        // Logical check: End must be after Start
+        if (d2 < d1) {
+            document.getElementById('liveAmt').innerText = `₹ 0`;
+            document.getElementById('liveMonths').innerText = `Check Dates!`;
+            return { amt: 0, months: 0 };
+        }
+
+        let diff = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
         if (d2.getDate() < d1.getDate()) diff--;
         const count = diff < 1 ? 1 : diff; 
         
@@ -198,20 +192,21 @@
         return { amt: count * 100, months: count };
     }
 
-    // Unlock End Date only after Start Date is chosen
     sDate.onchange = () => { 
         eDate.disabled = false; 
-        eDate.min = sDate.value; 
+        eDate.min = sDate.value; // End date still cannot be before start date
         calculateBilling(); 
     };
     eDate.onchange = calculateBilling;
 
-    /* SUBMISSION LOGIC
-       WHY: To save data to backend and generate the ticket.
-    */
     document.getElementById('pForm').onsubmit = (e) => {
         e.preventDefault();
         const bill = calculateBilling();
+        if(bill.amt === 0) {
+            Swal.fire('Error', 'Please select valid dates.', 'error');
+            return;
+        }
+        
         const tid = "POL-" + Date.now().toString().slice(-6);
         const today = new Date().toLocaleDateString('en-IN');
 
@@ -221,10 +216,8 @@
         formData.append("id", tid);
         formData.append("total", bill.amt);
 
-        // Fetch to Google Apps Script
         fetch(SHEET_URL, { method: 'POST', body: formData }).then(() => {
             Swal.close();
-            // Fill UI Fields
             document.getElementById('res-id').innerText = "TXN: " + tid;
             document.getElementById('res-date').innerText = today;
             document.getElementById('res-name').innerText = document.getElementById('name').value;
@@ -234,7 +227,6 @@
             document.getElementById('res-dur').innerText = bill.months + " Month(s)";
             document.getElementById('res-amt').innerText = `₹ ${bill.amt}/-`;
 
-            // THE QR FIX: Use absolute URL so scanning phones can find the link.
             const fullUrl = window.location.origin + window.location.pathname + 
                 `?v=1&id=${tid}&n=${encodeURIComponent(document.getElementById('name').value)}&a=${bill.amt}&s=${sDate.value}&e=${eDate.value}&d=${today}&m=${bill.months}`;
             
@@ -247,19 +239,13 @@
         });
     };
 
-    /* HD GALLERY SAVE
-       WHY: To let users keep a sharp image copy of their receipt.
-    */
     async function saveImage() {
         const canvas = await html2canvas(document.getElementById('captureReceipt'), { scale: 3 });
         const link = document.createElement('a');
-        link.download = `Poleramma_Receipt.png`;
+        link.download = `Poleramma_Receipt_${Date.now()}.png`;
         link.href = canvas.toDataURL(); link.click();
     }
 
-    /* SYSTEM SHARE
-       WHY: Native sharing (Telegram/Instagram) of the actual image file.
-    */
     async function shareDirect() {
         const canvas = await html2canvas(document.getElementById('captureReceipt'));
         canvas.toBlob(async (blob) => {
@@ -270,9 +256,6 @@
         });
     }
 
-    /* WHATSAPP SHARING: INCLUDES ALL DETAILS
-       WHY: Direct messaging to family or records.
-    */
     function shareWhatsApp() {
         const name = document.getElementById('res-name').innerText;
         const tid = document.getElementById('res-id').innerText;
@@ -286,9 +269,6 @@
         window.open(`https://wa.me/91${document.getElementById('phone').value}?text=${msg}`, '_blank');
     }
 
-    /* URL INTERCEPTOR
-       WHY: Detects if the page was opened via QR scan and shows verification only.
-    */
     window.onload = () => {
         const params = new URLSearchParams(window.location.search);
         if(params.has('v')) {
@@ -309,5 +289,5 @@
     };
 </script>
 </body>
-                    </html>
-                                                                                                                    
+    </html>
+    
