@@ -26,7 +26,6 @@
             color: #3e2723;
         }
 
-        /* 1. Header & Mandala Banner */
         .temple-banner {
             width: 100%;
             background: linear-gradient(rgba(183, 28, 28, 0.8), rgba(183, 28, 28, 0.9)), 
@@ -50,7 +49,6 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* 2. Main Form Layout */
         .container {
             max-width: 600px;
             margin: -30px auto 30px;
@@ -97,7 +95,6 @@
             transition: 0.3s;
         }
 
-        /* 3. Ticket Display Styling */
         .ticket-view {
             display: flex;
             flex-direction: column;
@@ -174,7 +171,6 @@
             font-size: 0.85rem;
         }
 
-        /* 4. Action Buttons */
         .share-container {
             margin-top: 20px;
             display: flex;
@@ -306,8 +302,23 @@
 
 <script>
     const form = document.getElementById('poojaForm');
-    const templePhone = "918951534845"; // Pre-formatted with country code
+    const startInput = document.getElementById('inpStart');
+    const endInput = document.getElementById('inpEnd');
+    const templePhone = "918951534845"; 
     let currentBooking = {};
+
+    // DATE LOGIC: Disable past dates and ensure end > start
+    const today = new Date().toISOString().split('T')[0];
+    startInput.setAttribute('min', today);
+    endInput.setAttribute('min', today);
+
+    startInput.addEventListener('change', () => {
+        // When start date is chosen, end date must be on or after it
+        endInput.setAttribute('min', startInput.value);
+        if (endInput.value && endInput.value < startInput.value) {
+            endInput.value = startInput.value;
+        }
+    });
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -315,14 +326,17 @@
         const name = document.getElementById('inpName').value;
         const gothram = document.getElementById('inpGothram').value;
         const phone = document.getElementById('inpPhone').value;
-        const start = document.getElementById('inpStart').value;
-        const end = document.getElementById('inpEnd').value;
+        const start = startInput.value;
+        const end = endInput.value;
         const bid = "POL-" + Math.floor(10000 + Math.random() * 90000);
 
         const d1 = new Date(start);
         const d2 = new Date(end);
-        let diff = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
-        const totalAmount = diff <= 0 ? 100 : diff * 100;
+        
+        // Calculate months (minimum 1 month charge)
+        let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
+        if (months <= 0) months = 1; 
+        const totalAmount = months * 100;
 
         currentBooking = { 
             id: bid, 
@@ -333,7 +347,6 @@
             amount: totalAmount 
         };
 
-        // Update UI
         document.getElementById('outID').innerText = "ID: #" + bid;
         document.getElementById('outName').innerText = name;
         document.getElementById('outGothram').innerText = gothram;
@@ -369,18 +382,14 @@
                `🙏 *ID:* ${currentBooking.id}\n` +
                `🙏 *భక్తుని పేరు:* ${currentBooking.name}\n` +
                `🙏 *గోత్రం:* ${currentBooking.gothram}\n` +
-               `🙏 *ఫోన్:* ${currentBooking.phone}\n` +
-               `🙏 *వ్యవధి:* ${currentBooking.period}\n` +
+               `🙏 *తేదీలు:* ${currentBooking.period}\n` +
                `🙏 *మొత్తం:* ₹${currentBooking.amount}\n\n` +
                `అమ్మవారి ఆశీస్సులు మీకు ఎల్లప్పుడూ ఉండాలని కోరుకుంటున్నాము. ✨`;
     }
 
-    // Function to share with the number entered in the form
     async function shareWithDevotee() {
         const msg = generateMessage();
         const devoteeNum = "91" + currentBooking.phone;
-        
-        // Use Native Share if available (to send Image + Text)
         const area = document.getElementById('captureArea');
         const canvas = await html2canvas(area, { scale: 2 });
         canvas.toBlob(async (blob) => {
@@ -393,10 +402,8 @@
         });
     }
 
-    // Function to share with the Temple number (8951534845)
     async function shareWithTemple() {
         const msg = "*NEW BOOKING RECEIVED*\n" + generateMessage();
-        
         const area = document.getElementById('captureArea');
         const canvas = await html2canvas(area, { scale: 2 });
         canvas.toBlob(async (blob) => {
