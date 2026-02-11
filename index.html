@@ -99,24 +99,15 @@
 
                     <div class="qr-container">
                         <div id="qrcode"></div>
-                        <p style="font-size: 10px; color: #666; margin-top: 5px;">Scan to Verify Ticket</p>
+                        <p style="font-size: 10px; color: #666; margin-top: 5px;">Scan to Verify Details</p>
                     </div>
                 </div>
             </div>
             
             <div class="ticket-actions no-print">
-                <button onclick="shareLockedPDF()" class="action-btn btn-wa" title="WhatsApp Share">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </button>
-                <button onclick="downloadPDF()" class="action-btn btn-pdf" title="Download PDF">
-                    <i class="fas fa-download"></i> Download
-                </button>
-                <button onclick="window.print()" class="action-btn btn-print" title="Print Ticket">
-                    <i class="fas fa-print"></i> Print
-                </button>
-                <button onclick="shareText()" class="action-btn btn-msg" title="Text Share">
-                    <i class="fas fa-share-alt"></i> Share
-                </button>
+                <button onclick="shareLockedPDF()" class="action-btn btn-wa"><i class="fab fa-whatsapp"></i> Share</button>
+                <button onclick="downloadPDF()" class="action-btn btn-pdf"><i class="fas fa-download"></i> PDF</button>
+                <button onclick="window.print()" class="action-btn btn-print"><i class="fas fa-print"></i> Print</button>
             </div>
         </div>
     </section>
@@ -131,6 +122,7 @@ const startInput = document.getElementById('startDate');
 const endInput = document.getElementById('endDate');
 let bookingData = {};
 
+// Date Logic
 startInput.addEventListener('change', function() {
     if (this.value) {
         endInput.min = this.value;
@@ -150,7 +142,6 @@ function updatePrice() {
         months += d2.getMonth();
         if (d2.getDate() < d1.getDate()) months--;
         const finalMonths = months <= 0 ? 0 : months;
-
         document.getElementById('durationText').innerText = `నెలలు: ${finalMonths}`;
         document.getElementById('totalCost').innerText = `మొత్తం: ₹${finalMonths * 100}`;
         return { total: finalMonths * 100, count: finalMonths };
@@ -182,19 +173,16 @@ form.addEventListener('submit', async (e) => {
 
         document.getElementById('spinner').classList.add('hidden');
         
-        // Generate QR Code with Ticket Details
-        const qrContent = `Temple Booking Details:\nID: ${bookingData.bookingID}\nName: ${bookingData.name}\nDates: ${bookingData.startDate} to ${bookingData.endDate}\nAmount: ₹${bookingData.totalAmount}`;
-        
-        document.getElementById("qrcode").innerHTML = ""; // Clear previous QR
+        // QR Code Logic
+        const qrContent = `Verification:\nID: ${bookingData.bookingID}\nName: ${bookingData.name}\nDates: ${bookingData.startDate} to ${bookingData.endDate}\nPaid: ₹${bookingData.totalAmount}`;
+        document.getElementById("qrcode").innerHTML = "";
         new QRCode(document.getElementById("qrcode"), {
             text: qrContent,
             width: 100,
-            height: 100,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
+            height: 100
         });
 
+        // Show Ticket
         document.getElementById('t-id').innerText = bookingData.bookingID;
         document.getElementById('t-date').innerText = bookingData.bookingDate;
         document.getElementById('t-name').innerText = bookingData.name;
@@ -205,7 +193,7 @@ form.addEventListener('submit', async (e) => {
         document.getElementById('t-total').innerText = total;
         
         document.getElementById('ticketOutput').classList.remove('hidden');
-        document.getElementById('ticketOutput').scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo(0, document.body.scrollHeight);
     } catch (err) {
         document.getElementById('spinner').classList.add('hidden');
         Swal.fire("Error", "సర్వర్ సమస్య", "error");
@@ -215,74 +203,53 @@ form.addEventListener('submit', async (e) => {
 async function shareLockedPDF() {
     const element = document.getElementById('printableTicket');
     const opt = { margin: 10, filename: `Ticket_${bookingData.bookingID}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4' } };
-    try {
-        const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
-        const file = new File([pdfBlob], `Ticket_${bookingData.bookingID}.pdf`, { type: 'application/pdf' });
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title: 'Temple Ticket', text: 'మీ పోలేరమ్మ ఆలయ టికెట్.' });
-        } else {
-            html2pdf().set(opt).from(element).save();
-            alert("డైరెక్ట్ షేరింగ్ కు మద్దతు లేదు. టికెట్ డౌన్‌లోడ్ చేయబడింది.");
-        }
-    } catch (e) { console.error(e); }
+    const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
+    const file = new File([pdfBlob], `Ticket_${bookingData.bookingID}.pdf`, { type: 'application/pdf' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'Temple Ticket' });
+    } else {
+        html2pdf().set(opt).from(element).save();
+    }
 }
 
 function downloadPDF() {
     const element = document.getElementById('printableTicket');
     html2pdf().from(element).save(`Ticket_${bookingData.bookingID}.pdf`);
 }
-
-function shareText() {
-    const msg = `శ్రీ పోలేరమ్మ ఆలయ బుకింగ్ కన్ఫర్మ్. ID: ${bookingData.bookingID}, పేరు: ${bookingData.name}, మొత్తం: ₹${bookingData.totalAmount}.`;
-    if (navigator.share) navigator.share({ title: 'Ticket Info', text: msg }); else alert(msg);
-}
 </script>
 
 <style>
-:root { --primary: #e65100; --secondary: #ff9800; --bg: #fdf5e6; --glass: rgba(255, 255, 255, 0.95); }
-* { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+:root { --primary: #e65100; --bg: #fdf5e6; --glass: rgba(255, 255, 255, 0.95); }
+* { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 body { margin: 0; background: var(--bg); }
-
 .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, #ff9800, #ff5722); opacity: 0.1; z-index: -1; }
-
-header { background: var(--glass); padding: 15px; text-align: center; border-bottom: 3px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.header-logo { width: 55px; border-radius: 50%; border: 2px solid var(--primary); }
-header h1 { color: var(--primary); font-size: 1.1rem; margin-top: 5px; }
-
-.booking-container { display: flex; flex-direction: column; align-items: center; padding: 20px; gap: 20px; }
+header { background: var(--glass); padding: 15px; text-align: center; border-bottom: 3px solid var(--primary); }
+.header-logo { width: 55px; border-radius: 50%; }
+.booking-container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
 .booking-card { background: white; border-radius: 20px; padding: 25px; width: 100%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.input-group { margin-bottom: 15px; }
-label { display: block; font-weight: 600; color: #444; margin-bottom: 5px; font-size: 0.9rem; }
-input, textarea { width: 100%; padding: 12px; border: 1.5px solid #eee; border-radius: 10px; }
-.row { display: flex; gap: 10px; } .col { flex: 1; }
-
+input, textarea { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 10px; margin-top: 5px; }
 .price-summary-card { background: #fff3e0; border-radius: 15px; padding: 15px; margin: 15px 0; border-left: 8px solid var(--primary); text-align: center; }
-.monthly-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+.monthly-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 50px; font-weight: bold; cursor: pointer; }
 
+/* TICKET STYLES */
 .ticket-card { background: white; width: 350px; padding: 30px; border: 1px solid #ddd; border-radius: 10px; position: relative; overflow: hidden; text-align: center; }
 .ticket-top-border { position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--primary); }
 .paid-stamp-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); border: 5px solid rgba(211, 47, 47, 0.2); color: rgba(211, 47, 47, 0.2); font-size: 3.5rem; font-weight: 900; padding: 10px; z-index: 0; pointer-events: none; }
-
-.ticket-header { margin-bottom: 20px; position: relative; z-index: 1; }
 .ticket-logo { width: 65px; margin-bottom: 5px; }
 .temple-name { font-size: 0.75rem; font-weight: bold; color: var(--primary); }
-
-.t-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.9rem; position: relative; z-index: 1; text-align: left; }
+.t-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.9rem; text-align: left; }
 .divider { border-top: 1px dashed #ccc; margin: 10px 0; }
-.price-highlight { background: #e8f5e9; padding: 12px; text-align: center; border-radius: 10px; border: 1px solid #c8e6c9; margin-top: 15px; position: relative; z-index: 1; }
+.price-highlight { background: #e8f5e9; padding: 12px; text-align: center; border-radius: 10px; margin-top: 15px; }
 .price-highlight b { font-size: 1.4rem; color: #1b5e20; }
-
-.qr-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 15px; position: relative; z-index: 1; }
+.qr-container { display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
 #qrcode { padding: 5px; background: white; border: 1px solid #eee; }
-
-.ticket-actions { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 350px; }
-.action-btn { border: none; padding: 12px; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; }
-.btn-wa { background: #25d366; } .btn-pdf { background: #d32f2f; } .btn-print { background: #555; } .btn-msg { background: #007bff; }
-
+.ticket-actions { margin-top: 25px; display: flex; gap: 10px; width: 350px; }
+.action-btn { flex: 1; border: none; padding: 12px; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; }
+.btn-wa { background: #25d366; } .btn-pdf { background: #d32f2f; } .btn-print { background: #555; }
 .hidden { display: none; }
 .spinner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </body>
                     </html>
-                               
+    
