@@ -28,7 +28,6 @@
             background-attachment: fixed;
         }
 
-        /* Essential Header Styling */
         header { 
             background: linear-gradient(135deg, var(--primary), var(--accent)); 
             color: white; padding: 50px 20px 100px; text-align: center; 
@@ -59,7 +58,6 @@
         .btn-wa { background: #25D366; }
         .btn-dl { background: #34495e; }
 
-        /* Ticket Design */
         .ticket-outer { padding: 12px; background: white; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.2); }
         .ticket-card { border: 2px solid #f2f2f2; border-radius: 25px; overflow: hidden; position: relative; }
         .ticket-header { background: var(--primary); color: white; padding: 30px 20px; text-align: center; position: relative; }
@@ -71,7 +69,6 @@
         .qr-wrapper { display: flex; flex-direction: column; align-items: center; margin: 30px 0; padding: 15px; }
         #qrcode { padding: 10px; background: #fff; }
 
-        /* PURE VERIFICATION VIEW - ZERO DISTRACTION */
         #verifyLayout { min-height: 100vh; background: #ffffff !important; display: flex; align-items: center; justify-content: center; padding: 20px; width: 100vw; position: absolute; top: 0; left: 0; z-index: 9999; }
         .v-card-clean { width: 100%; max-width: 440px; border: 2px solid #eee; padding: 35px; border-radius: 25px; text-align: center; background: #fff; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         .v-header-icon { font-size: 60px; color: var(--success); margin-bottom: 15px; }
@@ -158,13 +155,11 @@
         <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Sri Poleramma Temple Digital Record</p>
         
         <div id="vContent" style="text-align: left; background: #fafafa; padding: 25px; border-radius: 15px; border: 1px solid #eee; line-height: 1.8;">
-            </div>
+        </div>
 
         <div style="margin-top: 30px; padding: 15px; border: 1px dashed #4caf50; border-radius: 12px; background: #f9fff9;">
             <span style="color: #1b5e20; font-weight: 800; font-size: 12px;">✓ TICKET AUTHENTICITY SECURED</span>
         </div>
-        
-        <button onclick="window.location.href=window.location.pathname" style="margin-top: 30px; border: none; background: #f0f0f0; padding: 12px 25px; border-radius: 10px; font-weight: 800; color: #555; cursor: pointer;">EXIT VERIFICATION</button>
     </div>
 </div>
 
@@ -221,20 +216,14 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
-    // LOGIC: DETECT SCAN AND CLEAR EVERYTHING
     (function checkVerification() {
         const p = new URLSearchParams(window.location.search);
         if(p.has('verify')) {
-            // Hide the entire website container immediately
             document.addEventListener("DOMContentLoaded", () => {
                 const website = document.getElementById('websiteContainer');
                 if(website) website.style.display = 'none';
-                
-                // Remove background styling
                 document.body.style.backgroundImage = 'none';
                 document.body.style.backgroundColor = '#ffffff';
-
-                // Show only verification
                 const vLayout = document.getElementById('verifyLayout');
                 vLayout.classList.remove('hidden');
 
@@ -267,4 +256,5 @@
     }
 </script>
 </body>
-</html>
+                                                                          </html>
+    
