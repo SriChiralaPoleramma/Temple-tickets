@@ -37,48 +37,15 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .flower-divider {
-            color: var(--marigold);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
+        .flower-divider { color: var(--marigold); font-size: 1.5rem; margin-bottom: 10px; }
+        .temple-banner h1 { font-size: 1.6rem; margin: 5px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
-        .temple-banner h1 {
-            font-size: 1.6rem;
-            margin: 5px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .container {
-            max-width: 600px;
-            margin: -30px auto 30px;
-            padding: 0 15px;
-        }
-
-        .form-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 1px solid #ffe0b2;
-        }
+        .container { max-width: 600px; margin: -30px auto 30px; padding: 0 15px; }
+        .form-card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #ffe0b2; }
 
         .input-group { margin-bottom: 15px; }
-        .input-group label { 
-            display: block; 
-            font-weight: bold; 
-            margin-bottom: 5px; 
-            font-size: 0.9rem; 
-            color: var(--deep-red);
-        }
-        .input-group input {
-            width: 100%; 
-            padding: 12px; 
-            border: 2px solid #eee; 
-            border-radius: 10px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
+        .input-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; color: var(--deep-red); }
+        .input-group input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
         .input-group input:focus { border-color: var(--saffron); outline: none; background: #fffdf9; }
 
         .submit-btn {
@@ -92,117 +59,26 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
-            transition: 0.3s;
         }
 
-        .ticket-view {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 30px;
-        }
+        .ticket-view { display: flex; flex-direction: column; align-items: center; margin-top: 30px; }
+        .digital-ticket { width: 350px; background: #fff; border-radius: 20px; border: 2px solid var(--marigold); overflow: hidden; position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.15); }
+        .ticket-top { background: var(--saffron); color: white; padding: 20px; text-align: center; position: relative; }
+        .ticket-top::after { content: ""; position: absolute; bottom: -10px; left: 0; width: 100%; height: 12px; background: white; clip-path: polygon(0% 100%, 5% 0%, 10% 100%, 15% 0%, 20% 100%, 25% 0%, 30% 100%, 35% 0%, 40% 100%, 45% 0%, 50% 100%, 55% 0%, 60% 100%, 65% 0%, 70% 100%, 75% 0%, 80% 100%, 85% 0%, 90% 100%, 95% 0%, 100% 100%); }
+        .ticket-body { padding: 25px 20px; background-image: url('https://www.transparenttextures.com/patterns/p6.png'); }
 
-        .digital-ticket {
-            width: 350px;
-            background: #fff;
-            border-radius: 20px;
-            border: 2px solid var(--marigold);
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.15);
-        }
-
-        .ticket-top {
-            background: var(--saffron);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-        }
-
-        .ticket-top::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 12px;
-            background: white;
-            clip-path: polygon(0% 100%, 5% 0%, 10% 100%, 15% 0%, 20% 100%, 25% 0%, 30% 100%, 35% 0%, 40% 100%, 45% 0%, 50% 100%, 55% 0%, 60% 100%, 65% 0%, 70% 100%, 75% 0%, 80% 100%, 85% 0%, 90% 100%, 95% 0%, 100% 100%);
-        }
-
-        .ticket-body { 
-            padding: 25px 20px; 
-            background-image: url('https://www.transparenttextures.com/patterns/p6.png');
-        }
-
-        .watermark {
-            position: absolute;
-            top: 55%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 120px;
-            color: rgba(183, 28, 28, 0.04);
-            pointer-events: none;
-        }
-
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed #eee;
-        }
+        .info-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
         .info-item label { color: #888; font-size: 0.75rem; text-transform: uppercase; }
         .info-item span { font-weight: bold; color: var(--deep-red); }
 
-        .qr-box {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 20px;
-            text-align: center;
-            border: 1px solid #f0f0f0;
-        }
+        .qr-box { background: white; padding: 15px; border-radius: 12px; margin-top: 20px; text-align: center; border: 1px solid #f0f0f0; }
+        .blessing { text-align: center; margin-top: 15px; color: var(--leaf-green); font-weight: bold; font-size: 0.85rem; }
 
-        .blessing {
-            text-align: center;
-            margin-top: 15px;
-            color: var(--leaf-green);
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-
-        .share-container {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 350px;
-            margin-bottom: 50px;
-        }
-        .button-row {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-        }
-        .action-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
+        .share-container { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; width: 350px; margin-bottom: 50px; }
+        .action-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 0.9rem; }
         .btn-wa { background: #25D366; }
         .btn-dl { background: #0277bd; }
         .btn-temple { background: var(--deep-red); }
-
         .hidden { display: none; }
     </style>
 </head>
@@ -217,27 +93,12 @@
 <div class="container">
     <div class="form-card" id="formSection">
         <form id="poojaForm">
-            <div class="input-group">
-                <label>భక్తుని పేరు (Devotee Name)</label>
-                <input type="text" id="inpName" required placeholder="మీ పేరు నమోదు చేయండి">
-            </div>
-            <div class="input-group">
-                <label>గోత్రం (Gothram)</label>
-                <input type="text" id="inpGothram" required placeholder="మీ గోత్రం">
-            </div>
-            <div class="input-group">
-                <label>ఫోన్ నంబర్ (WhatsApp Number)</label>
-                <input type="tel" id="inpPhone" required maxlength="10" placeholder="10 అంకెల నంబర్">
-            </div>
+            <div class="input-group"><label>భక్తుని పేరు (Devotee Name)</label><input type="text" id="inpName" required placeholder="పేరు నమోదు చేయండి"></div>
+            <div class="input-group"><label>గోత్రం (Gothram)</label><input type="text" id="inpGothram" required placeholder="గోత్రం"></div>
+            <div class="input-group"><label>ఫోన్ నంబర్ (WhatsApp Number)</label><input type="tel" id="inpPhone" required maxlength="10" placeholder="10 అంకెల నంబర్"></div>
             <div class="input-group" style="display: flex; gap: 10px;">
-                <div style="flex: 1;">
-                    <label>ప్రారంభ తేదీ</label>
-                    <input type="date" id="inpStart" required>
-                </div>
-                <div style="flex: 1;">
-                    <label>ముగింపు తేదీ</label>
-                    <input type="date" id="inpEnd" required>
-                </div>
+                <div style="flex: 1;"><label>ప్రారంభ తేదీ</label><input type="date" id="inpStart" required></div>
+                <div style="flex: 1;"><label>ముగింపు తేదీ</label><input type="date" id="inpEnd" required></div>
             </div>
             <button type="submit" class="submit-btn">టికెట్ రూపొందించండి (Generate Ticket)</button>
         </form>
@@ -245,56 +106,26 @@
 
     <section id="ticketOutput" class="hidden ticket-view">
         <div class="digital-ticket" id="captureArea">
-            <div class="watermark">ॐ</div>
             <div class="ticket-top">
                 <div style="font-size: 30px; margin-bottom: 5px;">ॐ</div>
                 <div style="font-weight: bold; letter-spacing: 1px; font-size: 0.9rem;">DIGITAL POOJA RECEIPT</div>
                 <div id="outID" style="font-size: 0.7rem; opacity: 0.8;">ID: #---</div>
             </div>
-
             <div class="ticket-body">
-                <div class="info-item">
-                    <label>Devotee</label>
-                    <span id="outName">---</span>
-                </div>
-                <div class="info-item">
-                    <label>Gothram</label>
-                    <span id="outGothram">---</span>
-                </div>
-                <div class="info-item">
-                    <label>Validity</label>
-                    <span id="outDate">---</span>
-                </div>
-                <div class="info-item">
-                    <label>Phone</label>
-                    <span id="outPhoneDisp">---</span>
-                </div>
-                <div class="info-item" style="border:none; margin-top:10px;">
-                    <label>Amount Paid</label>
-                    <span style="font-size: 1.2rem;" id="outTotal">₹0</span>
-                </div>
-
-                <div class="qr-box">
-                    <div id="qrcode"></div>
-                    <div style="font-size: 0.6rem; color: #999; margin-top: 8px;">Scan to Verify Original Receipt</div>
-                </div>
-
-                <div class="blessing">
-                    🌸 లోకా సమస్తా సుఖినోభవంతు 🌸
-                </div>
+                <div class="info-item"><label>Devotee</label><span id="outName">---</span></div>
+                <div class="info-item"><label>Gothram</label><span id="outGothram">---</span></div>
+                <div class="info-item"><label>Validity</label><span id="outDate">---</span></div>
+                <div class="info-item" style="border:none; margin-top:10px;"><label>Amount Paid</label><span style="font-size: 1.2rem;" id="outTotal">₹0</span></div>
+                <div class="qr-box"><div id="qrcode"></div><div style="font-size: 0.6rem; color: #999; margin-top: 8px;">Scan to Verify</div></div>
+                <div class="blessing">🌸 లోకా సమస్తా సుఖినోభవంతు 🌸</div>
             </div>
         </div>
 
         <div class="share-container">
-            <div class="button-row">
-                <button onclick="downloadImage()" class="btn-dl action-btn"><i class="fas fa-download"></i> Save Image</button>
-            </div>
-            <div class="button-row">
-                <button onclick="shareWithDevotee()" class="btn-wa action-btn"><i class="fab fa-whatsapp"></i> Send to Devotee</button>
-                <button onclick="shareWithTemple()" class="btn-temple action-btn"><i class="fab fa-whatsapp"></i> Send to Temple</button>
-            </div>
-            <div style="text-align: center; font-size: 0.7rem; color: #666;">
-                Temple Admin Number: 8951534845
+            <button onclick="downloadImage()" class="btn-dl action-btn"><i class="fas fa-download"></i> Save Image</button>
+            <div style="display:flex; gap:10px;">
+                <button onclick="shareDirect('devotee')" class="btn-wa action-btn"><i class="fab fa-whatsapp"></i> Devotee Share</button>
+                <button onclick="shareDirect('temple')" class="btn-temple action-btn"><i class="fab fa-whatsapp"></i> Temple Share</button>
             </div>
         </div>
     </section>
@@ -307,115 +138,83 @@
     const templePhone = "918951534845"; 
     let currentBooking = {};
 
-    // DATE LOGIC: 
-    // Start Date is unrestricted. 
-    // End Date automatically restricts to dates AFTER Start Date selection.
     startInput.addEventListener('change', () => {
-        if (startInput.value) {
-            endInput.setAttribute('min', startInput.value);
-            // If current end date is now invalid, reset it
-            if (endInput.value && endInput.value < startInput.value) {
-                endInput.value = startInput.value;
-            }
-        }
+        endInput.setAttribute('min', startInput.value);
     });
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        const name = document.getElementById('inpName').value;
-        const gothram = document.getElementById('inpGothram').value;
-        const phone = document.getElementById('inpPhone').value;
-        const start = startInput.value;
-        const end = endInput.value;
-        const bid = "POL-" + Math.floor(10000 + Math.random() * 90000);
+        const start = new Date(startInput.value);
+        const end = new Date(endInput.value);
+        const today = new Date();
 
-        const d1 = new Date(start);
-        const d2 = new Date(end);
+        // MONEY CALCULATION: Only calculate for months starting from NEXT month
+        // Example: If today is Feb and booking is for Feb-March, only March is charged.
+        let chargeMonths = 0;
+        let tempDate = new Date(start.getFullYear(), start.getMonth(), 1);
         
-        // Month calculation
-        let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
-        if (months <= 0) months = 1; 
-        const totalAmount = months * 100;
+        while (tempDate <= end) {
+            // Check if tempDate month/year is greater than current month/year
+            if (tempDate.getFullYear() > today.getFullYear() || 
+               (tempDate.getFullYear() === today.getFullYear() && tempDate.getMonth() > today.getMonth())) {
+                chargeMonths++;
+            }
+            tempDate.setMonth(tempDate.getMonth() + 1);
+        }
+
+        const totalAmount = chargeMonths * 100;
+        const bid = "POL-" + Math.floor(10000 + Math.random() * 90000);
 
         currentBooking = { 
             id: bid, 
-            name: name, 
-            gothram: gothram, 
-            phone: phone, 
-            period: `${start} / ${end}`, 
+            name: document.getElementById('inpName').value, 
+            gothram: document.getElementById('inpGothram').value, 
+            phone: document.getElementById('inpPhone').value, 
+            period: `${startInput.value} to ${endInput.value}`, 
             amount: totalAmount 
         };
 
         document.getElementById('outID').innerText = "ID: #" + bid;
-        document.getElementById('outName').innerText = name;
-        document.getElementById('outGothram').innerText = gothram;
-        document.getElementById('outDate').innerText = `${start} to ${end}`;
-        document.getElementById('outPhoneDisp').innerText = phone;
+        document.getElementById('outName').innerText = currentBooking.name;
+        document.getElementById('outGothram').innerText = currentBooking.gothram;
+        document.getElementById('outDate').innerText = currentBooking.period;
         document.getElementById('outTotal').innerText = `₹${totalAmount}`;
 
         const qrContainer = document.getElementById("qrcode");
         qrContainer.innerHTML = "";
-        new QRCode(qrContainer, {
-            text: `ID:${bid}|Name:${name}|Gothram:${gothram}`,
-            width: 110,
-            height: 110,
-            colorDark : "#B71C1C",
-            colorLight : "#ffffff"
-        });
+        new QRCode(qrContainer, { text: bid, width: 110, height: 110, colorDark : "#B71C1C" });
 
         document.getElementById('ticketOutput').classList.remove('hidden');
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     });
 
     async function downloadImage() {
-        const area = document.getElementById('captureArea');
-        const canvas = await html2canvas(area, { scale: 3, backgroundColor: '#FFF8E1' });
+        const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 3 });
         const link = document.createElement('a');
-        link.download = `Poleramma_Ticket_${currentBooking.id}.png`;
+        link.download = `Ticket_${currentBooking.id}.png`;
         link.href = canvas.toDataURL();
         link.click();
     }
 
-    function generateMessage() {
-        return `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం పూజా బుకింగ్* 🌸\n\n` +
-               `🙏 *ID:* ${currentBooking.id}\n` +
-               `🙏 *భక్తుని పేరు:* ${currentBooking.name}\n` +
-               `🙏 *గోత్రం:* ${currentBooking.gothram}\n` +
-               `🙏 *తేదీలు:* ${currentBooking.period}\n` +
-               `🙏 *మొత్తం:* ₹${currentBooking.amount}\n\n` +
-               `అమ్మవారి ఆశీస్సులు మీకు ఎల్లప్పుడూ ఉండాలని కోరుకుంటున్నాము. ✨`;
-    }
-
-    async function shareWithDevotee() {
-        const msg = generateMessage();
-        const devoteeNum = "91" + currentBooking.phone;
-        const area = document.getElementById('captureArea');
-        const canvas = await html2canvas(area, { scale: 2 });
+    async function shareDirect(target) {
+        const msg = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸\n\n🙏 *ID:* ${currentBooking.id}\n🙏 *పేరు:* ${currentBooking.name}\n🙏 *గోత్రం:* ${currentBooking.gothram}\n🙏 *తేదీలు:* ${currentBooking.period}\n🙏 *మొత్తం:* ₹${currentBooking.amount}\n\nఅమ్మవారి ఆశీస్సులు మీకు ఉండాలి. ✨`;
+        const phone = (target === 'temple') ? templePhone : "91" + currentBooking.phone;
+        
+        const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 2 });
         canvas.toBlob(async (blob) => {
-            const file = new File([blob], "PoojaTicket.png", { type: "image/png" });
+            const file = new File([blob], "Ticket.png", { type: "image/png" });
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({ files: [file], text: msg });
+                try {
+                    await navigator.share({ files: [file], text: msg });
+                } catch (e) {
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                }
             } else {
-                window.open(`https://wa.me/${devoteeNum}?text=${encodeURIComponent(msg)}`, '_blank');
-            }
-        });
-    }
-
-    async function shareWithTemple() {
-        const msg = "*NEW BOOKING RECEIVED*\n" + generateMessage();
-        const area = document.getElementById('captureArea');
-        const canvas = await html2canvas(area, { scale: 2 });
-        canvas.toBlob(async (blob) => {
-            const file = new File([blob], "AdminCopy.png", { type: "image/png" });
-            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({ files: [file], text: msg });
-            } else {
-                window.open(`https://wa.me/${templePhone}?text=${encodeURIComponent(msg)}`, '_blank');
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
             }
         });
     }
 </script>
-
 </body>
-</html>
+    </html>
+    
