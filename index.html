@@ -178,9 +178,15 @@
         .share-container {
             margin-top: 20px;
             display: flex;
+            flex-direction: column;
             gap: 10px;
             width: 350px;
             margin-bottom: 50px;
+        }
+        .button-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
         }
         .action-btn {
             flex: 1;
@@ -194,9 +200,12 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
         }
         .btn-wa { background: #25D366; }
         .btn-dl { background: #0277bd; }
+        .btn-temple { background: var(--deep-red); }
 
         .hidden { display: none; }
     </style>
@@ -221,8 +230,8 @@
                 <input type="text" id="inpGothram" required placeholder="మీ గోత్రం">
             </div>
             <div class="input-group">
-                <label>ఫోన్ నంబర్ (Mobile Number)</label>
-                <input type="tel" id="inpPhone" required maxlength="10" placeholder="WhatsApp నంబర్">
+                <label>ఫోన్ నంబర్ (WhatsApp Number)</label>
+                <input type="tel" id="inpPhone" required maxlength="10" placeholder="10 అంకెల నంబర్">
             </div>
             <div class="input-group" style="display: flex; gap: 10px;">
                 <div style="flex: 1;">
@@ -261,8 +270,8 @@
                     <span id="outDate">---</span>
                 </div>
                 <div class="info-item">
-                    <label>Contact</label>
-                    <span id="outPhone">---</span>
+                    <label>Phone</label>
+                    <span id="outPhoneDisp">---</span>
                 </div>
                 <div class="info-item" style="border:none; margin-top:10px;">
                     <label>Amount Paid</label>
@@ -273,10 +282,6 @@
                     <div id="qrcode"></div>
                     <div style="font-size: 0.6rem; color: #999; margin-top: 8px;">Scan to Verify Original Receipt</div>
                 </div>
-                
-                <div style="text-align: center; font-size: 0.65rem; color: #666; margin-top: 10px;">
-                    Temple Help: 8951534845
-                </div>
 
                 <div class="blessing">
                     🌸 లోకా సమస్తా సుఖినోభవంతు 🌸
@@ -285,15 +290,23 @@
         </div>
 
         <div class="share-container">
-            <button onclick="downloadImage()" class="btn-dl action-btn"><i class="fas fa-download"></i> Save</button>
-            <button onclick="shareWhatsApp()" class="btn-wa action-btn"><i class="fab fa-whatsapp"></i> Share on WhatsApp</button>
+            <div class="button-row">
+                <button onclick="downloadImage()" class="btn-dl action-btn"><i class="fas fa-download"></i> Save Image</button>
+            </div>
+            <div class="button-row">
+                <button onclick="shareWithDevotee()" class="btn-wa action-btn"><i class="fab fa-whatsapp"></i> Send to Devotee</button>
+                <button onclick="shareWithTemple()" class="btn-temple action-btn"><i class="fab fa-whatsapp"></i> Send to Temple</button>
+            </div>
+            <div style="text-align: center; font-size: 0.7rem; color: #666;">
+                Temple Admin Number: 8951534845
+            </div>
         </div>
     </section>
 </div>
 
 <script>
     const form = document.getElementById('poojaForm');
-    const templePhone = "8951534845";
+    const templePhone = "918951534845"; // Pre-formatted with country code
     let currentBooking = {};
 
     form.addEventListener('submit', (e) => {
@@ -320,17 +333,18 @@
             amount: totalAmount 
         };
 
+        // Update UI
         document.getElementById('outID').innerText = "ID: #" + bid;
         document.getElementById('outName').innerText = name;
         document.getElementById('outGothram').innerText = gothram;
         document.getElementById('outDate').innerText = `${start} / ${end}`;
-        document.getElementById('outPhone').innerText = phone;
+        document.getElementById('outPhoneDisp').innerText = phone;
         document.getElementById('outTotal').innerText = `₹${totalAmount}`;
 
         const qrContainer = document.getElementById("qrcode");
         qrContainer.innerHTML = "";
         new QRCode(qrContainer, {
-            text: `ID: ${bid}\nName: ${name}\nVerify at Temple: ${templePhone}`,
+            text: `ID:${bid}|Name:${name}|Gothram:${gothram}`,
             width: 110,
             height: 110,
             colorDark : "#B71C1C",
@@ -350,43 +364,51 @@
         link.click();
     }
 
-    async function shareWhatsApp() {
-        const message = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం పూజా బుకింగ్* 🌸\n\n` +
-                        `🙏 *ID:* ${currentBooking.id}\n` +
-                        `🙏 *భక్తుని పేరు:* ${currentBooking.name}\n` +
-                        `🙏 *గోత్రం:* ${currentBooking.gothram}\n` +
-                        `🙏 *తేదీలు:* ${currentBooking.period}\n` +
-                        `🙏 *మొత్తం:* ₹${currentBooking.amount}\n\n` +
-                        `*Temple Contact:* ${templePhone}\n\n` +
-                        `అమ్మవారి ఆశీస్సులు మీకు ఎల్లప్పుడూ ఉండాలని కోరుకుంటున్నాము. ✨`;
+    function generateMessage() {
+        return `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం పూజా బుకింగ్* 🌸\n\n` +
+               `🙏 *ID:* ${currentBooking.id}\n` +
+               `🙏 *భక్తుని పేరు:* ${currentBooking.name}\n` +
+               `🙏 *గోత్రం:* ${currentBooking.gothram}\n` +
+               `🙏 *ఫోన్:* ${currentBooking.phone}\n` +
+               `🙏 *వ్యవధి:* ${currentBooking.period}\n` +
+               `🙏 *మొత్తం:* ₹${currentBooking.amount}\n\n` +
+               `అమ్మవారి ఆశీస్సులు మీకు ఎల్లప్పుడూ ఉండాలని కోరుకుంటున్నాము. ✨`;
+    }
+
+    // Function to share with the number entered in the form
+    async function shareWithDevotee() {
+        const msg = generateMessage();
+        const devoteeNum = "91" + currentBooking.phone;
         
-        const encodedMsg = encodeURIComponent(message);
-        const waUrl = `https://wa.me/91${currentBooking.phone}?text=${encodedMsg}`;
-        
-        // Try sharing the image via System Share first
+        // Use Native Share if available (to send Image + Text)
         const area = document.getElementById('captureArea');
         const canvas = await html2canvas(area, { scale: 2 });
-        
         canvas.toBlob(async (blob) => {
-            const file = new File([blob], "Ticket.png", { type: "image/png" });
+            const file = new File([blob], "PoojaTicket.png", { type: "image/png" });
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Poleramma Temple Ticket',
-                        text: message
-                    });
-                } catch (err) {
-                    window.open(waUrl, '_blank');
-                }
+                await navigator.share({ files: [file], text: msg });
             } else {
-                // Fallback direct to the number provided in form
-                window.open(waUrl, '_blank');
+                window.open(`https://wa.me/${devoteeNum}?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+        });
+    }
+
+    // Function to share with the Temple number (8951534845)
+    async function shareWithTemple() {
+        const msg = "*NEW BOOKING RECEIVED*\n" + generateMessage();
+        
+        const area = document.getElementById('captureArea');
+        const canvas = await html2canvas(area, { scale: 2 });
+        canvas.toBlob(async (blob) => {
+            const file = new File([blob], "AdminCopy.png", { type: "image/png" });
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({ files: [file], text: msg });
+            } else {
+                window.open(`https://wa.me/${templePhone}?text=${encodeURIComponent(msg)}`, '_blank');
             }
         });
     }
 </script>
 
 </body>
-        </html>
-    
+</html>
