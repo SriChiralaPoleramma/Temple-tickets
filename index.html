@@ -88,8 +88,7 @@
         <h2 style="color: #1b5e20; margin: 0;">Verified Ticket</h2>
         <p style="font-size: 12px; color: #666; margin-bottom: 25px;">Official Sri Poleramma Temple Record</p>
         <div id="vContent" style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 15px; line-height: 2;"></div>
-        <button onclick="window.location.href=window.location.pathname" class="btn btn-primary" style="margin-top: 20px; width: 100%;">Back to Booking</button>
-    </div>
+        </div>
 </div>
 
 <div id="websiteContainer">
@@ -163,18 +162,18 @@
 </div>
 
 <script>
-    // !! CONFIGURATION !! 
+    // !! CONFIGURATION: INSERT YOUR APPS SCRIPT URL BELOW !!
     const SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
 
     const sDate = document.getElementById('sDate');
     const eDate = document.getElementById('eDate');
     let bookingData = {};
 
-    // QR VERIFICATION REDIRECT LOGIC
+    // QR CODE VERIFICATION LOGIC
     (function checkUrl() {
         const params = new URLSearchParams(window.location.search);
         if(params.has('verify')) {
-            // Hide everything and show only the ticket data
+            // Hide booking portal and show verification layout
             document.getElementById('websiteContainer').style.display = 'none';
             document.getElementById('verifyLayout').classList.remove('hidden');
             document.getElementById('vContent').innerHTML = `
@@ -187,7 +186,7 @@
         }
     })();
 
-    // PRICE CALCULATION LOGIC
+    // DYNAMIC PRICE CALCULATION
     sDate.onchange = () => { eDate.min = sDate.value; calculatePricing(); };
     eDate.onchange = calculatePricing;
 
@@ -211,10 +210,11 @@
         return 0;
     }
 
-    // FORM SUBMISSION & CLOUD STORAGE
+    // FORM SUBMISSION & CLOUD INTEGRATION
     document.getElementById('pForm').onsubmit = async (e) => {
         e.preventDefault();
         
+        // Prevent double clicks and show loading state
         document.getElementById('subBtn').disabled = true;
         document.getElementById('loader').style.display = 'flex';
 
@@ -234,7 +234,7 @@
         };
 
         try {
-            // Push to Google Sheets
+            // Push data to Google Spreadsheet
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -242,7 +242,7 @@
                 body: JSON.stringify(bookingData)
             });
 
-            // Populate Ticket UI
+            // Update Ticket View with Devotee Info
             document.getElementById('t-id').innerText = "TXN: " + tid;
             document.getElementById('t-name').innerText = bookingData.name;
             document.getElementById('t-phone').innerText = bookingData.phone;
@@ -251,36 +251,36 @@
             document.getElementById('t-period').innerText = bookingData.period;
             document.getElementById('t-amt').innerText = amt;
 
-            // Create QR Code Verification URL
+            // Generate the secure Verification URL for the QR Code
             const baseUrl = window.location.href.split('?')[0];
             const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}`;
 
             document.getElementById("qrcode").innerHTML = "";
             new QRCode(document.getElementById("qrcode"), { text: verifyUrl, width: 140, height: 140, colorDark: "#880e4f" });
             
-            // Switch view
+            // Switch from Form to Ticket view
             document.getElementById('bookingSection').classList.add('hidden');
             document.getElementById('ticketSection').classList.remove('hidden');
             window.scrollTo(0,0);
         } catch (err) {
-            Swal.fire("Error", "Cloud sync failed. Check internet connection.", "error");
+            Swal.fire("Cloud Error", "Failed to sync with temple records.", "error");
         } finally {
             document.getElementById('loader').style.display = 'none';
         }
     };
 
-    // SAVE TICKET AS IMAGE
+    // HIGH-QUALITY IMAGE EXPORT
     async function downloadTicket() {
         const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 3 });
         const link = document.createElement('a');
-        link.download = `Receipt_${bookingData.id}.png`;
+        link.download = `Poleramma_Receipt_${bookingData.id}.png`;
         link.href = canvas.toDataURL();
         link.click();
     }
 
-    // SHARE ON WHATSAPP
+    // WHATSAPP MESSAGING INTEGRATION
     function shareDirectWA() {
-        const msg = ` 🌸 *శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A*ID:* ${bookingData.id}%0A*పేరు:* ${bookingData.name}%0A*మొత్తం:* ₹${bookingData.amt}%0Aఅమ్మవారి కృప ఎల్లవేళలా మీకు ఉండాలని కోరుకుంటున్నాము. 🙏`;
+        const msg = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A*ID:* ${bookingData.id}%0A*పేరు:* ${bookingData.name}%0A*మొత్తం:* ₹${bookingData.amt}%0Aఅమ్మవారి కృప ఎల్లవేళలా ఉండాలి. 🙏`;
         window.open(`https://wa.me/91${bookingData.phone}?text=${msg}`, '_blank');
     }
 </script>
