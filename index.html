@@ -3,79 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔖 Pooja Booking | శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</title>
-    <link rel="stylesheet" href="index.css">
+    <title>🔖 Sri Poleramma Temple Booking</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root { --main: #e65100; --bg: #fff3e0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
+        
+        header { 
+            background: linear-gradient(to right, #e65100, #ff9800); 
+            color: white; padding: 15px; text-align: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo { width: 50px; border-radius: 50%; vertical-align: middle; border: 2px solid white; }
+
+        .container { max-width: 450px; margin: 20px auto; padding: 15px; }
+
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        h2 { color: var(--main); text-align: center; margin-top: 0; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #5d4037; }
+        input { 
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; 
+            box-sizing: border-box; font-size: 1rem; 
+        }
+
+        .btn-primary { 
+            background: var(--main); color: white; border: none; padding: 15px; 
+            border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; 
+        }
+
+        /* Ticket Styling */
+        .ticket-box { 
+            background: #fff; border: 3px solid var(--main); padding: 20px; 
+            border-radius: 15px; text-align: center; position: relative; 
+        }
+        .ticket-logo { width: 80px; border-radius: 50%; margin-bottom: 10px; }
+        .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; font-size: 14px;}
+        
+        #qrcode { margin: 20px auto; display: flex; justify-content: center; }
+
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .btn-whatsapp { background: #25d366; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-save { background: #1976d2; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-print { grid-column: span 2; background: #455a64; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+        .hidden { display: none; }
+        
+        .loader { 
+            position: fixed; top: 50%; left: 50%; border: 6px solid #f3f3f3; 
+            border-top: 6px solid var(--main); border-radius: 50%; width: 50px; 
+            height: 50px; animation: spin 1s linear infinite; margin: -25px 0 0 -25px; 
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
+
     <header>
-        <div class="logo-container">
-            <img src="templeimage/1742626228036 (1).jpg" alt="Logo" class="header-logo">
-            <h1>శ్రీ శ్రీ శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
-        </div>
+        <img src="templeimage/1742626228036 (1).jpg" alt="Logo" class="header-logo">
+        <h1 style="display:inline; margin-left:10px; font-size:1.2rem;">శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
     </header>
 
-    <main class="booking-container">
+    <div class="container">
         <div class="card" id="formSection">
-            <h2>📜 నెలవారీ పూజా బుకింగ్</h2>
-            <form id="monthlyForm">
+            <h2>📜 పూజా బుకింగ్</h2>
+            <form id="bookingForm">
                 <div class="form-group">
-                    <label>👤 పేరు (Devotee Name)</label>
-                    <input type="text" id="monthlyName" required placeholder="పేరు నమోదు చేయండి">
-                </div>
-                <div class="form-group">
-                    <label>📞 ఫోన్ నంబర్ (Phone)</label>
-                    <input type="tel" id="monthlyPhone" required pattern="[0-9]{10}" placeholder="10 అంకెల నంబర్">
+                    <label>👤 భక్తుని పేరు (Name)</label>
+                    <input type="text" id="name" required placeholder="పేరు నమోదు చేయండి">
                 </div>
                 <div class="form-group">
-                    <label>🕉️ గోత్రం (Gothram)</label>
-                    <input type="text" id="monthlyGothram" placeholder="గోత్రం (Optional)">
+                    <label>📞 ఫోన్ (Phone)</label>
+                    <input type="tel" id="phone" required pattern="[0-9]{10}" placeholder="10 అంకెల ఫోన్ నంబర్">
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>📅 ప్రారంభ నెల</label>
-                        <input type="month" id="startMonth" required>
-                    </div>
-                    <div class="form-group">
-                        <label>📅 ముగింపు నెల</label>
-                        <input type="month" id="endMonth" required>
-                    </div>
+                <div class="form-group">
+                    <label>📅 ప్రారంభ నెల</label>
+                    <input type="month" id="start" required>
                 </div>
-                <button type="submit" class="btn-primary">🛕 టికెట్ జనరేట్ చేయండి</button>
+                <div class="form-group">
+                    <label>📅 ముగింపు నెల</label>
+                    <input type="month" id="end" required>
+                </div>
+                <button type="submit" class="btn-primary">🛕 టికెట్ సిద్ధం చేయండి</button>
             </form>
         </div>
 
-        <section id="successSection" class="hidden">
-            <div class="ticket-box" id="ticketCapture">
-                <div class="ticket-header">
-                    <img src="templeimage/1742626228036 (1).jpg" class="ticket-logo">
-                    <h3>శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h3>
-                    <p>చీరాల, బాపట్ల జిల్లా</p>
-                </div>
-                <div class="ticket-body">
-                    <div class="row"><span>బుకింగ్ ఐడీ:</span> <b id="resID"></b></div>
+        <div id="ticketSection" class="hidden">
+            <div class="ticket-box" id="captureArea">
+                <img src="templeimage/1742626228036 (1).jpg" class="ticket-logo">
+                <h3 style="color:var(--main); margin:5px 0;">శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h3>
+                <p style="font-size:0.8rem; margin:0;">చీరాల, బాపట్ల జిల్లా</p>
+                
+                <div style="margin-top:20px; text-align:left;">
+                    <div class="row"><span>ID:</span> <b id="resID"></b></div>
                     <div class="row"><span>పేరు:</span> <b id="resName"></b></div>
                     <div class="row"><span>ఫోన్:</span> <b id="resPhone"></b></div>
-                    <div class="row"><span>గోత్రం:</span> <b id="resGothram"></b></div>
                     <div class="row"><span>కాలం:</span> <b id="resPeriod"></b></div>
-                    <div id="qrcode"></div>
                 </div>
-                <p class="footer-msg">అమ్మవారి కృపాకటాక్షాలు మీకు కలగాలి.</p>
+
+                <div id="qrcode"></div>
+                <p style="font-size:0.7rem; color:#888;">టికెట్ వెరిఫికేషన్ కోసం పైన ఉన్న QR కోడ్ స్కాన్ చేయండి.</p>
             </div>
 
             <div class="actions">
-                <button onclick="shareWhatsApp()" class="btn-whatsapp">📱 WhatsApp</button>
-                <button onclick="saveImage()" class="btn-save">🖼️ Save Image</button>
+                <button onclick="shareWA()" class="btn-whatsapp">📱 WhatsApp</button>
+                <button onclick="saveImg()" class="btn-save">🖼️ Save Image</button>
                 <button onclick="window.print()" class="btn-print">🖨️ Print Ticket</button>
             </div>
-            <button onclick="location.reload()" class="btn-reset">Back to New Booking</button>
-        </section>
-    </main>
+            <button onclick="location.reload()" style="width:100%; margin-top:15px; padding:10px; border:1px solid #ccc; background:none; border-radius:8px; cursor:pointer;">కొత్త బుకింగ్</button>
+        </div>
+    </div>
 
     <div id="loader" class="loader hidden"></div>
-    <script src="index.js"></script>
+
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('loader').classList.remove('hidden');
+
+            const id = 'POL-' + Math.floor(100000 + Math.random() * 900000);
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const period = document.getElementById('start').value + " to " + document.getElementById('end').value;
+
+            // Fill Ticket
+            document.getElementById('resID').innerText = id;
+            document.getElementById('resName').innerText = name;
+            document.getElementById('resPhone').innerText = phone;
+            document.getElementById('resPeriod').innerText = period;
+
+            // QR Code Logic
+            const qrDiv = document.getElementById('qrcode');
+            qrDiv.innerHTML = "";
+            const verifyURL = window.location.origin + window.location.pathname.replace('index.html', '') + `verify.html?id=${id}&name=${encodeURIComponent(name)}`;
+
+            new QRCode(qrDiv, { text: verifyURL, width: 140, height: 140 });
+
+            // Show Ticket
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('formSection').classList.add('hidden');
+                document.getElementById('ticketSection').classList.remove('hidden');
+                Swal.fire('విజయం!', 'మీ టికెట్ సిద్ధమైంది', 'success');
+            }, 800);
+        });
+
+        function shareWA() {
+            const id = document.getElementById('resID').innerText;
+            const name = document.getElementById('resName').innerText;
+            const text = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం*%0A🔖 ఐడీ: ${id}%0A👤 పేరు: ${name}%0A📅 కాలం: ${document.getElementById('resPeriod').innerText}`;
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        function saveImg() {
+            html2canvas(document.getElementById('captureArea')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Temple_Ticket.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
 </body>
-    </html>
-                
+                    </html>
+                    
