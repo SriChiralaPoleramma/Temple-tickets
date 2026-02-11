@@ -1,176 +1,313 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔖 Sri Poleramma Temple Booking</title>
+    <title>శ్రీ పోలేరమ్మ తల్లి | Divine Pro Portal</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mukta+Vaani:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        :root { --main: #e65100; --bg: #fff3e0; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
-        
+        /* CSS DESIGN SYSTEM: Natural Sandalwood & Temple Maroon Theme */
+        :root {
+            --sandalwood: #fdf5e6;
+            --om-red: #8e0000;
+            --banthi-gold: #ffab00;
+            --leaf-green: #386641;
+            --white: #ffffff;
+            --designer-orange: #f37021;
+        }
+
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        body { font-family: 'Mukta Vaani', sans-serif; background: var(--sandalwood); margin: 0; color: #333; }
+
+        /* HEADER: Designer Style with spiritual Om branding */
         header { 
-            background: linear-gradient(to right, #e65100, #ff9800); 
-            color: white; padding: 15px; text-align: center; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: var(--white); padding: 50px 15px; text-align: center;
+            border-bottom: 5px double var(--banthi-gold); position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .om-icon { font-size: 45px; color: var(--om-red); display: block; margin-bottom: 8px; }
+
+        /* PROMO BANNER: Based on image reference, highlights Seva info */
+        .promo-banner {
+            background: linear-gradient(135deg, var(--designer-orange), #e65100);
+            margin: -30px auto 20px; max-width: 520px; border-radius: 15px;
+            padding: 18px; color: white; text-align: center; font-size: 14px;
+            box-shadow: 0 12px 25px rgba(243, 112, 33, 0.3); border: 2px solid white;
+            position: relative; z-index: 10; line-height: 1.6;
         }
 
-        .header-logo { width: 50px; border-radius: 50%; vertical-align: middle; border: 2px solid white; }
+        .container { max-width: 480px; margin: 0 auto; padding: 15px; }
 
-        .container { max-width: 450px; margin: 20px auto; padding: 15px; }
-
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        
-        h2 { color: var(--main); text-align: center; margin-top: 0; }
-
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #5d4037; }
-        input { 
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; 
-            box-sizing: border-box; font-size: 1rem; 
+        /* FORM CARD: Modern, clean input grouping */
+        .divine-card { 
+            background: var(--white); border-radius: 30px; padding: 35px; 
+            border: 1px solid #f1e9db; box-shadow: 0 20px 50px rgba(107, 0, 0, 0.05);
         }
 
-        .btn-primary { 
-            background: var(--main); color: white; border: none; padding: 15px; 
-            border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; 
+        .input-group { margin-bottom: 22px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 700; color: var(--leaf-green); margin-bottom: 6px; text-transform: uppercase; }
+        .input-group input { width: 100%; padding: 14px; border: 1.5px solid #eee; border-radius: 15px; font-size: 16px; background: #fafafa; }
+        .input-group input:focus { border-color: var(--banthi-gold); outline: none; background: white; }
+
+        /* DYNAMIC PRICE BOX: Highlights the calculated ₹100/mo amount */
+        .price-panel {
+            background: #fffdf5; border: 1.5px solid var(--banthi-gold);
+            border-radius: 20px; padding: 20px; text-align: center; margin: 25px 0;
         }
 
-        /* Ticket Styling */
-        .ticket-box { 
-            background: #fff; border: 3px solid var(--main); padding: 20px; 
-            border-radius: 15px; text-align: center; position: relative; 
-        }
-        .ticket-logo { width: 80px; border-radius: 50%; margin-bottom: 10px; }
-        .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; font-size: 14px;}
-        
-        #qrcode { margin: 20px auto; display: flex; justify-content: center; }
+        /* TICKET: Optimized layout for clear text and QR scanning */
+        .ticket-pro { background: var(--white); border-radius: 25px; overflow: hidden; border: 2px solid #eee; box-shadow: 0 35px 70px rgba(0,0,0,0.12); }
+        .ticket-top { background: var(--om-red); color: white; padding: 30px; text-align: center; }
+        .ticket-body { padding: 35px; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
+        .t-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding: 12px 0; font-size: 14.5px; }
+        .t-val { font-weight: 700; color: #111; text-align: right; }
 
-        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .btn-whatsapp { background: #25d366; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .btn-save { background: #1976d2; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .btn-print { grid-column: span 2; background: #455a64; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-
-        .hidden { display: none; }
-        
-        .loader { 
-            position: fixed; top: 50%; left: 50%; border: 6px solid #f3f3f3; 
-            border-top: 6px solid var(--main); border-radius: 50%; width: 50px; 
-            height: 50px; animation: spin 1s linear infinite; margin: -25px 0 0 -25px; 
+        /* ACTION BUTTONS: High-visibility for WhatsApp and Gallery save */
+        .btn { 
+            width: 100%; padding: 18px; border: none; border-radius: 18px; 
+            font-weight: 700; cursor: pointer; display: flex; align-items: center; 
+            justify-content: center; gap: 12px; margin-top: 12px; font-size: 16px; 
         }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .btn-om { background: var(--om-red); color: white; }
+        .btn-wa { background: #25D366; color: white; }
+        .btn-save { background: #34495e; color: white; }
+        .btn-share { background: #673ab7; color: white; }
+
+        .hidden { display: none !important; }
+        .qr-wrapper { background: white; padding: 15px; border-radius: 20px; display: inline-block; border: 1px solid #eee; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <img src="templeimage/1742626228036 (1).jpg" alt="Logo" class="header-logo">
-        <h1 style="display:inline; margin-left:10px; font-size:1.2rem;">శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
-    </header>
+<header id="mainHeader">
+    <span class="om-icon">ॐ</span>
+    <h1 style="margin:0; font-size: 28px; font-weight: 800; color: var(--om-red);">శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
+    <p style="margin:5px 0 0; color: var(--leaf-green); font-size: 14px; letter-spacing: 1px;">DIGITAL SEVA PORTAL - CHIRALA</p>
+</header>
 
-    <div class="container">
-        <div class="card" id="formSection">
-            <h2>📜 పూజా బుకింగ్</h2>
-            <form id="bookingForm">
-                <div class="form-group">
-                    <label>👤 భక్తుని పేరు (Name)</label>
-                    <input type="text" id="name" required placeholder="పేరు నమోదు చేయండి">
-                </div>
-                <div class="form-group">
-                    <label>📞 ఫోన్ (Phone)</label>
-                    <input type="tel" id="phone" required pattern="[0-9]{10}" placeholder="10 అంకెల ఫోన్ నంబర్">
-                </div>
-                <div class="form-group">
-                    <label>📅 ప్రారంభ నెల</label>
-                    <input type="month" id="start" required>
-                </div>
-                <div class="form-group">
-                    <label>📅 ముగింపు నెల</label>
-                    <input type="month" id="end" required>
-                </div>
-                <button type="submit" class="btn-primary">🛕 టికెట్ సిద్ధం చేయండి</button>
-            </form>
-        </div>
+<div class="promo-banner" id="promoBanner">
+    నెలకు రూ. 101/- చెల్లించిన భక్తుల పేర్లతో నెల రోజుల పాటు ప్రత్యేక పూజలు నిర్వహించబడును. <br>
+    🌼 <b>ప్రతి నెల ప్రసాదం అందజేయబడును.</b>
+</div>
 
-        <div id="ticketSection" class="hidden">
-            <div class="ticket-box" id="captureArea">
-                <img src="templeimage/1742626228036 (1).jpg" class="ticket-logo">
-                <h3 style="color:var(--main); margin:5px 0;">శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h3>
-                <p style="font-size:0.8rem; margin:0;">చీరాల, బాపట్ల జిల్లా</p>
-                
-                <div style="margin-top:20px; text-align:left;">
-                    <div class="row"><span>ID:</span> <b id="resID"></b></div>
-                    <div class="row"><span>పేరు:</span> <b id="resName"></b></div>
-                    <div class="row"><span>ఫోన్:</span> <b id="resPhone"></b></div>
-                    <div class="row"><span>కాలం:</span> <b id="resPeriod"></b></div>
+<div class="container">
+    <div id="bookingForm" class="divine-card">
+        <h2 style="text-align:center; color: var(--om-red); margin-bottom: 25px;">పూజా బుకింగ్</h2>
+        <form id="pForm">
+            <div class="input-group">
+                <label>భక్తుని పేరు (Devotee Name)</label>
+                <input type="text" id="name" name="dev_name" placeholder="Full Name" required>
+            </div>
+            <div class="input-group">
+                <label>మొబైల్ నంబర్ (WhatsApp)</label>
+                <input type="tel" id="phone" name="dev_mobile" maxlength="10" placeholder="10 Digit Number" required>
+            </div>
+            <div class="input-group">
+                <label>గోత్రం (Gothram)</label>
+                <input type="text" id="gothram" name="dev_goth" placeholder="Gothram">
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group">
+                    <label>ప్రారంభ తేదీ (Start)</label>
+                    <input type="date" id="sDate" name="start_date" required>
                 </div>
-
-                <div id="qrcode"></div>
-                <p style="font-size:0.7rem; color:#888;">టికెట్ వెరిఫికేషన్ కోసం పైన ఉన్న QR కోడ్ స్కాన్ చేయండి.</p>
+                <div class="input-group">
+                    <label>ముగింపు తేదీ (End)</label>
+                    <input type="date" id="eDate" name="end_date" required disabled>
+                </div>
             </div>
 
-            <div class="actions">
-                <button onclick="shareWA()" class="btn-whatsapp">📱 WhatsApp</button>
-                <button onclick="saveImg()" class="btn-save">🖼️ Save Image</button>
-                <button onclick="window.print()" class="btn-print">🖨️ Print Ticket</button>
+            <div class="price-panel">
+                <span id="liveAmt" style="font-size: 32px; font-weight: 900; color: var(--om-red);">₹ 100</span><br>
+                <small id="liveMonths" style="color: #888; font-weight: 700;">1 Month Selection</small>
             </div>
-            <button onclick="location.reload()" style="width:100%; margin-top:15px; padding:10px; border:1px solid #ccc; background:none; border-radius:8px; cursor:pointer;">కొత్త బుకింగ్</button>
-        </div>
+            <button type="submit" class="btn btn-om"><i class="fas fa-check-circle"></i> Generate Digital Receipt</button>
+        </form>
     </div>
 
-    <div id="loader" class="loader hidden"></div>
+    <div id="receiptUI" class="hidden">
+        <div id="captureReceipt" class="ticket-pro">
+            <div class="ticket-top">
+                <span style="font-size: 20px;">ॐ</span>
+                <h2 style="margin:5px 0; font-size: 18px; letter-spacing: 2px;">OFFICIAL POOJA RECEIPT</h2>
+                <small id="res-id" style="opacity: 0.8;"></small>
+            </div>
+            <div class="ticket-body">
+                <div class="t-row"><span>ISSUE DATE:</span><b class="t-val" id="res-date"></b></div>
+                <div class="t-row"><span>DEVOTEE:</span><b class="t-val" id="res-name"></b></div>
+                <div class="t-row"><span>GOTHRAM:</span><b class="t-val" id="res-goth"></b></div>
+                <div class="t-row"><span>START DATE:</span><b class="t-val" id="res-start"></b></div>
+                <div class="t-row"><span>END DATE:</span><b class="t-val" id="res-end"></b></div>
+                <div class="t-row"><span>DURATION:</span><b class="t-val" id="res-dur"></b></div>
+                <div class="t-row" style="border:none; margin-top:20px; background: #fffdf5; padding: 15px; border-radius: 15px; border: 1px solid #f1e9db;">
+                    <span style="font-weight: 700; color: var(--leaf-green);">TOTAL PAID:</span>
+                    <b style="color:var(--om-red); font-size: 22px;" id="res-amt"></b>
+                </div>
+                <center><div class="qr-wrapper"><div id="qrcode"></div></div></center>
+                <p style="text-align:center; font-size: 10px; color:#bbb; margin-top: 15px;">AUTHENTICATED BY TEMPLE MANAGEMENT</p>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button onclick="saveImage()" class="btn btn-save"><i class="fas fa-image"></i> Save to Gallery</button>
+            <button onclick="shareDirect()" class="btn btn-share"><i class="fas fa-share-nodes"></i> Share Receipt Image</button>
+            <button onclick="shareWhatsApp()" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Share (All Details)</button>
+            <button onclick="location.reload()" class="btn" style="background:white; border: 1px solid #ddd;">New Booking</button>
+        </div>
+    </div>
+</div>
 
-    <script>
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('loader').classList.remove('hidden');
+<div id="verifyUI" class="hidden" style="min-height: 100vh; background: #fffbf2; display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div class="divine-card" style="max-width: 420px; text-align: center; border-top: 10px solid var(--leaf-green);">
+        <span style="font-size: 50px; color: var(--leaf-green);">ॐ</span>
+        <h2 style="color: var(--leaf-green); margin:10px 0;">VERIFIED TEMPLE RECORD</h2>
+        <div id="vDetails" style="text-align: left; margin-top: 25px; background: #fafafa; padding: 25px; border-radius: 15px; border: 1px solid #eee;"></div>
+    </div>
+</div>
 
-            const id = 'POL-' + Math.floor(100000 + Math.random() * 900000);
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const period = document.getElementById('start').value + " to " + document.getElementById('end').value;
+<script>
+    // URL for Google Apps Script to save to Google Sheets
+    const SHEET_URL = "YOUR_APPS_SCRIPT_URL_HERE";
 
-            // Fill Ticket
-            document.getElementById('resID').innerText = id;
-            document.getElementById('resName').innerText = name;
-            document.getElementById('resPhone').innerText = phone;
-            document.getElementById('resPeriod').innerText = period;
+    /* DATE & PRICING LOGIC
+       WHY: To automate cost calculation based on selected months.
+       HOW: Calculates difference between years and months.
+    */
+    const sDate = document.getElementById('sDate');
+    const eDate = document.getElementById('eDate');
+    sDate.min = new Date().toISOString().split('T')[0];
 
-            // QR Code Logic
-            const qrDiv = document.getElementById('qrcode');
-            qrDiv.innerHTML = "";
-            const verifyURL = window.location.origin + window.location.pathname.replace('index.html', '') + `verify.html?id=${id}&name=${encodeURIComponent(name)}`;
+    function calculateBilling() {
+        if(!sDate.value || !eDate.value) return;
+        const d1 = new Date(sDate.value), d2 = new Date(eDate.value);
+        let diff = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
+        
+        // Exact rule: End day < Start day reduces month count, but min 1 month.
+        if (d2.getDate() < d1.getDate()) diff--;
+        const count = diff < 1 ? 1 : diff; 
+        
+        document.getElementById('liveAmt').innerText = `₹ ${count * 100}`;
+        document.getElementById('liveMonths').innerText = `${count} Month(s) Seva`;
+        return { amt: count * 100, months: count };
+    }
 
-            new QRCode(qrDiv, { text: verifyURL, width: 140, height: 140 });
+    // Unlock End Date only after Start Date is chosen
+    sDate.onchange = () => { 
+        eDate.disabled = false; 
+        eDate.min = sDate.value; 
+        calculateBilling(); 
+    };
+    eDate.onchange = calculateBilling;
 
-            // Show Ticket
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-                document.getElementById('formSection').classList.add('hidden');
-                document.getElementById('ticketSection').classList.remove('hidden');
-                Swal.fire('విజయం!', 'మీ టికెట్ సిద్ధమైంది', 'success');
-            }, 800);
+    /* SUBMISSION LOGIC
+       WHY: To save data to backend and generate the ticket.
+    */
+    document.getElementById('pForm').onsubmit = (e) => {
+        e.preventDefault();
+        const bill = calculateBilling();
+        const tid = "POL-" + Date.now().toString().slice(-6);
+        const today = new Date().toLocaleDateString('en-IN');
+
+        Swal.fire({ title: 'Recording Seva...', didOpen: () => Swal.showLoading() });
+
+        const formData = new FormData(e.target);
+        formData.append("id", tid);
+        formData.append("total", bill.amt);
+
+        // Fetch to Google Apps Script
+        fetch(SHEET_URL, { method: 'POST', body: formData }).then(() => {
+            Swal.close();
+            // Fill UI Fields
+            document.getElementById('res-id').innerText = "TXN: " + tid;
+            document.getElementById('res-date').innerText = today;
+            document.getElementById('res-name').innerText = document.getElementById('name').value;
+            document.getElementById('res-goth').innerText = document.getElementById('gothram').value || "---";
+            document.getElementById('res-start').innerText = sDate.value;
+            document.getElementById('res-end').innerText = eDate.value;
+            document.getElementById('res-dur').innerText = bill.months + " Month(s)";
+            document.getElementById('res-amt').innerText = `₹ ${bill.amt}/-`;
+
+            // THE QR FIX: Use absolute URL so scanning phones can find the link.
+            const fullUrl = window.location.origin + window.location.pathname + 
+                `?v=1&id=${tid}&n=${encodeURIComponent(document.getElementById('name').value)}&a=${bill.amt}&s=${sDate.value}&e=${eDate.value}&d=${today}&m=${bill.months}`;
+            
+            document.getElementById("qrcode").innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), { text: fullUrl, width: 160, height: 160, colorDark: "#8e0000" });
+
+            document.getElementById('bookingForm').classList.add('hidden');
+            document.getElementById('receiptUI').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+    };
 
-        function shareWA() {
-            const id = document.getElementById('resID').innerText;
-            const name = document.getElementById('resName').innerText;
-            const text = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం*%0A🔖 ఐడీ: ${id}%0A👤 పేరు: ${name}%0A📅 కాలం: ${document.getElementById('resPeriod').innerText}`;
-            window.open(`https://wa.me/?text=${text}`, '_blank');
-        }
+    /* HD GALLERY SAVE
+       WHY: To let users keep a sharp image copy of their receipt.
+    */
+    async function saveImage() {
+        const canvas = await html2canvas(document.getElementById('captureReceipt'), { scale: 3 });
+        const link = document.createElement('a');
+        link.download = `Poleramma_Receipt.png`;
+        link.href = canvas.toDataURL(); link.click();
+    }
 
-        function saveImg() {
-            html2canvas(document.getElementById('captureArea')).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Temple_Ticket.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
+    /* SYSTEM SHARE
+       WHY: Native sharing (Telegram/Instagram) of the actual image file.
+    */
+    async function shareDirect() {
+        const canvas = await html2canvas(document.getElementById('captureReceipt'));
+        canvas.toBlob(async (blob) => {
+            const file = new File([blob], 'receipt.png', { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({ files: [file], title: 'Seva Receipt', text: 'Blessings from Sri Poleramma Devi.' });
+            } else { Swal.fire('Note', 'Sharing not supported on this browser.', 'info'); }
+        });
+    }
+
+    /* WHATSAPP SHARING: INCLUDES ALL DETAILS
+       WHY: Direct messaging to family or records.
+    */
+    function shareWhatsApp() {
+        const name = document.getElementById('res-name').innerText;
+        const tid = document.getElementById('res-id').innerText;
+        const amt = document.getElementById('res-amt').innerText;
+        const start = document.getElementById('res-start').innerText;
+        const end = document.getElementById('res-end').innerText;
+        const dur = document.getElementById('res-dur').innerText;
+        const date = document.getElementById('res-date').innerText;
+
+        const msg = `*శ్రీ పోలేరమ్మ తల్లి ఆలయం - చిరాల* 🌸%0A--------------------------------%0A✅ *Status:* విజయవంతమైంది%0A🔖 *ID:* ${tid}%0A📅 *జారీ తేదీ:* ${date}%0A👤 *భక్తుడు:* ${name}%0A📅 *ప్రారంభ తేదీ:* ${start}%0A📅 *ముగింపు తేదీ:* ${end}%0A💰 *మొత్తం:* ${amt}%0A📅 *వ్యవధి:* ${dur}%0A--------------------------------%0A_ఓం నమో నారాయణి! మీ గోత్రనామాలతో పూజలు జరిపి ప్రసాదం అందజేయబడును._`;
+        window.open(`https://wa.me/91${document.getElementById('phone').value}?text=${msg}`, '_blank');
+    }
+
+    /* URL INTERCEPTOR
+       WHY: Detects if the page was opened via QR scan and shows verification only.
+    */
+    window.onload = () => {
+        const params = new URLSearchParams(window.location.search);
+        if(params.has('v')) {
+            document.getElementById('mainHeader').classList.add('hidden');
+            document.getElementById('promoBanner').classList.add('hidden');
+            document.getElementById('bookingForm').classList.add('hidden');
+            document.getElementById('verifyUI').classList.remove('hidden');
+            document.getElementById('vDetails').innerHTML = `
+                <div class="t-row"><span>TXN Audit ID:</span><b>${params.get('id')}</b></div>
+                <div class="t-row"><span>Devotee Name:</span><b>${params.get('n')}</b></div>
+                <div class="t-row"><span>Start Date:</span><b>${params.get('s')}</b></div>
+                <div class="t-row"><span>End Date:</span><b>${params.get('e')}</b></div>
+                <div class="t-row"><span>Duration:</span><b>${params.get('m')} Month(s)</b></div>
+                <div class="t-row"><span>Paid Amount:</span><b style="color:green">₹ ${params.get('a')} (VERIFIED)</b></div>
+                <div class="t-row"><span>Issue Date:</span><b>${params.get('d')}</b></div>
+            `;
         }
-    </script>
+    };
+</script>
 </body>
-                    </html>
-                    
+                </html>
+    
