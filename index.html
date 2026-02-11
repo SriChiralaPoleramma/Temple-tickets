@@ -307,16 +307,16 @@
     const templePhone = "918951534845"; 
     let currentBooking = {};
 
-    // DATE LOGIC: Disable past dates and ensure end > start
-    const today = new Date().toISOString().split('T')[0];
-    startInput.setAttribute('min', today);
-    endInput.setAttribute('min', today);
-
+    // DATE LOGIC: 
+    // Start Date is unrestricted. 
+    // End Date automatically restricts to dates AFTER Start Date selection.
     startInput.addEventListener('change', () => {
-        // When start date is chosen, end date must be on or after it
-        endInput.setAttribute('min', startInput.value);
-        if (endInput.value && endInput.value < startInput.value) {
-            endInput.value = startInput.value;
+        if (startInput.value) {
+            endInput.setAttribute('min', startInput.value);
+            // If current end date is now invalid, reset it
+            if (endInput.value && endInput.value < startInput.value) {
+                endInput.value = startInput.value;
+            }
         }
     });
 
@@ -333,7 +333,7 @@
         const d1 = new Date(start);
         const d2 = new Date(end);
         
-        // Calculate months (minimum 1 month charge)
+        // Month calculation
         let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
         if (months <= 0) months = 1; 
         const totalAmount = months * 100;
@@ -343,14 +343,14 @@
             name: name, 
             gothram: gothram, 
             phone: phone, 
-            period: `${start} to ${end}`, 
+            period: `${start} / ${end}`, 
             amount: totalAmount 
         };
 
         document.getElementById('outID').innerText = "ID: #" + bid;
         document.getElementById('outName').innerText = name;
         document.getElementById('outGothram').innerText = gothram;
-        document.getElementById('outDate').innerText = `${start} / ${end}`;
+        document.getElementById('outDate').innerText = `${start} to ${end}`;
         document.getElementById('outPhoneDisp').innerText = phone;
         document.getElementById('outTotal').innerText = `₹${totalAmount}`;
 
@@ -418,5 +418,4 @@
 </script>
 
 </body>
-    </html>
-    
+</html>
