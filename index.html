@@ -79,16 +79,16 @@
 
 <div id="loader">
     <i class="fas fa-circle-notch fa-spin fa-3x"></i>
-    <p style="margin-top:15px; letter-spacing:1px;">Saving to Temple Records...</p>
+    <p style="margin-top:15px; letter-spacing:1px;">Temple Cloud Syncing...</p>
 </div>
 
 <div id="verifyLayout" class="hidden">
     <div class="v-card">
         <i class="fas fa-check-circle" style="font-size: 60px; color: #4caf50; margin-bottom: 15px;"></i>
-        <h2 style="color: #1b5e20; margin: 0;">Verified Record</h2>
-        <p style="font-size: 12px; color: #666; margin-bottom: 25px;">Sri Poleramma Temple Digital Seva</p>
-        <div id="vContent" style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 15px;"></div>
-        <button onclick="window.location.href=window.location.pathname" class="btn btn-primary" style="margin-top: 20px; width: 100%;">Close</button>
+        <h2 style="color: #1b5e20; margin: 0;">Verified Ticket</h2>
+        <p style="font-size: 12px; color: #666; margin-bottom: 25px;">Official Sri Poleramma Temple Record</p>
+        <div id="vContent" style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 15px; line-height: 2;"></div>
+        <button onclick="window.location.href=window.location.pathname" class="btn btn-primary" style="margin-top: 20px; width: 100%;">Back to Booking</button>
     </div>
 </div>
 
@@ -127,7 +127,7 @@
                     <div id="totalPrice">₹0</div>
                     <small id="monthCount" style="color:#5d4037; font-weight:800;">0 Months Selected</small>
                 </div>
-                <button type="submit" id="subBtn" class="btn btn-primary">Generate Official Receipt</button>
+                <button type="submit" id="subBtn" class="btn btn-primary">Save & Generate Receipt</button>
             </form>
         </div>
 
@@ -136,7 +136,7 @@
                 <div class="ticket-card">
                     <div class="ticket-header">
                         <div style="font-size: 30px; margin-bottom: 5px;">ॐ</div>
-                        <h2 style="margin: 0; font-size: 20px;">DIGITAL RECEIPT</h2>
+                        <h2 style="margin: 0; font-size: 20px; letter-spacing: 1px;">DIGITAL RECEIPT</h2>
                         <small id="t-id" style="font-family: monospace;"></small>
                     </div>
                     <div class="ticket-body">
@@ -145,48 +145,49 @@
                         <div class="data-row"><span>GOTHRAM:</span> <b id="t-gothram"></b></div>
                         <div class="data-row"><span>FAMILY:</span> <b id="t-family"></b></div>
                         <div class="data-row"><span>PERIOD:</span> <b id="t-period"></b></div>
-                        <div style="display: flex; justify-content: center; margin: 20px 0;"><div id="qrcode"></div></div>
+                        <div style="display: flex; justify-content: center; margin: 25px 0;"><div id="qrcode"></div></div>
                         <div class="price-badge" style="margin-top: 5px; background: #f1f8e9; border-color: #4caf50;">
-                            <span style="font-size: 11px; color: #1b5e20;">TOTAL DONATION PAID</span>
+                            <span style="font-size: 11px; color: #1b5e20; font-weight: 800;">TOTAL DONATION PAID</span>
                             <div style="font-size: 32px; font-weight: 900; color: #1b5e20;">₹<span id="t-amt"></span></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="btn-group">
-                <button onclick="downloadTicket()" class="btn btn-dl"><i class="fas fa-save"></i> Save</button>
-                <button onclick="shareDirectWA()" class="btn btn-wa"><i class="fab fa-whatsapp"></i> Share</button>
+                <button onclick="downloadTicket()" class="btn btn-dl"><i class="fas fa-file-image"></i> Save Image</button>
+                <button onclick="shareDirectWA()" class="btn btn-wa"><i class="fab fa-whatsapp"></i> Share WA</button>
             </div>
-            <button onclick="location.reload()" class="btn btn-primary" style="margin-top:15px; background: #444;">Book New Ticket</button>
+            <button onclick="location.reload()" class="btn btn-primary" style="margin-top:15px; background: #333;">New Booking</button>
         </div>
     </div>
 </div>
 
 <script>
-    // 1. CONFIGURATION: PASTE YOUR GOOGLE APPS SCRIPT URL HERE
+    // !! CONFIGURATION !! 
     const SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
 
     const sDate = document.getElementById('sDate');
     const eDate = document.getElementById('eDate');
     let bookingData = {};
 
-    // 2. LOGIC: AUTOMATIC VERIFICATION CHECK (Only displays details if URL has verify param)
+    // QR VERIFICATION REDIRECT LOGIC
     (function checkUrl() {
         const params = new URLSearchParams(window.location.search);
         if(params.has('verify')) {
+            // Hide everything and show only the ticket data
             document.getElementById('websiteContainer').style.display = 'none';
             document.getElementById('verifyLayout').classList.remove('hidden');
             document.getElementById('vContent').innerHTML = `
                 <div class="data-row"><span>TXN ID:</span><b>${params.get('id')}</b></div>
-                <div class="data-row"><span>DEVOTEE:</span><b>${params.get('n')}</b></div>
+                <div class="data-row"><span>NAME:</span><b>${params.get('n')}</b></div>
                 <div class="data-row"><span>GOTHRAM:</span><b>${params.get('g')}</b></div>
                 <div class="data-row"><span>PERIOD:</span><b>${params.get('p')}</b></div>
-                <div class="data-row"><span>AMOUNT:</span><b style="color:green">₹${params.get('a')} (Paid)</b></div>
+                <div class="data-row"><span>STATUS:</span><b style="color:#1b5e20;">OFFICIALLY PAID (₹${params.get('a')})</b></div>
             `;
         }
     })();
 
-    // 3. LOGIC: PRICE CALCULATION
+    // PRICE CALCULATION LOGIC
     sDate.onchange = () => { eDate.min = sDate.value; calculatePricing(); };
     eDate.onchange = calculatePricing;
 
@@ -210,7 +211,7 @@
         return 0;
     }
 
-    // 4. LOGIC: FORM SUBMISSION & CLOUD STORAGE
+    // FORM SUBMISSION & CLOUD STORAGE
     document.getElementById('pForm').onsubmit = async (e) => {
         e.preventDefault();
         
@@ -233,7 +234,7 @@
         };
 
         try {
-            // Save to Google Sheets
+            // Push to Google Sheets
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -241,8 +242,8 @@
                 body: JSON.stringify(bookingData)
             });
 
-            // Update UI with Ticket
-            document.getElementById('t-id').innerText = "ID: " + tid;
+            // Populate Ticket UI
+            document.getElementById('t-id').innerText = "TXN: " + tid;
             document.getElementById('t-name').innerText = bookingData.name;
             document.getElementById('t-phone').innerText = bookingData.phone;
             document.getElementById('t-gothram').innerText = bookingData.gothram;
@@ -250,36 +251,39 @@
             document.getElementById('t-period').innerText = bookingData.period;
             document.getElementById('t-amt').innerText = amt;
 
-            // Generate QR for Verification
+            // Create QR Code Verification URL
             const baseUrl = window.location.href.split('?')[0];
             const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}`;
 
             document.getElementById("qrcode").innerHTML = "";
-            new QRCode(document.getElementById("qrcode"), { text: verifyUrl, width: 150, height: 150, colorDark: "#880e4f" });
+            new QRCode(document.getElementById("qrcode"), { text: verifyUrl, width: 140, height: 140, colorDark: "#880e4f" });
             
+            // Switch view
             document.getElementById('bookingSection').classList.add('hidden');
             document.getElementById('ticketSection').classList.remove('hidden');
             window.scrollTo(0,0);
         } catch (err) {
-            Swal.fire("Connection Error", "Check your internet and try again.", "error");
+            Swal.fire("Error", "Cloud sync failed. Check internet connection.", "error");
         } finally {
             document.getElementById('loader').style.display = 'none';
         }
     };
 
+    // SAVE TICKET AS IMAGE
     async function downloadTicket() {
-        const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 2 });
+        const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 3 });
         const link = document.createElement('a');
-        link.download = `Poleramma_${bookingData.id}.png`;
+        link.download = `Receipt_${bookingData.id}.png`;
         link.href = canvas.toDataURL();
         link.click();
     }
 
+    // SHARE ON WHATSAPP
     function shareDirectWA() {
-        const msg = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A*ID:* ${bookingData.id}%0A*పేరు:* ${bookingData.name}%0A*వ్యవధి:* ${bookingData.period}%0Aఅమ్మవారి ఆశీస్సులు మీకు కలగాలని కోరుకుంటున్నాము. 🙏`;
+        const msg = ` 🌸 *శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A*ID:* ${bookingData.id}%0A*పేరు:* ${bookingData.name}%0A*మొత్తం:* ₹${bookingData.amt}%0Aఅమ్మవారి కృప ఎల్లవేళలా మీకు ఉండాలని కోరుకుంటున్నాము. 🙏`;
         window.open(`https://wa.me/91${bookingData.phone}?text=${msg}`, '_blank');
     }
 </script>
 </body>
-        </html>
-            
+    </html>
+    
