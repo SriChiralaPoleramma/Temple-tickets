@@ -44,12 +44,13 @@
         h2 { color: var(--primary); text-align: center; font-size: 1.5rem; margin-top: 0; }
         label { font-weight: 700; font-size: 0.85rem; color: #555; display: block; margin-top: 15px; }
         
-        input { 
+        input, select { 
             width: 100%; padding: 14px; margin: 8px 0;
             border: 2px solid #eee; border-radius: 15px; 
             box-sizing: border-box; font-size: 1rem; transition: 0.3s;
+            background: white;
         }
-        input:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 10px rgba(255,152,0,0.1); }
+        input:focus, select:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 10px rgba(255,152,0,0.1); }
         
         .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
@@ -65,7 +66,6 @@
             box-shadow: 0 10px 20px rgba(230, 81, 0, 0.3); transition: 0.3s;
         }
 
-        /* Premium Scalloped Ticket Design */
         #ticketOutput { width: 100%; max-width: 420px; margin-top: 40px; }
         .ticket-card { 
             background: white; border-radius: 25px; overflow: hidden; 
@@ -74,7 +74,6 @@
         }
         .ticket-header { background: #fafafa; padding: 30px; text-align: center; border-bottom: 3px dashed #eee; }
         
-        /* Scalloped edge decorative cut-outs */
         .ticket-card::before, .ticket-card::after {
             content: ""; position: absolute; width: 30px; height: 30px;
             background: var(--bg); border-radius: 50%; top: 105px; z-index: 5;
@@ -116,14 +115,20 @@
             <input type="tel" id="phone" required maxlength="10" placeholder="10 అంకెల మొబైల్ నంబర్">
             
             <div class="date-grid">
-                <div><label>ప్రారంభ తేదీ (Start)</label><input type="date" id="startDate" required></div>
-                <div><label>ముగింపు తేదీ (End)</label><input type="date" id="endDate" required disabled></div>
+                <div>
+                    <label>ప్రారంభ నెల (Start)</label>
+                    <input type="month" id="startMonth" required>
+                </div>
+                <div>
+                    <label>ముగింపు నెల (End)</label>
+                    <input type="month" id="endMonth" required>
+                </div>
             </div>
 
             <div id="priceSummary" class="price-summary-card">
-                <p id="calcInfo" style="margin:0; font-weight: 600; color:#777;">వ్యవధి మరియు తేదీలను ఎంచుకోండి</p>
+                <p id="calcInfo" style="margin:0; font-weight: 600; color:#777;">నెలలు మరియు సంవత్సరాలను ఎంచుకోండి</p>
                 <h3 id="totalCost" style="margin:10px 0; color: var(--primary); font-size: 2.2rem;">₹0</h3>
-                <small style="color: #bf360c; font-weight: bold;">* క్యాలిక్యులేషన్ వచ్చే నెల నుండి ప్రారంభమవుతుంది</small>
+                <small style="color: #bf360c; font-weight: bold;">* ఒక నెలకు ₹100 చొప్పున</small>
             </div>
 
             <button type="submit" class="monthly-btn">Confirm & Generate Digital Ticket</button>
@@ -140,8 +145,8 @@
                 <div class="t-row"><span>Devotee:</span> <b id="t-name"></b></div>
                 <div class="t-row"><span>Mobile:</span> <b id="t-phone"></b></div>
                 <hr style="border:0; border-top:1px dashed #eee; margin:15px 0;">
-                <div class="t-row"><span>Period Start:</span> <b id="t-start"></b></div>
-                <div class="t-row"><span>Period End:</span> <b id="t-end"></b></div>
+                <div class="t-row"><span>Period:</span> <b id="t-range"></b></div>
+                <div class="t-row"><span>Total Months:</span> <b id="t-count"></b></div>
                 <div class="t-row"><span>Issued Time:</span> <b id="t-datetime"></b></div>
                 
                 <div id="qrcode"></div>
@@ -159,16 +164,13 @@
 </div>
 
 <script>
-    const startInput = document.getElementById('startDate');
-    const endInput = document.getElementById('endDate');
+    const startInput = document.getElementById('startMonth');
+    const endInput = document.getElementById('endMonth');
 
-    // Display current month dates in start picker
-    const today = new Date();
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-    startInput.min = firstDayOfMonth; // Allows selecting from the start of the current month
+    // Remove the 'min' restriction to allow users to select any past month/year
+    // Users can now go back as far as they want.
 
     startInput.addEventListener('change', () => {
-        endInput.disabled = !startInput.value;
         endInput.min = startInput.value;
         updatePricing();
     });
@@ -180,13 +182,20 @@
             const d1 = new Date(startInput.value);
             const d2 = new Date(endInput.value);
             
-            // Logic: Jan 1 to Feb 1 = 1 month (Difference based)
-            let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
-            months = months < 0 ? 0 : months;
+            // Calculate total months inclusive
+            let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth()) + 1;
             
+            if (months < 1) months = 0;
+
             document.getElementById('calcInfo').innerText = `వ్యవధి: ${months} నెలలు (నెలవారీ ₹100)`;
             document.getElementById('totalCost').innerText = `₹${months * 100}`;
-            return { total: months * 100, start: startInput.value, end: endInput.value, count: months };
+            
+            return { 
+                total: months * 100, 
+                start: startInput.value, 
+                end: endInput.value, 
+                count: months 
+            };
         }
         return { total: 0 };
     }
@@ -194,27 +203,32 @@
     document.getElementById('monthlyForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const pricing = updatePricing();
+
+        if(pricing.count <= 0) {
+            Swal.fire("Error", "ముగింపు నెల ప్రారంభ నెల కంటే ముందు ఉండకూడదు", "error");
+            return;
+        }
         
         const bID = "POL-" + Math.floor(100000 + Math.random() * 900000);
         const now = new Date();
-        const timeStr = now.toLocaleDateString('en-IN') + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const timeStr = now.toLocaleDateString('en-IN') + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
         document.getElementById('t-id').innerText = "TRANSACTION ID: " + bID;
         document.getElementById('t-name').innerText = document.getElementById('name').value;
         document.getElementById('t-phone').innerText = document.getElementById('phone').value;
-        document.getElementById('t-start').innerText = pricing.start;
-        document.getElementById('t-end').innerText = pricing.end;
+        document.getElementById('t-range').innerText = `${pricing.start} to ${pricing.end}`;
+        document.getElementById('t-count').innerText = pricing.count;
         document.getElementById('t-total').innerText = pricing.total;
         document.getElementById('t-datetime').innerText = timeStr;
 
         const qrBox = document.getElementById("qrcode");
         qrBox.innerHTML = "";
-        const qrPayload = `OFFICIAL_VERIFIED\nID:${bID}\nNAME:${document.getElementById('name').value}\nSTART:${pricing.start}\nEND:${pricing.end}\nAMT:${pricing.total}\nTIME:${timeStr}`;
+        const qrPayload = `OFFICIAL_VERIFIED\nID:${bID}\nNAME:${document.getElementById('name').value}\nRANGE:${pricing.start}-${pricing.end}\nAMT:${pricing.total}\nTIME:${timeStr}`;
         
         new QRCode(qrBox, {
             text: qrPayload,
-            width: 170,
-            height: 170,
+            width: 160,
+            height: 160,
             colorDark : "#e65100",
             correctLevel : QRCode.CorrectLevel.H
         });
@@ -225,8 +239,8 @@
     });
 
     function downloadTicket() {
-        // High scale (3) for ultra-clear QR codes and text
-        html2canvas(document.getElementById('ticketCapture'), { scale: 3 }).then(canvas => {
+        const ticket = document.getElementById('ticketCapture');
+        html2canvas(ticket, { scale: 3, backgroundColor: "#fdf5e6" }).then(canvas => {
             const link = document.createElement('a');
             link.download = `Poleramma_Receipt_${Date.now()}.png`;
             link.href = canvas.toDataURL();
@@ -235,9 +249,11 @@
     }
 
     function shareWhatsApp() {
-        const text = `*శ్రీ పోలేరమ్మ ఆలయం - రశీదు*%0AID: ${document.getElementById('t-id').innerText}%0Aపేరు: ${document.getElementById('t-name').innerText}%0Aమొత్తం: ₹${document.getElementById('t-total').innerText}%0Aతేదీ: ${document.getElementById('t-datetime').innerText}`;
-        window.open(`https://wa.me/91${document.getElementById('phone').value}?text=${text}`, '_blank');
+        const phone = document.getElementById('phone').value;
+        const text = `*శ్రీ పోలేరమ్మ ఆలయం - రశీదు*%0A--------------------------%0AID: ${document.getElementById('t-id').innerText}%0Aపేరు: ${document.getElementById('t-name').innerText}%0Aవ్యవధి: ${document.getElementById('t-range').innerText}%0Aమొత్తం: ₹${document.getElementById('t-total').innerText}%0Aతేదీ: ${document.getElementById('t-datetime').innerText}`;
+        window.open(`https://wa.me/91${phone}?text=${text}`, '_blank');
     }
 </script>
 </body>
-</html>
+    </html>
+                                     
