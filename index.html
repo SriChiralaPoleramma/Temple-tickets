@@ -22,15 +22,15 @@
             <h2>📜 నెలవారీ పూజా బుకింగ్</h2>
             <form id="monthlyForm">
                 <div class="form-group">
-                    <label>👤 పేరు</label>
-                    <input type="text" id="monthlyName" required placeholder="మీ పేరు">
+                    <label>👤 పేరు (Devotee Name)</label>
+                    <input type="text" id="monthlyName" required placeholder="పేరు నమోదు చేయండి">
                 </div>
                 <div class="form-group">
-                    <label>📞 ఫోన్ నంబర్</label>
+                    <label>📞 ఫోన్ నంబర్ (Phone)</label>
                     <input type="tel" id="monthlyPhone" required pattern="[0-9]{10}" placeholder="10 అంకెల నంబర్">
                 </div>
                 <div class="form-group">
-                    <label>🕉️ గోత్రం</label>
+                    <label>🕉️ గోత్రం (Gothram)</label>
                     <input type="text" id="monthlyGothram" placeholder="గోత్రం (Optional)">
                 </div>
                 <div class="form-row">
@@ -55,25 +55,27 @@
                     <p>చీరాల, బాపట్ల జిల్లా</p>
                 </div>
                 <div class="ticket-body">
-                    <div class="row"><span>ID:</span> <b id="resID"></b></div>
+                    <div class="row"><span>బుకింగ్ ఐడీ:</span> <b id="resID"></b></div>
                     <div class="row"><span>పేరు:</span> <b id="resName"></b></div>
                     <div class="row"><span>ఫోన్:</span> <b id="resPhone"></b></div>
                     <div class="row"><span>గోత్రం:</span> <b id="resGothram"></b></div>
                     <div class="row"><span>కాలం:</span> <b id="resPeriod"></b></div>
                     <div id="qrcode"></div>
                 </div>
+                <p class="footer-msg">అమ్మవారి కృపాకటాక్షాలు మీకు కలగాలి.</p>
             </div>
 
             <div class="actions">
-                <button onclick="shareWhatsApp()" class="btn-whatsapp">📱 WhatsApp Share</button>
+                <button onclick="shareWhatsApp()" class="btn-whatsapp">📱 WhatsApp</button>
                 <button onclick="saveImage()" class="btn-save">🖼️ Save Image</button>
-                <button onclick="window.print()" class="btn-print">🖨️ Print</button>
+                <button onclick="window.print()" class="btn-print">🖨️ Print Ticket</button>
             </div>
+            <button onclick="location.reload()" class="btn-reset">Back to New Booking</button>
         </section>
     </main>
 
     <div id="loader" class="loader hidden"></div>
     <script src="index.js"></script>
 </body>
-            </html>
-                        
+    </html>
+                
