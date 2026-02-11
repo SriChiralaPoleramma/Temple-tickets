@@ -20,7 +20,7 @@
         }
 
         body { 
-            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
             background: var(--bg); 
             margin: 0; padding-bottom: 60px; color: #333; 
         }
@@ -65,7 +65,7 @@
             box-shadow: 0 10px 20px rgba(230, 81, 0, 0.3); transition: 0.3s;
         }
 
-        /* Senior Developer Ticket UI */
+        /* Premium Scalloped Ticket Design */
         #ticketOutput { width: 100%; max-width: 420px; margin-top: 40px; }
         .ticket-card { 
             background: white; border-radius: 25px; overflow: hidden; 
@@ -74,10 +74,10 @@
         }
         .ticket-header { background: #fafafa; padding: 30px; text-align: center; border-bottom: 3px dashed #eee; }
         
-        /* Scalloped edge effect */
+        /* Scalloped edge decorative cut-outs */
         .ticket-card::before, .ticket-card::after {
             content: ""; position: absolute; width: 30px; height: 30px;
-            background: var(--bg); border-radius: 50%; top: 100px; z-index: 5;
+            background: var(--bg); border-radius: 50%; top: 105px; z-index: 5;
         }
         .ticket-card::before { left: -15px; }
         .ticket-card::after { right: -15px; }
@@ -87,8 +87,8 @@
         .t-row span { color: #888; font-weight: 500; }
         .t-row b { color: #111; }
 
-        #qrcode { display: flex; justify-content: center; margin: 25px 0; padding: 15px; border: 1px solid #eee; border-radius: 20px; }
-        .price-highlight { background: #e8f5e9; padding: 18px; text-align: center; color: var(--success); border-radius: 18px; font-weight: 900; font-size: 1.6rem; border: 1px solid #c8e6c9; }
+        #qrcode { display: flex; justify-content: center; margin: 25px 0; padding: 15px; border: 1px solid #eee; border-radius: 20px; background: #fafafa; }
+        .price-highlight { background: #e8f5e9; padding: 18px; text-align: center; color: var(--success); border-radius: 18px; font-weight: 900; font-size: 1.7rem; border: 1px solid #c8e6c9; }
         
         .ticket-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px; background: #f8f8f8; }
         .btn-action { padding: 15px; border: none; border-radius: 15px; color: white; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -102,12 +102,12 @@
 
 <header>
     <h1>శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
-    <p>చీరాల - స్మార్ట్ బుకింగ్ పోర్టల్</p>
+    <p>చీరాల - అధికారిక ఆన్‌లైన్ రశీదు సిస్టమ్</p>
 </header>
 
 <div class="booking-container">
     <div class="booking-form">
-        <h2>📜 పూజా బుకింగ్</h2>
+        <h2>📜 పూజా బుకింగ్ వివరాలు</h2>
         <form id="monthlyForm">
             <label>భక్తుని పేరు (Name)</label>
             <input type="text" id="name" required placeholder="మీ పేరు నమోదు చేయండి">
@@ -116,43 +116,44 @@
             <input type="tel" id="phone" required maxlength="10" placeholder="10 అంకెల మొబైల్ నంబర్">
             
             <div class="date-grid">
-                <div><label>ప్రారంభ తేదీ</label><input type="date" id="startDate" required></div>
-                <div><label>ముగింపు తేదీ</label><input type="date" id="endDate" required disabled></div>
+                <div><label>ప్రారంభ తేదీ (Start)</label><input type="date" id="startDate" required></div>
+                <div><label>ముగింపు తేదీ (End)</label><input type="date" id="endDate" required disabled></div>
             </div>
 
             <div id="priceSummary" class="price-summary-card">
-                <p id="calcInfo" style="margin:0; font-weight: 600; color:#777;">తేదీలను ఎంచుకోండి</p>
-                <h3 id="totalCost" style="margin:10px 0; color: var(--primary); font-size: 2rem;">₹0</h3>
+                <p id="calcInfo" style="margin:0; font-weight: 600; color:#777;">వ్యవధి మరియు తేదీలను ఎంచుకోండి</p>
+                <h3 id="totalCost" style="margin:10px 0; color: var(--primary); font-size: 2.2rem;">₹0</h3>
+                <small style="color: #bf360c; font-weight: bold;">* క్యాలిక్యులేషన్ వచ్చే నెల నుండి ప్రారంభమవుతుంది</small>
             </div>
 
-            <button type="submit" class="monthly-btn">Confirm & Generate Ticket</button>
+            <button type="submit" class="monthly-btn">Confirm & Generate Digital Ticket</button>
         </form>
     </div>
 
     <div id="ticketOutput" class="hidden">
         <div id="ticketCapture" class="ticket-card">
             <div class="ticket-header">
-                <h2 style="margin:0; color:var(--primary); font-size: 1.4rem;">పూజా ప్రసాద రశీదు</h2>
-                <div id="t-id" style="font-weight:800; color:#666; margin-top:5px; font-size: 0.9rem;"></div>
+                <h2 style="margin:0; color:var(--primary); font-size: 1.4rem; font-weight: 800;">పూజా ప్రసాద రశీదు</h2>
+                <div id="t-id" style="font-weight:900; color:#666; margin-top:8px; font-size: 0.9rem; letter-spacing: 1px;"></div>
             </div>
             <div class="ticket-body">
                 <div class="t-row"><span>Devotee:</span> <b id="t-name"></b></div>
                 <div class="t-row"><span>Mobile:</span> <b id="t-phone"></b></div>
-                <hr style="border:0; border-top:1px dashed #eee;">
-                <div class="t-row"><span>Start Date:</span> <b id="t-start"></b></div>
-                <div class="t-row"><span>End Date:</span> <b id="t-end"></b></div>
-                <div class="t-row"><span>Issued On:</span> <b id="t-datetime"></b></div>
+                <hr style="border:0; border-top:1px dashed #eee; margin:15px 0;">
+                <div class="t-row"><span>Period Start:</span> <b id="t-start"></b></div>
+                <div class="t-row"><span>Period End:</span> <b id="t-end"></b></div>
+                <div class="t-row"><span>Issued Time:</span> <b id="t-datetime"></b></div>
                 
                 <div id="qrcode"></div>
                 
                 <div class="price-highlight">PAID: ₹<span id="t-total"></span></div>
-                <p style="text-align:center; font-size: 10px; color: #bbb; margin-top: 15px; text-transform: uppercase;">Verified Official Digital Receipt</p>
+                <p style="text-align:center; font-size: 11px; color: #bbb; margin-top: 20px; text-transform: uppercase; font-weight: bold;">Verified Official Digital Receipt</p>
             </div>
         </div>
         
         <div class="ticket-actions">
-            <button onclick="downloadTicket()" class="btn-action btn-download"><i class="fas fa-file-download"></i> Save</button>
-            <button onclick="shareWhatsApp()" class="btn-action btn-wa"><i class="fab fa-whatsapp"></i> Share</button>
+            <button onclick="downloadTicket()" class="btn-action btn-download"><i class="fas fa-file-download"></i> Save Image</button>
+            <button onclick="shareWhatsApp()" class="btn-action btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</button>
         </div>
     </div>
 </div>
@@ -161,8 +162,10 @@
     const startInput = document.getElementById('startDate');
     const endInput = document.getElementById('endDate');
 
-    // Date Logic: Past restriction
-    startInput.min = new Date().toISOString().split('T')[0];
+    // Display current month dates in start picker
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+    startInput.min = firstDayOfMonth; // Allows selecting from the start of the current month
 
     startInput.addEventListener('change', () => {
         endInput.disabled = !startInput.value;
@@ -177,7 +180,7 @@
             const d1 = new Date(startInput.value);
             const d2 = new Date(endInput.value);
             
-            // Next Month Logic: Jan 1 to Feb 1 = 1 month
+            // Logic: Jan 1 to Feb 1 = 1 month (Difference based)
             let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
             months = months < 0 ? 0 : months;
             
@@ -194,7 +197,7 @@
         
         const bID = "POL-" + Math.floor(100000 + Math.random() * 900000);
         const now = new Date();
-        const timeStr = now.toLocaleDateString('en-IN') + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        const timeStr = now.toLocaleDateString('en-IN') + ' ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
         document.getElementById('t-id').innerText = "TRANSACTION ID: " + bID;
         document.getElementById('t-name').innerText = document.getElementById('name').value;
@@ -206,10 +209,10 @@
 
         const qrBox = document.getElementById("qrcode");
         qrBox.innerHTML = "";
-        const qrData = `VERIFIED:${bID}\nNAME:${document.getElementById('name').value}\nSTART:${pricing.start}\nEND:${pricing.end}\nISSUED:${timeStr}\nAMT:${pricing.total}`;
+        const qrPayload = `OFFICIAL_VERIFIED\nID:${bID}\nNAME:${document.getElementById('name').value}\nSTART:${pricing.start}\nEND:${pricing.end}\nAMT:${pricing.total}\nTIME:${timeStr}`;
         
         new QRCode(qrBox, {
-            text: qrData,
+            text: qrPayload,
             width: 170,
             height: 170,
             colorDark : "#e65100",
@@ -218,10 +221,11 @@
 
         document.getElementById('ticketOutput').classList.remove('hidden');
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        Swal.fire("విజయం!", "పూజా రశీదు సిద్ధంగా ఉంది", "success");
+        Swal.fire("విజయం!", "డిజిటల్ రశీదు జనరేట్ అయింది", "success");
     });
 
     function downloadTicket() {
+        // High scale (3) for ultra-clear QR codes and text
         html2canvas(document.getElementById('ticketCapture'), { scale: 3 }).then(canvas => {
             const link = document.createElement('a');
             link.download = `Poleramma_Receipt_${Date.now()}.png`;
@@ -236,5 +240,4 @@
     }
 </script>
 </body>
-        </html>
-                    
+</html>
