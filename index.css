@@ -1,0 +1,101 @@
+:root {
+    --primary: #e65100;
+    --secondary: #ff9800;
+    --accent: #d84315;
+    --whatsapp: #25d366;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff3e0;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo { width: 50px; border-radius: 50%; border: 2px solid white; }
+
+nav ul { display: flex; justify-content: center; gap: 20px; list-style: none; padding: 10px; }
+nav a { color: white; text-decoration: none; font-weight: bold; }
+
+.booking-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
+/* Form Styling */
+.booking-form-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #5d4037; }
+.form-group input { 
+    width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.btn-primary {
+    width: 100%; background: var(--primary); color: white; border: none; padding: 15px;
+    font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: 0.3s;
+}
+
+.btn-primary:hover { background: var(--accent); }
+
+/* Ticket Styling */
+.ticket-card {
+    background: #fff;
+    border: 2px dashed var(--primary);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    background-image: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 3px, transparent 3px), radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 3px, transparent 3px), radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 3px, transparent 3px), radial-gradient(circle at 0 0, #ffffff 0, #ffffff 3px, transparent 3px), linear-gradient(to right, #fff9f0, #fff);
+}
+
+.ticket-header h3 { color: var(--primary); margin: 10px 0; }
+.ticket-body { margin: 20px 0; border-top: 1px solid #eee; padding-top: 15px; text-align: left; }
+.info-row { margin-bottom: 8px; font-size: 0.95rem; display: flex; justify-content: space-between; }
+
+#qrcode-container { margin: 20px auto; display: flex; justify-content: center; }
+
+/* Buttons Grid */
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+.btn-whatsapp { background: var(--whatsapp); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; }
+.btn-save { background: #0277bd; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; }
+.btn-print { background: #455a64; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; grid-column: span 2; }
+
+.hidden { display: none; }
+
+/* Loader */
+.loader {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%;
+    width: 50px; height: 50px; animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Print Handling */
+@media print {
+    header, nav, .action-grid, .btn-reset { display: none !important; }
+    .booking-container { margin: 0; padding: 0; }
+    .ticket-card { border: 2px solid black; }
+}
