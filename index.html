@@ -89,7 +89,7 @@
         }
 
         .btn-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-        .action-btn { padding: 15px; border-radius: 15px; border: none; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .action-btn { padding: 15px; border-radius: 15px; border: none; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; }
 
         .hidden { display: none; }
     </style>
@@ -123,7 +123,7 @@
 
             <div class="input-group">
                 <label><i class="fas fa-users"></i> కుటుంబ సభ్యులు (Family Members)</label>
-                <textarea id="family" rows="2" placeholder="పేర్లు మరియు నక్షత్రాలు (ఒకరి తర్వాత ఒకరు)"></textarea>
+                <textarea id="family" rows="2" placeholder="పేర్లు మరియు నక్షత్రాలు"></textarea>
             </div>
 
             <div class="date-grid">
@@ -173,6 +173,8 @@
 
         <div class="btn-actions">
             <button onclick="saveTicket()" class="action-btn" style="background: #1565c0;"><i class="fas fa-file-download"></i> Save PNG</button>
+            <button onclick="shareWhatsApp()" class="action-btn" style="background: #25D366;"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+            <button onclick="shareSystem()" class="action-btn" style="background: #333;"><i class="fas fa-share-alt"></i> Share Link</button>
             <button onclick="location.reload()" class="action-btn" style="background: #e65100;"><i class="fas fa-redo"></i> New Booking</button>
         </div>
     </div>
@@ -181,6 +183,7 @@
 <script>
     const startInput = document.getElementById('start');
     const endInput = document.getElementById('end');
+    let globalVUrl = "";
 
     function calculateTotal() {
         if(startInput.value && endInput.value) {
@@ -208,29 +211,62 @@
         const name = document.getElementById('name').value;
         const gothram = document.getElementById('gothram').value;
         const family = document.getElementById('family').value || "None";
+        const phone = document.getElementById('phone').value;
 
         // Set Ticket Values
         document.getElementById('txnId').innerText = "ID: " + tid;
         document.getElementById('r-name').innerText = name;
         document.getElementById('r-gothram').innerText = gothram;
-        document.getElementById('r-phone').innerText = document.getElementById('phone').value;
+        document.getElementById('r-phone').innerText = phone;
         document.getElementById('r-family').innerText = family;
         document.getElementById('r-dates').innerText = `${startInput.value} నుండి ${endInput.value}`;
         document.getElementById('r-total').innerText = info.total;
 
-        // QR Code Logic
-        const currentUrl = window.location.href.split('?')[0];
-        const vUrl = `${currentUrl}?v=true&id=${tid}&n=${encodeURIComponent(name)}&g=${encodeURIComponent(gothram)}&f=${encodeURIComponent(family)}&s=${startInput.value}&e=${endInput.value}&t=${info.total}`;
+        // URL Generation for QR and Sharing
+        const currentUrl = window.location.origin + window.location.pathname;
+        globalVUrl = `${currentUrl}?v=true&id=${tid}&n=${encodeURIComponent(name)}&g=${encodeURIComponent(gothram)}&f=${encodeURIComponent(family)}&s=${startInput.value}&e=${endInput.value}&t=${info.total}`;
 
         document.getElementById('qr').innerHTML = "";
-        new QRCode(document.getElementById('qr'), { text: vUrl, width: 150, height: 150 });
+        new QRCode(document.getElementById('qr'), { text: globalVUrl, width: 150, height: 150 });
 
         document.getElementById('form-ui').classList.add('hidden');
         document.getElementById('ticket-wrapper').classList.remove('hidden');
         window.scrollTo(0, 0);
     });
 
-    // Verification Logic from URL
+    // Share Functions
+    function shareWhatsApp() {
+        const name = document.getElementById('r-name').innerText;
+        const total = document.getElementById('r-total').innerText;
+        const id = document.getElementById('txnId').innerText;
+        const text = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం - పూజా రశీదు*%0A%0AID: ${id}%0Aభక్తుని పేరు: ${name}%0Aమొత్తం: ₹${total}%0A%0Aటికెట్ వివరాల కోసం ఇక్కడ క్లిక్ చేయండి: %0A${encodeURIComponent(globalVUrl)}`;
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+
+    function shareSystem() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Poleramma Temple Pooja Receipt',
+                text: `Pooja Receipt for ${document.getElementById('r-name').innerText}`,
+                url: globalVUrl
+            }).catch(console.error);
+        } else {
+            // Fallback: Copy to clipboard
+            navigator.clipboard.writeText(globalVUrl);
+            Swal.fire("Link Copied!", "లింక్ కాపీ చేయబడింది. మీరు ఎక్కడైనా షేర్ చేయవచ్చు.", "success");
+        }
+    }
+
+    function saveTicket() {
+        html2canvas(document.getElementById('ticket-capture'), { scale: 3 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Pooja_Ticket_${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
+
+    // URL View Logic
     window.onload = function() {
         const p = new URLSearchParams(window.location.search);
         if (p.has('v')) {
@@ -244,21 +280,11 @@
             
             document.getElementById('form-ui').classList.add('hidden');
             document.getElementById('ticket-wrapper').classList.remove('hidden');
-            document.querySelector('.btn-actions').classList.add('hidden');
+            document.querySelector('.btn-actions').innerHTML = `<button onclick="location.href=window.location.origin + window.location.pathname" class="action-btn" style="background: #e65100; width: 100%; grid-column: span 2;">Book New Pooja</button>`;
             document.getElementById('qr').classList.add('hidden');
-            Swal.fire("Verified!","పోలేరమ్మ తల్లి దేవస్థానం పూజా రశీదు.", "success");
         }
     };
-
-    function saveTicket() {
-        html2canvas(document.getElementById('ticket-capture'), { scale: 3 }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `Pooja_Ticket_${Date.now()}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-        });
-    }
 </script>
 </body>
-    </html>
-                                                              
+                </html>
+    
