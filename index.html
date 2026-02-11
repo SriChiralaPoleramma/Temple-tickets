@@ -58,8 +58,7 @@
         .btn-wa { background: #25D366; }
         .btn-dl { background: #34495e; }
 
-        /* Loader Overlay */
-        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; color: white; }
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; color: white; }
 
         .ticket-outer { padding: 12px; background: white; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.2); }
         .ticket-card { border: 2px solid #f2f2f2; border-radius: 25px; overflow: hidden; position: relative; }
@@ -69,21 +68,32 @@
         .data-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .data-row span { color: #888; font-size: 12px; font-weight: 700; }
         .data-row b { color: #222; font-size: 14px; text-align: right; }
-        .qr-wrapper { display: flex; flex-direction: column; align-items: center; margin: 30px 0; padding: 15px; }
-        #qrcode { padding: 10px; background: #fff; }
-
+        
+        #verifyLayout { min-height: 100vh; background: #fff !important; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .v-card { width: 100%; max-width: 400px; padding: 30px; border-radius: 25px; border: 2px solid #4caf50; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
 <div id="loader">
-    <i class="fas fa-spinner fa-spin fa-3x"></i>
-    <p style="margin-top:15px; font-weight:bold;">Saving to Cloud Database...</p>
+    <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+    <p style="margin-top:15px; letter-spacing:1px;">Saving to Temple Records...</p>
+</div>
+
+<div id="verifyLayout" class="hidden">
+    <div class="v-card">
+        <i class="fas fa-check-circle" style="font-size: 60px; color: #4caf50; margin-bottom: 15px;"></i>
+        <h2 style="color: #1b5e20; margin: 0;">Verified Record</h2>
+        <p style="font-size: 12px; color: #666; margin-bottom: 25px;">Sri Poleramma Temple Digital Seva</p>
+        <div id="vContent" style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 15px;"></div>
+        <button onclick="window.location.href=window.location.pathname" class="btn btn-primary" style="margin-top: 20px; width: 100%;">Close</button>
+    </div>
 </div>
 
 <div id="websiteContainer">
-    <header id="mainHeader">
+    <header>
         <img src="https://poleramma.com/templeimage/1742626228036%20(1).jpg" class="header-logo" alt="Logo">
         <h1>శ్రీ పోలేరమ్మ తల్లి దేవస్థానం</h1>
         <p><i class="fas fa-om"></i> Official Digital Portal</p>
@@ -117,7 +127,7 @@
                     <div id="totalPrice">₹0</div>
                     <small id="monthCount" style="color:#5d4037; font-weight:800;">0 Months Selected</small>
                 </div>
-                <button type="submit" id="submitBtn" class="btn btn-primary">Generate Official Receipt</button>
+                <button type="submit" id="subBtn" class="btn btn-primary">Generate Official Receipt</button>
             </form>
         </div>
 
@@ -126,8 +136,8 @@
                 <div class="ticket-card">
                     <div class="ticket-header">
                         <div style="font-size: 30px; margin-bottom: 5px;">ॐ</div>
-                        <h2 style="margin: 0; font-size: 20px; letter-spacing: 2px;">DIGITAL RECEIPT</h2>
-                        <small id="t-id" style="font-family: monospace; font-weight: 800; opacity: 0.9;"></small>
+                        <h2 style="margin: 0; font-size: 20px;">DIGITAL RECEIPT</h2>
+                        <small id="t-id" style="font-family: monospace;"></small>
                     </div>
                     <div class="ticket-body">
                         <div class="data-row"><span>DEVOTEE:</span> <b id="t-name"></b></div>
@@ -135,17 +145,17 @@
                         <div class="data-row"><span>GOTHRAM:</span> <b id="t-gothram"></b></div>
                         <div class="data-row"><span>FAMILY:</span> <b id="t-family"></b></div>
                         <div class="data-row"><span>PERIOD:</span> <b id="t-period"></b></div>
-                        <div class="qr-wrapper"><div id="qrcode"></div></div>
-                        <div class="price-badge" style="margin-top: 5px; background: #f1f8e9; border-color: #4caf50; padding: 15px;">
-                            <span style="font-size: 11px; color: #1b5e20; font-weight: 800;">TOTAL DONATION PAID</span>
+                        <div style="display: flex; justify-content: center; margin: 20px 0;"><div id="qrcode"></div></div>
+                        <div class="price-badge" style="margin-top: 5px; background: #f1f8e9; border-color: #4caf50;">
+                            <span style="font-size: 11px; color: #1b5e20;">TOTAL DONATION PAID</span>
                             <div style="font-size: 32px; font-weight: 900; color: #1b5e20;">₹<span id="t-amt"></span></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="btn-group">
-                <button onclick="downloadTicket()" class="btn btn-dl"><i class="fas fa-file-download"></i> Save Image</button>
-                <button onclick="shareDirectWA('devotee')" class="btn btn-wa"><i class="fab fa-whatsapp"></i> Devotee</button>
+                <button onclick="downloadTicket()" class="btn btn-dl"><i class="fas fa-save"></i> Save</button>
+                <button onclick="shareDirectWA()" class="btn btn-wa"><i class="fab fa-whatsapp"></i> Share</button>
             </div>
             <button onclick="location.reload()" class="btn btn-primary" style="margin-top:15px; background: #444;">Book New Ticket</button>
         </div>
@@ -153,18 +163,33 @@
 </div>
 
 <script>
-    // Configuration - PASTE YOUR APPS SCRIPT URL HERE
+    // 1. CONFIGURATION: PASTE YOUR GOOGLE APPS SCRIPT URL HERE
     const SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
 
     const sDate = document.getElementById('sDate');
     const eDate = document.getElementById('eDate');
-    const templePhone = "918951534845"; 
     let bookingData = {};
 
+    // 2. LOGIC: AUTOMATIC VERIFICATION CHECK (Only displays details if URL has verify param)
+    (function checkUrl() {
+        const params = new URLSearchParams(window.location.search);
+        if(params.has('verify')) {
+            document.getElementById('websiteContainer').style.display = 'none';
+            document.getElementById('verifyLayout').classList.remove('hidden');
+            document.getElementById('vContent').innerHTML = `
+                <div class="data-row"><span>TXN ID:</span><b>${params.get('id')}</b></div>
+                <div class="data-row"><span>DEVOTEE:</span><b>${params.get('n')}</b></div>
+                <div class="data-row"><span>GOTHRAM:</span><b>${params.get('g')}</b></div>
+                <div class="data-row"><span>PERIOD:</span><b>${params.get('p')}</b></div>
+                <div class="data-row"><span>AMOUNT:</span><b style="color:green">₹${params.get('a')} (Paid)</b></div>
+            `;
+        }
+    })();
+
+    // 3. LOGIC: PRICE CALCULATION
     sDate.onchange = () => { eDate.min = sDate.value; calculatePricing(); };
     eDate.onchange = calculatePricing;
 
-    // Function to calculate price based on future months
     function calculatePricing() {
         if(sDate.value && eDate.value) {
             const start = new Date(sDate.value);
@@ -185,18 +210,15 @@
         return 0;
     }
 
-    // Main Form Submission
+    // 4. LOGIC: FORM SUBMISSION & CLOUD STORAGE
     document.getElementById('pForm').onsubmit = async (e) => {
         e.preventDefault();
         
-        // Disable button and show loader
-        const submitBtn = document.getElementById('submitBtn');
-        const loader = document.getElementById('loader');
-        submitBtn.disabled = true;
-        loader.style.display = 'flex';
+        document.getElementById('subBtn').disabled = true;
+        document.getElementById('loader').style.display = 'flex';
 
         const amt = calculatePricing();
-        const tid = "POL-TXN-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+        const tid = "POL-" + Date.now().toString(36).toUpperCase();
         
         bookingData = { 
             id: tid, 
@@ -211,16 +233,15 @@
         };
 
         try {
-            // SEND DATA TO GOOGLE SHEETS
-            const response = await fetch(SCRIPT_URL, {
+            // Save to Google Sheets
+            await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Essential for Apps Script Web Apps
-                cache: 'no-cache',
+                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(bookingData)
             });
 
-            // Prepare Ticket View
+            // Update UI with Ticket
             document.getElementById('t-id').innerText = "ID: " + tid;
             document.getElementById('t-name').innerText = bookingData.name;
             document.getElementById('t-phone').innerText = bookingData.phone;
@@ -229,40 +250,36 @@
             document.getElementById('t-period').innerText = bookingData.period;
             document.getElementById('t-amt').innerText = amt;
 
-            // Generate QR Code with Verification Link
+            // Generate QR for Verification
             const baseUrl = window.location.href.split('?')[0];
-            const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}&f=${encodeURIComponent(bookingData.family)}&ph=${bookingData.phone}`;
+            const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}`;
 
             document.getElementById("qrcode").innerHTML = "";
-            new QRCode(document.getElementById("qrcode"), { text: verifyUrl, width: 160, height: 160, colorDark: "#880e4f" });
+            new QRCode(document.getElementById("qrcode"), { text: verifyUrl, width: 150, height: 150, colorDark: "#880e4f" });
             
-            // Switch Views
             document.getElementById('bookingSection').classList.add('hidden');
             document.getElementById('ticketSection').classList.remove('hidden');
-            window.scrollTo({top: 0, behavior: 'smooth'});
-
+            window.scrollTo(0,0);
         } catch (err) {
-            Swal.fire("Error!", "Failed to save data. Please try again.", "error");
+            Swal.fire("Connection Error", "Check your internet and try again.", "error");
         } finally {
-            loader.style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
         }
     };
 
-    // Download Ticket as Image
     async function downloadTicket() {
-        const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 3 });
+        const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 2 });
         const link = document.createElement('a');
-        link.download = `Poleramma_Receipt_${bookingData.id}.png`;
+        link.download = `Poleramma_${bookingData.id}.png`;
         link.href = canvas.toDataURL();
         link.click();
     }
 
-    // WhatsApp Share
-    function shareDirectWA(target) {
-        const msg = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A*ID:* ${bookingData.id}%0A*పేరు:* ${bookingData.name}%0A*మొత్తం:* ₹${bookingData.amt}%0A*వ్యవధి:* ${bookingData.period}%0Aఅమ్మవారి కృపాకటాక్షాలు కలగాలి. 🙏`;
-        window.open(`https://wa.me/${(target === 'temple' ? templePhone : '91' + bookingData.phone)}?text=${msg}`, '_blank');
+    function shareDirectWA() {
+        const msg = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A*ID:* ${bookingData.id}%0A*పేరు:* ${bookingData.name}%0A*వ్యవధి:* ${bookingData.period}%0Aఅమ్మవారి ఆశీస్సులు మీకు కలగాలని కోరుకుంటున్నాము. 🙏`;
+        window.open(`https://wa.me/91${bookingData.phone}?text=${msg}`, '_blank');
     }
 </script>
 </body>
-                                            </html>
-    
+        </html>
+            
