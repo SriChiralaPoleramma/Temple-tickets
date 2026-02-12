@@ -11,68 +11,65 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        /* CSS Root Variables: Define the 'Soul' of the temple theme */
+        /* రంగులు మరియు వేరియబుల్స్ - థీమ్ కోసం */
         :root {
-            --primary: #880e4f;      /* Deep Maroon - Spiritual base */
-            --accent: #bf360c;       /* Saffron Orange - Energy */
-            --saffron: #ff9100;      /* Bright Saffron - Highlighting */
-            --gold: #ffd700;         /* Divine Gold - Borders */
-            --success: #1b5e20;      /* Green - Used for 'Paid' status */
-            --glass: rgba(255, 255, 255, 0.98); 
-            --bg-shade: #fdf5e6;     /* Traditional 'Old Lace' paper color */
+            --primary: #880e4f;
+            --accent: #bf360c;
+            --saffron: #ff9100;
+            --gold: #ffd700;
+            --success: #1b5e20;
+            --glass: rgba(255, 255, 255, 0.98);
+            --bg-shade: #fdf5e6;
         }
 
-        /* Global Styles */
+        /* బాడీ స్టైల్ మరియు బ్యాక్‌గ్రౌండ్ డిజైన్ */
         body { 
             font-family: 'Segoe UI', Arial, sans-serif; 
             background: var(--bg-shade); margin: 0; color: #2d3436; 
-            background-image: url('https://www.transparenttextures.com/patterns/mandala.png'); /* Divine Mandala Pattern */
+            background-image: url('https://www.transparenttextures.com/patterns/mandala.png');
             background-attachment: fixed;
         }
 
-        /* Header Design with Curved Clip Path */
+        /* హెడర్ (పైన ఉండే రంగుల భాగం) స్టైల్ */
         header { 
             background: linear-gradient(135deg, var(--primary), var(--accent)); 
             color: white; padding: 50px 20px 100px; text-align: center; 
             border-bottom: 5px solid var(--gold);
-            clip-path: ellipse(150% 100% at 50% 0%); /* Creates the circular bottom curve */
+            clip-path: ellipse(150% 100% at 50% 0%);
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .header-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 10px; box-shadow: 0 0 20px var(--gold); }
         .container { max-width: 480px; margin: -70px auto 40px; padding: 0 15px; box-sizing: border-box; }
 
-        /* Glassmorphism Card: The Modern Floating Look */
+        /* గ్లాస్ కార్డ్ ఎఫెక్ట్ (ఫామ్ బ్యాక్‌గ్రౌండ్) */
         .glass-card { 
             background: var(--glass); backdrop-filter: blur(15px); border-radius: 30px; 
             padding: 30px; border: 1px solid rgba(255,255,255,0.5);
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
 
-        /* Form Elements Styling */
+        /* ఇన్‌పుట్ ఫీల్డ్స్ స్టైలింగ్ */
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 11px; font-weight: 800; color: #5d4037; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
         input, textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; box-sizing: border-box; font-size: 15px; transition: 0.3s; background: #fff; }
 
-        /* Pricing Badge: Visual Feedback for the Donation Amount */
+        /* ధర చూపించే బాక్స్ స్టైల్ */
         .price-badge { background: linear-gradient(to right, #fffde7, #fff9c4); border: 2px dashed var(--saffron); border-radius: 20px; padding: 22px; text-align: center; margin: 25px 0; }
         #totalPrice { font-size: 36px; font-weight: 900; color: var(--accent); margin: 5px 0; }
 
-        /* Button Framework */
+        /* బటన్ల స్టైలింగ్ */
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 25px; }
         .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; color: white; font-weight: 800; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s transform; }
         .btn-primary { background: linear-gradient(45deg, var(--accent), var(--saffron)); box-shadow: 0 10px 25px rgba(191, 54, 12, 0.3); }
-        .btn-wa { background: #25D366; } /* Official WhatsApp Brand Color */
-        .btn-dl { background: #34495e; } /* Contrast Dark Gray */
+        .btn-wa { background: #25D366; }
+        .btn-dl { background: #34495e; }
 
-        /* Receipt (Ticket) UI Architecture */
+        /* రసీదు (Receipt) రూపకల్పన */
         .ticket-outer { padding: 12px; background: white; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.2); }
         .ticket-card { border: 2px solid #f2f2f2; border-radius: 25px; overflow: hidden; position: relative; }
         .ticket-header { background: var(--primary); color: white; padding: 30px 20px; text-align: center; position: relative; }
-        
-        /* Zig-Zag Cut Decoration on Receipt */
         .ticket-header::after { content: ''; position: absolute; width: 100%; height: 20px; background: white; bottom: -10px; left: 0; clip-path: polygon(0% 100%, 5% 0%, 10% 100%, 15% 0%, 20% 100%, 25% 0%, 30% 100%, 35% 0%, 40% 100%, 45% 0%, 50% 100%, 55% 0%, 60% 100%, 65% 0%, 70% 100%, 75% 0%, 80% 100%, 85% 0%, 90% 100%, 95% 0%, 100% 100%); }
-        
         .ticket-body { padding: 45px 30px 30px; background: #fff; }
         .data-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .data-row span { color: #888; font-size: 12px; font-weight: 700; }
@@ -80,12 +77,11 @@
         .qr-wrapper { display: flex; flex-direction: column; align-items: center; margin: 30px 0; padding: 15px; }
         #qrcode { padding: 10px; background: #fff; }
 
-        /* Verification Screen: Fullscreen modal look for QR scanning results */
+        /* వెరిఫికేషన్ పేజీ (QR స్కాన్ చేసినప్పుడు వచ్చేది) స్టైలింగ్ */
         #verifyLayout { min-height: 100vh; background: #ffffff !important; display: flex; align-items: center; justify-content: center; padding: 20px; width: 100vw; position: absolute; top: 0; left: 0; z-index: 9999; }
         .v-card-clean { width: 100%; max-width: 440px; border: 2px solid #eee; padding: 35px; border-radius: 25px; text-align: center; background: #fff; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         .v-header-icon { font-size: 60px; color: var(--success); margin-bottom: 15px; }
 
-        /* Global Utility: Quickly hide elements */
         .hidden { display: none !important; }
     </style>
 </head>
@@ -122,7 +118,6 @@
                     <div class="input-group"><label>ప్రారంభ తేదీ</label><input type="date" id="sDate" required></div>
                     <div class="input-group"><label>ముగింపు తేదీ</label><input type="date" id="eDate" required></div>
                 </div>
-                
                 <div class="price-badge">
                     <div id="totalPrice">₹0</div>
                     <small id="monthCount" style="color:#5d4037; font-weight:800;">0 Months Selected</small>
@@ -145,9 +140,7 @@
                         <div class="data-row"><span>GOTHRAM:</span> <b id="t-gothram"></b></div>
                         <div class="data-row"><span>FAMILY:</span> <b id="t-family"></b></div>
                         <div class="data-row"><span>PERIOD:</span> <b id="t-period"></b></div>
-                        
                         <div class="qr-wrapper"><div id="qrcode"></div></div>
-                        
                         <div class="price-badge" style="margin-top: 5px; background: #f1f8e9; border-color: #4caf50; padding: 15px;">
                             <span style="font-size: 11px; color: #1b5e20; font-weight: 800;">TOTAL DONATION PAID</span>
                             <div style="font-size: 32px; font-weight: 900; color: #1b5e20;">₹<span id="t-amt"></span></div>
@@ -155,7 +148,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="btn-group">
                 <button onclick="downloadTicket()" class="btn btn-dl"><i class="fas fa-file-download"></i> Save Image</button>
                 <button onclick="shareDirectWA('devotee')" class="btn btn-wa"><i class="fab fa-whatsapp"></i> Devotee</button>
@@ -172,7 +164,7 @@
         <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Sri Poleramma Temple Digital Record</p>
         
         <div id="vContent" style="text-align: left; background: #fafafa; padding: 25px; border-radius: 15px; border: 1px solid #eee; line-height: 1.8;">
-            </div>
+        </div>
 
         <div style="margin-top: 30px; padding: 15px; border: 1px dashed #4caf50; border-radius: 12px; background: #f9fff9;">
             <span style="color: #1b5e20; font-weight: 800; font-size: 12px;">✓ TICKET AUTHENTICITY SECURED</span>
@@ -181,24 +173,19 @@
 </div>
 
 <script>
-    /**
-     * CORE JAVASCRIPT LOGIC
-     * Handles pricing, form submission, QR generation, and receipt capturing.
+    /** * జావాస్క్రిప్ట్ సెక్షన్ - లాజిక్ మొత్తం ఇక్కడ ఉంటుంది 
      */
 
     const sDate = document.getElementById('sDate');
     const eDate = document.getElementById('eDate');
-    const templePhone = "918951534845"; // Pre-defined admin contact
+    const templePhone = "918951534845"; 
     let bookingData = {};
 
-    // Trigger price calculation whenever dates change
+    // తేదీ మారినప్పుడు ధరను లెక్కించే ఈవెంట్స్
     sDate.onchange = () => { eDate.min = sDate.value; calculatePricing(); };
     eDate.onchange = calculatePricing;
 
-    /**
-     * PRICING LOGIC:
-     * Calculates ₹100 for every distinct month from the current month onwards.
-     */
+    /** ధరను లెక్కించే ఫంక్షన్ (నెలకు ₹100 చొప్పున) **/
     function calculatePricing() {
         if(sDate.value && eDate.value) {
             const start = new Date(sDate.value);
@@ -206,9 +193,7 @@
             const today = new Date();
             let chargeMonths = 0;
             let tempDate = new Date(start.getFullYear(), start.getMonth(), 1);
-            
             while (tempDate <= end) {
-                // Only charge if the date is in the future or current month
                 if (tempDate.getFullYear() > today.getFullYear() || (tempDate.getFullYear() === today.getFullYear() && tempDate.getMonth() > today.getMonth())) {
                     chargeMonths++;
                 }
@@ -221,19 +206,16 @@
         return 0;
     }
 
-    /**
-     * FORM SUBMISSION HANDLER:
-     * Generates Transaction ID, Ticket UI, and QR code.
-     */
+    /** ఫామ్ సబ్మిట్ చేసినప్పుడు రశీదును తయారు చేసే ఫంక్షన్ **/
     document.getElementById('pForm').onsubmit = (e) => {
         e.preventDefault();
         const amt = calculatePricing();
         const tid = "POL-TXN-" + Math.random().toString(36).substr(2, 6).toUpperCase();
         
-        // Save form data into local object
+        // డేటాను ఆబ్జెక్ట్‌లో భద్రపరచడం
         bookingData = { id: tid, name: document.getElementById('name').value, phone: document.getElementById('phone').value, gothram: document.getElementById('gothram').value || "---", family: document.getElementById('family').value || "---", period: `${sDate.value} to ${eDate.value}`, amt: amt };
 
-        // Inject data into Ticket UI
+        // రశీదుపై వివరాలను నింపడం
         document.getElementById('t-id').innerText = "ID: " + tid;
         document.getElementById('t-name').innerText = bookingData.name;
         document.getElementById('t-phone').innerText = bookingData.phone;
@@ -242,39 +224,32 @@
         document.getElementById('t-period').innerText = bookingData.period;
         document.getElementById('t-amt').innerText = amt;
 
-        // VERIFICATION URL: This is what the QR code contains
+        // వెరిఫికేషన్ కోసం URL ని తయారు చేయడం
         const baseUrl = window.location.href.split('?')[0];
         const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}&f=${encodeURIComponent(bookingData.family)}&ph=${bookingData.phone}`;
 
-        // Initialize QR Code inside the receipt
+        // QR కోడ్ జనరేట్ చేయడం
         document.getElementById("qrcode").innerHTML = "";
         new QRCode(document.getElementById("qrcode"), { text: verifyUrl, width: 160, height: 160, colorDark: "#880e4f" });
         
-        // Switch Views
+        // సెక్షన్లను మార్చడం (ఫామ్ దాచి, రశీదు చూపడం)
         document.getElementById('bookingSection').classList.add('hidden');
         document.getElementById('ticketSection').classList.remove('hidden');
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
-    /**
-     * AUTO-VERIFICATION SYSTEM:
-     * Runs immediately on page load. If URL has '?verify=true', it switches to verification mode.
-     */
+    /** QR కోడ్ ద్వారా స్కాన్ చేసినప్పుడు వివరాలను చూపే ఫంక్షన్ **/
     (function checkVerification() {
         const p = new URLSearchParams(window.location.search);
         if(p.has('verify')) {
             document.addEventListener("DOMContentLoaded", () => {
-                // Hide main website elements
                 const website = document.getElementById('websiteContainer');
                 if(website) website.style.display = 'none';
                 document.body.style.backgroundImage = 'none';
                 document.body.style.backgroundColor = '#ffffff';
-                
-                // Show Verification Result Card
                 const vLayout = document.getElementById('verifyLayout');
                 vLayout.classList.remove('hidden');
 
-                // Read data from URL Parameters and display
                 document.getElementById('vContent').innerHTML = `
                     <div class="data-row"><span>TXN ID:</span><b>${p.get('id')}</b></div>
                     <div class="data-row"><span>DEVOTEE:</span><b>${p.get('n')}</b></div>
@@ -290,22 +265,37 @@
         }
     })();
 
-    /**
-     * TICKET DOWNLOADER:
-     * Converts HTML div 'captureArea' into a high-res PNG image.
-     */
+    /** రశీదును ఇమేజ్ లాగా డౌన్‌లోడ్ చేసే ఫంక్షన్ (వేగం కోసం ఆప్టిమైజ్ చేయబడింది) **/
     async function downloadTicket() {
-        const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 3 });
-        const link = document.createElement('a');
-        link.download = `Poleramma_Receipt_${bookingData.id}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
+        // డౌన్‌లోడ్ అవుతున్నట్లు పాప్-అప్ చూపిస్తుంది
+        Swal.fire({
+            title: 'Generating Image...',
+            html: 'దయచేసి వేచి ఉండండి...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        try {
+            // రశీదు ఏరియాను ఫోటో లాగా మారుస్తుంది
+            const canvas = await html2canvas(document.getElementById('captureArea'), { 
+                scale: 2, // వేగం కోసం స్కేల్ తగ్గించబడింది
+                useCORS: true,
+                logging: false,
+                backgroundColor: "#ffffff"
+            });
+            
+            const link = document.createElement('a');
+            link.download = `Poleramma_Receipt_${bookingData.id}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+            
+            Swal.close(); // పాప్-అప్ క్లోజ్ అవుతుంది
+        } catch (err) {
+            Swal.fire('Error', 'Image generation failed.', 'error');
+        }
     }
 
-    /**
-     * WHATSAPP SHARING:
-     * Formats a spiritual message and opens WhatsApp.
-     */
+    /** వాట్సాప్ ద్వారా రశీదు వివరాలను షేర్ చేసే ఫంక్షన్ **/
     function shareDirectWA(target) {
         const msg = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A*ID:* ${bookingData.id}%0A*పేరు:* ${bookingData.name}%0A*మొత్తం:* ₹${bookingData.amt}%0A*వ్యవధి:* ${bookingData.period}%0Aఅమ్మవారి కృపాకటాక్షాలు కలగాలి. 🙏`;
         window.open(`https://wa.me/${(target === 'temple' ? templePhone : '91' + bookingData.phone)}?text=${msg}`, '_blank');
