@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        /* రంగులు మరియు వేరియబుల్స్ - థీమ్ కోసం */
+        /* Theme Variables */
         :root {
             --primary: #880e4f;
             --accent: #bf360c;
@@ -22,7 +22,6 @@
             --bg-shade: #fdf5e6;
         }
 
-        /* బాడీ స్టైల్ మరియు బ్యాక్‌గ్రౌండ్ డిజైన్ */
         body { 
             font-family: 'Segoe UI', Arial, sans-serif; 
             background: var(--bg-shade); margin: 0; color: #2d3436; 
@@ -30,7 +29,7 @@
             background-attachment: fixed;
         }
 
-        /* హెడర్ (పైన ఉండే రంగుల భాగం) స్టైల్ */
+        /* Header Design */
         header { 
             background: linear-gradient(135deg, var(--primary), var(--accent)); 
             color: white; padding: 50px 20px 100px; text-align: center; 
@@ -42,30 +41,29 @@
         .header-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 10px; box-shadow: 0 0 20px var(--gold); }
         .container { max-width: 480px; margin: -70px auto 40px; padding: 0 15px; box-sizing: border-box; }
 
-        /* గ్లాస్ కార్డ్ ఎఫెక్ట్ (ఫామ్ బ్యాక్‌గ్రౌండ్) */
+        /* Form Card */
         .glass-card { 
             background: var(--glass); backdrop-filter: blur(15px); border-radius: 30px; 
             padding: 30px; border: 1px solid rgba(255,255,255,0.5);
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
 
-        /* ఇన్‌పుట్ ఫీల్డ్స్ స్టైలింగ్ */
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 11px; font-weight: 800; color: #5d4037; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
         input, textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; box-sizing: border-box; font-size: 15px; transition: 0.3s; background: #fff; }
 
-        /* ధర చూపించే బాక్స్ స్టైల్ */
+        /* Price Section */
         .price-badge { background: linear-gradient(to right, #fffde7, #fff9c4); border: 2px dashed var(--saffron); border-radius: 20px; padding: 22px; text-align: center; margin: 25px 0; }
         #totalPrice { font-size: 36px; font-weight: 900; color: var(--accent); margin: 5px 0; }
 
-        /* బటన్ల స్టైలింగ్ */
+        /* Buttons */
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 25px; }
         .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; color: white; font-weight: 800; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s transform; }
         .btn-primary { background: linear-gradient(45deg, var(--accent), var(--saffron)); box-shadow: 0 10px 25px rgba(191, 54, 12, 0.3); }
         .btn-wa { background: #25D366; }
         .btn-dl { background: #34495e; }
 
-        /* రసీదు (Receipt) రూపకల్పన */
+        /* Receipt (Ticket) UI */
         .ticket-outer { padding: 12px; background: white; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.2); }
         .ticket-card { border: 2px solid #f2f2f2; border-radius: 25px; overflow: hidden; position: relative; }
         .ticket-header { background: var(--primary); color: white; padding: 30px 20px; text-align: center; position: relative; }
@@ -77,7 +75,7 @@
         .qr-wrapper { display: flex; flex-direction: column; align-items: center; margin: 30px 0; padding: 15px; }
         #qrcode { padding: 10px; background: #fff; }
 
-        /* వెరిఫికేషన్ పేజీ (QR స్కాన్ చేసినప్పుడు వచ్చేది) స్టైలింగ్ */
+        /* Verification View */
         #verifyLayout { min-height: 100vh; background: #ffffff !important; display: flex; align-items: center; justify-content: center; padding: 20px; width: 100vw; position: absolute; top: 0; left: 0; z-index: 9999; }
         .v-card-clean { width: 100%; max-width: 440px; border: 2px solid #eee; padding: 35px; border-radius: 25px; text-align: center; background: #fff; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         .v-header-icon { font-size: 60px; color: var(--success); margin-bottom: 15px; }
@@ -173,30 +171,29 @@
 </div>
 
 <script>
-    /** * జావాస్క్రిప్ట్ సెక్షన్ - లాజిక్ మొత్తం ఇక్కడ ఉంటుంది 
+    /** * JAVASCRIPT LOGIC
+     * Replace the URL below with your Google Web App URL
      */
+    const GOOGLE_SCRIPT_URL = "YOUR_DEPLOYED_WEB_APP_URL"; 
 
     const sDate = document.getElementById('sDate');
     const eDate = document.getElementById('eDate');
     const templePhone = "918951534845"; 
     let bookingData = {};
 
-    // తేదీ మారినప్పుడు ధరను లెక్కించే ఈవెంట్స్
+    // Date change listeners
     sDate.onchange = () => { eDate.min = sDate.value; calculatePricing(); };
     eDate.onchange = calculatePricing;
 
-    /** ధరను లెక్కించే ఫంక్షన్ (నెలకు ₹100 చొప్పున) **/
+    /** Calculate price based on selected months (₹100 per month) */
     function calculatePricing() {
         if(sDate.value && eDate.value) {
             const start = new Date(sDate.value);
             const end = new Date(eDate.value);
-            const today = new Date();
             let chargeMonths = 0;
             let tempDate = new Date(start.getFullYear(), start.getMonth(), 1);
             while (tempDate <= end) {
-                if (tempDate.getFullYear() > today.getFullYear() || (tempDate.getFullYear() === today.getFullYear() && tempDate.getMonth() > today.getMonth())) {
-                    chargeMonths++;
-                }
+                chargeMonths++;
                 tempDate.setMonth(tempDate.getMonth() + 1);
             }
             document.getElementById('monthCount').innerText = `${chargeMonths} Month(s) Calculated`;
@@ -206,16 +203,44 @@
         return 0;
     }
 
-    /** ఫామ్ సబ్మిట్ చేసినప్పుడు రశీదును తయారు చేసే ఫంక్షన్ **/
-    document.getElementById('pForm').onsubmit = (e) => {
+    /** Handle Form Submission and Data Sync */
+    document.getElementById('pForm').onsubmit = async (e) => {
         e.preventDefault();
+        
+        // Show Loading UI
+        Swal.fire({
+            title: 'దయచేసి వేచి ఉండండి...',
+            text: 'Storing data in Temple Records...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
         const amt = calculatePricing();
         const tid = "POL-TXN-" + Math.random().toString(36).substr(2, 6).toUpperCase();
         
-        // డేటాను ఆబ్జెక్ట్‌లో భద్రపరచడం
-        bookingData = { id: tid, name: document.getElementById('name').value, phone: document.getElementById('phone').value, gothram: document.getElementById('gothram').value || "---", family: document.getElementById('family').value || "---", period: `${sDate.value} to ${eDate.value}`, amt: amt };
+        bookingData = { 
+            id: tid, 
+            name: document.getElementById('name').value, 
+            phone: document.getElementById('phone').value, 
+            gothram: document.getElementById('gothram').value || "---", 
+            family: document.getElementById('family').value || "---", 
+            period: `${sDate.value} to ${eDate.value}`, 
+            amt: amt 
+        };
 
-        // రశీదుపై వివరాలను నింపడం
+        // --- APPS SCRIPT SYNC ---
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bookingData)
+            });
+        } catch (error) {
+            console.error("Storage Error:", error);
+        }
+
+        // --- UPDATE RECEIPT UI ---
         document.getElementById('t-id').innerText = "ID: " + tid;
         document.getElementById('t-name').innerText = bookingData.name;
         document.getElementById('t-phone').innerText = bookingData.phone;
@@ -224,21 +249,22 @@
         document.getElementById('t-period').innerText = bookingData.period;
         document.getElementById('t-amt').innerText = amt;
 
-        // వెరిఫికేషన్ కోసం URL ని తయారు చేయడం
+        // --- GENERATE QR URL ---
         const baseUrl = window.location.href.split('?')[0];
         const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}&f=${encodeURIComponent(bookingData.family)}&ph=${bookingData.phone}`;
 
-        // QR కోడ్ జనరేట్ చేయడం
         document.getElementById("qrcode").innerHTML = "";
         new QRCode(document.getElementById("qrcode"), { text: verifyUrl, width: 160, height: 160, colorDark: "#880e4f" });
         
-        // సెక్షన్లను మార్చడం (ఫామ్ దాచి, రశీదు చూపడం)
+        // Switch views
         document.getElementById('bookingSection').classList.add('hidden');
         document.getElementById('ticketSection').classList.remove('hidden');
+        
+        Swal.close();
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
-    /** QR కోడ్ ద్వారా స్కాన్ చేసినప్పుడు వివరాలను చూపే ఫంక్షన్ **/
+    /** Check if the page is opened via QR scan */
     (function checkVerification() {
         const p = new URLSearchParams(window.location.search);
         if(p.has('verify')) {
@@ -265,9 +291,8 @@
         }
     })();
 
-    /** రశీదును ఇమేజ్ లాగా డౌన్‌లోడ్ చేసే ఫంక్షన్ (వేగం కోసం ఆప్టిమైజ్ చేయబడింది) **/
+    /** Save Receipt as Image */
     async function downloadTicket() {
-        // డౌన్‌లోడ్ అవుతున్నట్లు పాప్-అప్ చూపిస్తుంది
         Swal.fire({
             title: 'Generating Image...',
             html: 'దయచేసి వేచి ఉండండి...',
@@ -276,11 +301,9 @@
         });
 
         try {
-            // రశీదు ఏరియాను ఫోటో లాగా మారుస్తుంది
             const canvas = await html2canvas(document.getElementById('captureArea'), { 
-                scale: 2, // వేగం కోసం స్కేల్ తగ్గించబడింది
+                scale: 2, 
                 useCORS: true,
-                logging: false,
                 backgroundColor: "#ffffff"
             });
             
@@ -288,18 +311,18 @@
             link.download = `Poleramma_Receipt_${bookingData.id}.png`;
             link.href = canvas.toDataURL("image/png");
             link.click();
-            
-            Swal.close(); // పాప్-అప్ క్లోజ్ అవుతుంది
+            Swal.close();
         } catch (err) {
             Swal.fire('Error', 'Image generation failed.', 'error');
         }
     }
 
-    /** వాట్సాప్ ద్వారా రశీదు వివరాలను షేర్ చేసే ఫంక్షన్ **/
+    /** Send details to WhatsApp */
     function shareDirectWA(target) {
         const msg = `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A*ID:* ${bookingData.id}%0A*పేరు:* ${bookingData.name}%0A*మొత్తం:* ₹${bookingData.amt}%0A*వ్యవధి:* ${bookingData.period}%0Aఅమ్మవారి కృపాకటాక్షాలు కలగాలి. 🙏`;
         window.open(`https://wa.me/${(target === 'temple' ? templePhone : '91' + bookingData.phone)}?text=${msg}`, '_blank');
     }
 </script>
 </body>
-</html>
+                                                                </html>
+    
