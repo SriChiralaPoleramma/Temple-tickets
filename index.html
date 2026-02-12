@@ -73,7 +73,6 @@
         .btn-dl { background: #34495e; }
         .btn:active { transform: scale(0.96); }
 
-        /* Ticket Design */
         .ticket-outer { padding: 12px; background: white; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.2); }
         .ticket-card { border: 2px solid #f2f2f2; border-radius: 25px; overflow: hidden; position: relative; }
         .ticket-header { background: var(--primary); color: white; padding: 30px 20px; text-align: center; position: relative; }
@@ -90,7 +89,6 @@
         .qr-wrapper { display: flex; flex-direction: column; align-items: center; margin: 30px 0; padding: 15px; background: #fdfdfd; border-radius: 20px; border: 1px solid #f0f0f0; }
         #qrcode { padding: 10px; background: #fff; }
 
-        /* Verification Screen */
         .v-layout { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #e8f5e9; padding: 20px; }
         .v-card { text-align: center; border-top: 15px solid var(--success); width: 100%; max-width: 440px; padding: 40px; }
         
@@ -210,10 +208,8 @@
             const start = new Date(sDate.value);
             const end = new Date(eDate.value);
             const today = new Date();
-            
             let chargeMonths = 0;
             let tempDate = new Date(start.getFullYear(), start.getMonth(), 1);
-            
             while (tempDate <= end) {
                 if (tempDate.getFullYear() > today.getFullYear() || 
                    (tempDate.getFullYear() === today.getFullYear() && tempDate.getMonth() > today.getMonth())) {
@@ -221,7 +217,6 @@
                 }
                 tempDate.setMonth(tempDate.getMonth() + 1);
             }
-
             document.getElementById('monthCount').innerText = `${chargeMonths} Month(s) Calculated`;
             document.getElementById('totalPrice').innerText = `₹${chargeMonths * 100}`;
             return chargeMonths * 100;
@@ -244,7 +239,6 @@
             amt: amt
         };
 
-        // Populate Ticket
         document.getElementById('t-id').innerText = "ID: " + tid;
         document.getElementById('t-name').innerText = bookingData.name;
         document.getElementById('t-phone').innerText = bookingData.phone;
@@ -253,12 +247,17 @@
         document.getElementById('t-period').innerText = bookingData.period;
         document.getElementById('t-amt').innerText = amt;
 
-        // Generate URL for QR
-        const baseUrl = window.location.href.split('?')[0];
-        const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}&f=${encodeURIComponent(bookingData.family)}&ph=${bookingData.phone}`;
+        // Encode all data into the URL
+        const baseUrl = window.location.origin + window.location.pathname;
+        const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&ph=${bookingData.phone}&g=${encodeURIComponent(bookingData.gothram)}&f=${encodeURIComponent(bookingData.family)}&p=${encodeURIComponent(bookingData.period)}&a=${amt}`;
 
         document.getElementById("qrcode").innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { text: verifyUrl, width: 160, height: 160, colorDark: "#880e4f" });
+        new QRCode(document.getElementById("qrcode"), { 
+            text: verifyUrl, 
+            width: 160, 
+            height: 160, 
+            colorDark: "#880e4f" 
+        });
 
         document.getElementById('bookingSection').classList.add('hidden');
         document.getElementById('ticketSection').classList.remove('hidden');
@@ -271,12 +270,12 @@
             document.getElementById('bookingFlow').classList.add('hidden'); 
             document.getElementById('verifyLayout').classList.remove('hidden');
             document.getElementById('vContent').innerHTML = `
-                <div class="data-row"><span>TXN ID:</span><b>${p.get('id')}</b></div>
-                <div class="data-row"><span>DEVOTEE:</span><b>${p.get('n')}</b></div>
-                <div class="data-row"><span>MOBILE:</span><b>${p.get('ph')}</b></div>
+                <div class="data-row"><span>TRANSACTION ID:</span><b>${p.get('id')}</b></div>
+                <div class="data-row"><span>DEVOTEE NAME:</span><b>${p.get('n')}</b></div>
+                <div class="data-row"><span>MOBILE NUMBER:</span><b>${p.get('ph')}</b></div>
                 <div class="data-row"><span>GOTHRAM:</span><b>${p.get('g')}</b></div>
-                <div class="data-row"><span>FAMILY:</span><b>${p.get('f')}</b></div>
-                <div class="data-row"><span>VALIDITY:</span><b>${p.get('p')}</b></div>
+                <div class="data-row"><span>FAMILY MEMBERS:</span><b>${p.get('f')}</b></div>
+                <div class="data-row"><span>VALIDITY PERIOD:</span><b>${p.get('p')}</b></div>
                 <div class="data-row" style="margin-top:15px; border-top:2px solid #ddd; padding-top:15px;">
                     <span>PAYMENT STATUS:</span><b style="color:green">SUCCESSFUL (₹${p.get('a')})</b>
                 </div>
@@ -285,10 +284,10 @@
     };
 
     async function downloadTicket() {
-        Swal.fire({ title: 'Processing Image...', didOpen: () => Swal.showLoading() });
+        Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading() });
         const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 3 });
         const link = document.createElement('a');
-        link.download = `Poleramma_Receipt_${bookingData.id}.png`;
+        link.download = `Receipt_${bookingData.id}.png`;
         link.href = canvas.toDataURL();
         link.click();
         Swal.close();
@@ -296,21 +295,18 @@
 
     function shareDirectWA(target) {
         const message = 
-            `* 🌸 శ్రీ పోలేరమ్మ తల్లి దేవస్థానం - చిరాల* 🌸%0A` +
+            `* 🌸 శ్రీ పోలేరమ్మ తల్లి దేవస్థానం* 🌸%0A` +
             `----------------------------------------%0A` +
             `✅ *Status:* PAID / విజయవంతమైంది%0A` +
             `🔖 *ID:* ${bookingData.id}%0A` +
             `👤 *పేరు:* ${bookingData.name}%0A` +
-            `🕉️ *గోత్రం:* ${bookingData.gothram}%0A` +
             `📅 *వ్యవధి:* ${bookingData.period}%0A` +
             `💰 *మొత్తం:* ₹${bookingData.amt}%0A` +
-            `----------------------------------------%0A` +
-            `అమ్మవారి కృపాకటాక్షాలు మీకు కలగాలని కోరుకుంటున్నాము. 🙏`;
-
+            `----------------------------------------`;
         const phone = (target === 'temple') ? templePhone : "91" + bookingData.phone;
         window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
     }
 </script>
 </body>
-    </html>
-                        
+                </html>
+                
