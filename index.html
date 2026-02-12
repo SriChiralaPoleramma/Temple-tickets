@@ -193,8 +193,7 @@
         <h2 style="color: var(--success); margin: 0; font-weight: 900; font-size: 28px;">RECEIPT VERIFIED</h2>
         <p style="color: #666; font-size: 15px; margin-bottom: 30px;">Official Temple Record Authenticated.</p>
         <div id="vContent" style="text-align: left; background: #f8f9fa; padding: 25px; border-radius: 20px; border: 1px solid #eee; line-height: 1.8;"></div>
-        <button onclick="location.href=window.location.pathname" class="btn btn-primary" style="margin-top: 30px;">Close</button>
-    </div>
+        </div>
 </div>
 
 <script>
@@ -203,7 +202,6 @@
     const templePhone = "918951534845"; 
     let bookingData = {};
 
-    // Logic: End date must be after start date
     sDate.onchange = () => { eDate.min = sDate.value; calculatePricing(); };
     eDate.onchange = calculatePricing;
 
@@ -217,7 +215,6 @@
             let tempDate = new Date(start.getFullYear(), start.getMonth(), 1);
             
             while (tempDate <= end) {
-                // Skips current month and year automatically
                 if (tempDate.getFullYear() > today.getFullYear() || 
                    (tempDate.getFullYear() === today.getFullYear() && tempDate.getMonth() > today.getMonth())) {
                     chargeMonths++;
@@ -247,7 +244,6 @@
             amt: amt
         };
 
-        // Populate Ticket
         document.getElementById('t-id').innerText = "ID: " + tid;
         document.getElementById('t-name').innerText = bookingData.name;
         document.getElementById('t-phone').innerText = bookingData.phone;
@@ -256,7 +252,6 @@
         document.getElementById('t-period').innerText = bookingData.period;
         document.getElementById('t-amt').innerText = amt;
 
-        // Smart QR Link for other devices
         const baseUrl = window.location.href.split('?')[0];
         const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}&f=${encodeURIComponent(bookingData.family)}&ph=${bookingData.phone}`;
 
@@ -268,7 +263,6 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
-    // Auto-detection for QR Scans
     window.onload = () => {
         const p = new URLSearchParams(window.location.search);
         if(p.has('verify')) {
@@ -300,7 +294,7 @@
 
     function shareDirectWA(target) {
         const message = 
-            `*శ్రీ పోలేరమ్మ తల్లి దేవస్థానం - చిరాల* 🌸%0A` +
+            `* 🌸శ్రీ పోలేరమ్మ తల్లి దేవస్థానం - చిరాల* 🌸%0A` +
             `----------------------------------------%0A` +
             `✅ *Status:* PAID / విజయవంతమైంది%0A` +
             `🔖 *ID:* ${bookingData.id}%0A` +
@@ -316,4 +310,4 @@
     }
 </script>
 </body>
-    </html>
+</html>
