@@ -193,7 +193,7 @@
         <h2 style="color: var(--success); margin: 0; font-weight: 900; font-size: 28px;">RECEIPT VERIFIED</h2>
         <p style="color: #666; font-size: 15px; margin-bottom: 30px;">Official Temple Record Authenticated.</p>
         <div id="vContent" style="text-align: left; background: #f8f9fa; padding: 25px; border-radius: 20px; border: 1px solid #eee; line-height: 1.8;"></div>
-        </div>
+    </div>
 </div>
 
 <script>
@@ -244,6 +244,7 @@
             amt: amt
         };
 
+        // Populate Ticket
         document.getElementById('t-id').innerText = "ID: " + tid;
         document.getElementById('t-name').innerText = bookingData.name;
         document.getElementById('t-phone').innerText = bookingData.phone;
@@ -252,6 +253,7 @@
         document.getElementById('t-period').innerText = bookingData.period;
         document.getElementById('t-amt').innerText = amt;
 
+        // Generate URL for QR
         const baseUrl = window.location.href.split('?')[0];
         const verifyUrl = `${baseUrl}?verify=true&id=${tid}&n=${encodeURIComponent(bookingData.name)}&a=${amt}&p=${encodeURIComponent(bookingData.period)}&g=${encodeURIComponent(bookingData.gothram)}&f=${encodeURIComponent(bookingData.family)}&ph=${bookingData.phone}`;
 
@@ -294,7 +296,7 @@
 
     function shareDirectWA(target) {
         const message = 
-            `* 🌸శ్రీ పోలేరమ్మ తల్లి దేవస్థానం - చిరాల* 🌸%0A` +
+            `* 🌸 శ్రీ పోలేరమ్మ తల్లి దేవస్థానం - చిరాల* 🌸%0A` +
             `----------------------------------------%0A` +
             `✅ *Status:* PAID / విజయవంతమైంది%0A` +
             `🔖 *ID:* ${bookingData.id}%0A` +
@@ -310,4 +312,5 @@
     }
 </script>
 </body>
-</html>
+    </html>
+                        
